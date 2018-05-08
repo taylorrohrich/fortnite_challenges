@@ -1,0 +1,58 @@
+.App {
+  height: 100%;
+}
+
+/* Custom, iPhone Retina */
+@media only screen and (min-width: 320px) {
+  #mapid {
+    height: 255px;
+    width: 255px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+/* Extra Small Devices, Phones */
+@media only screen and (min-width: 480px) {
+  #mapid {
+    height: 385px;
+    width: 385px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+/* Small Devices, Tablets */
+@media only screen and (min-width: 768px) {
+  #mapid {
+    height: 615px;
+    width: 615px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+/* Medium Devices, Desktops */
+@media only screen and (min-width: 992px) {
+  #mapid {
+    height: 795px;
+    width: 795px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+/* Large Devices, Wide Screens */
+@media only screen and (min-width: 1200px) {
+  #mapid {
+    height: 960px;
+    width: 960px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
