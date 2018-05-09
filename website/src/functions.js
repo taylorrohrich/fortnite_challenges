@@ -24,17 +24,17 @@ export function getInitialBrowserHeight() {
 
 export function populateMap(data, length, group) {
   for (let i = 0; i < data.length; i++) {
-    console.log(length);
     let chal = data[i];
-    if (chal.coord) {
-      let m = L.marker(
-        [chal.coord.x_multiplier * length, chal.coord.y_multiplier * length],
-        {
+    if (chal.coord.length) {
+      let coords = chal.coord;
+
+      for (let j = 0; j < coords.length; j++) {
+        let m = L.marker([coords[j].x * length, coords[j].y * length], {
           // Make the icon dragable
           icon: challengeIcon
-        }
-      ).bindPopup(chal.description); // Adjust the opacity
-      group.addLayer(m);
+        }).bindPopup(chal.description); // Adjust the opacity
+        group.addLayer(m);
+      }
     }
   }
 }

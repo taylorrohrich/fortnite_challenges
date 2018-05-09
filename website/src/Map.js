@@ -12,19 +12,21 @@ const dummydata = [
     },
     icon: "challenge",
     description: "kill 5 people"
+  },
+  {
+    coord: {
+      x_multiplier: 0.24,
+      y_multiplier: 0.64
+    },
+    icon: "challenge",
+    description: "kill 5 people"
   }
 ];
 class Map extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      map: null,
-      tileLayer: null,
-      geojsonLayer: null,
-      geojson: null,
-      subwayLinesFilter: "*",
-      numEntrances: null,
-      markers: []
+      map: null
     };
   }
 
@@ -38,17 +40,19 @@ class Map extends Component {
   init = id => {
     if (this.state.map) return;
     let length = getInitialBrowserHeight();
+    var markers = L.layerGroup();
+
+    populateMap(this.props.data, length, markers);
     let map = L.map("mapid", {
       crs: L.CRS.Simple,
-      maxBoundsViscosity: 1
+      maxBoundsViscosity: 1,
+      layers: markers
     });
     let imageUrl = fnmap;
     let imageBounds = [[0, 0], [length, length]];
     let currentimage = L.imageOverlay(imageUrl, imageBounds).addTo(map);
     map.fitBounds(imageBounds);
     map.setMaxBounds(imageBounds);
-    var markers = L.layerGroup().addTo(map);
-    populateMap(dummydata, length, markers);
     map.on("click", function(e) {
       var coord = e.latlng.toString().split(",");
       var lat = coord[0].split("(");
@@ -65,7 +69,7 @@ class Map extends Component {
       let length = data.newSize.x;
       map.removeLayer(currentimage);
       markers.clearLayers();
-      populateMap(dummydata, length, markers);
+      populateMap(this.props.data, length, markers);
       imageBounds = [[0, 0], [length, length]];
       currentimage = L.imageOverlay(imageUrl, imageBounds).addTo(map);
       map.setMaxBounds(imageBounds);
@@ -76,6 +80,9 @@ class Map extends Component {
     this.setState({ map });
   };
   render() {
+    if (this.props.loading) {
+      return <div />;
+    }
     return (
       <div className="App">
         <div className="mapContainer">
