@@ -26,7 +26,8 @@ class Map extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      map: null
+      map: null,
+      markers: null
     };
   }
 
@@ -34,11 +35,24 @@ class Map extends Component {
     // code to run just after the component "mounts" / DOM elements are created
     // we could make an AJAX request for the GeoJSON data here if it wasn't stored locally
     // create the Leaflet map object
-    if (!this.state.map) this.init();
+    if (!this.state.map) {
+      this.init();
+    } else {
+      this.state.map.invalidateSize();
+    }
   }
-
+  componentDidUpdate() {
+    if (this.state.map) {
+      let length = getInitialBrowserHeight();
+      let markers = this.state.markers;
+      markers.clearLayers();
+      populateMap(this.props.data, length, markers);
+      this.state.map.invalidateSize();
+    }
+  }
   init = id => {
     if (this.state.map) return;
+    console.log(this.props.data);
     let length = getInitialBrowserHeight();
     var markers = L.layerGroup();
 
@@ -67,17 +81,19 @@ class Map extends Component {
     map.on("resize", data => {
       console.log(data);
       let length = data.newSize.x;
-      map.removeLayer(currentimage);
-      markers.clearLayers();
-      populateMap(this.props.data, length, markers);
-      imageBounds = [[0, 0], [length, length]];
-      currentimage = L.imageOverlay(imageUrl, imageBounds).addTo(map);
-      map.setMaxBounds(imageBounds);
-      map.fitBounds(imageBounds);
-      map.invalidateSize();
+      if (length != 0) {
+        map.removeLayer(currentimage);
+        markers.clearLayers();
+        populateMap(this.props.data, length, markers);
+        imageBounds = [[0, 0], [length, length]];
+        currentimage = L.imageOverlay(imageUrl, imageBounds).addTo(map);
+        map.setMaxBounds(imageBounds);
+        map.fitBounds(imageBounds);
+        map.invalidateSize();
+      }
       //marker.setLatLng([length / 2, length / 2]);
     });
-    this.setState({ map });
+    this.setState({ map: map, markers: markers });
   };
   render() {
     if (this.props.loading) {
@@ -85,9 +101,7 @@ class Map extends Component {
     }
     return (
       <div className="App">
-        <div className="mapContainer">
-          <div id="mapid" />
-        </div>
+        <div id="mapid" />
       </div>
     );
   }

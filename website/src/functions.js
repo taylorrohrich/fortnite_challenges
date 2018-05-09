@@ -5,18 +5,21 @@ export function getInitialBrowserHeight() {
   let res = 0;
   console.log(window.innerWidth);
   if (width > 320) {
-    res = 255;
+    res = 190;
   }
   if (width > 480) {
-    res = 385;
+    res = 290;
   }
   if (width > 768) {
-    res = 615;
+    res = 460;
   }
   if (width > 992) {
-    res = 795;
+    res = 595;
   }
   if (width > 1200) {
+    res = 720;
+  }
+  if (width > 1600) {
     res = 960;
   }
   return res;
