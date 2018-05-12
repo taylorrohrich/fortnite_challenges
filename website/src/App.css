@@ -1,70 +1,71 @@
 @import "~antd/dist/antd.css";
+
 .App {
+  font-family: "Luckiest Guy";
   height: 100%;
 }
-
+.logo {
+  height: 100%;
+  float: left;
+  text-align: center;
+  line-height: "64px";
+}
+h1 {
+  margin: 0;
+  color: white;
+}
 /* Custom, iPhone Retina */
 @media only screen and (min-width: 320px) {
   #mapid {
-    height: 190px;
-    width: 190px;
+    height: 240px;
+    width: 240px;
     display: block;
-    margin-left: auto;
-    margin-right: auto;
   }
 }
 
 /* Extra Small Devices, Phones */
 @media only screen and (min-width: 480px) {
   #mapid {
-    height: 290px;
-    width: 290px;
+    height: 360px;
+    width: 360px;
     display: block;
-    margin-left: auto;
-    margin-right: auto;
   }
 }
 
 /* Small Devices, Tablets */
 @media only screen and (min-width: 768px) {
   #mapid {
-    height: 460px;
-    width: 460px;
+    height: 575px;
+    width: 575px;
     display: block;
-    margin-left: auto;
-    margin-right: auto;
   }
 }
 
 /* Medium Devices, Desktops */
 @media only screen and (min-width: 992px) {
   #mapid {
-    height: 595px;
-    width: 595px;
+    height: 745px;
+    width: 745px;
     display: block;
-    margin-left: auto;
-    margin-right: auto;
   }
 }
 
 /* Large Devices, Wide Screens */
 @media only screen and (min-width: 1200px) {
   #mapid {
-    height: 720px;
-    width: 720px;
+    height: 900px;
+    width: 900px;
     display: block;
-    margin-left: auto;
-    margin-right: auto;
   }
 }
 
 /* Large Devices, Wide Screens */
 @media only screen and (min-width: 1600px) {
   #mapid {
-    height: 960px;
-    width: 960px;
+    height: 1200px;
+    width: 1200px;
     display: block;
-    margin-left: auto;
-    margin-right: auto;
+    padding: 0;
+    margin: 0;
   }
 }

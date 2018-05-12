@@ -1,34 +1,40 @@
 import React, { Component } from "react";
 import "./App.css";
-import { BrowserRouter as Router, Route } from "react-router-dom";
-import Map from "./Map.js";
-import { ApolloProvider, graphql, compose } from "react-apollo";
-import { ApolloClient } from "apollo-client";
-import { HttpLink } from "apollo-link-http";
-import { InMemoryCache } from "apollo-cache-inmemory";
-import gql from "graphql-tag";
-import { withRouter } from "react-router-dom";
 
-import Button from "antd/lib/button";
-
-import { Layout, Menu, Breadcrumb, Icon } from "antd";
-const { SubMenu } = Menu;
-const { Header, Content, Sider } = Layout;
+//node modules
+import { Layout, Menu } from "antd";
+const { Header } = Layout;
 
 class Navbar extends Component {
+  mapSeasons = () => {
+    let seasons = this.props.data;
+    return seasons.map(season => {
+      return (
+        <Menu.Item
+          style={{ marginLeft: "50px" }}
+          onClick={() => {
+            this.props.updateSelectedSeason(season.number);
+          }}
+          key={season.number}
+        >
+          Season {season.number}
+        </Menu.Item>
+      );
+    });
+  };
   render() {
     return (
       <Header className="header">
-        <div className="logo" />
+        <div className="logo">
+          <h1>FortFriend</h1>
+        </div>
         <Menu
           theme="dark"
           mode="horizontal"
-          defaultSelectedKeys={["3"]}
+          defaultSelectedKeys={["4"]}
           style={{ lineHeight: "64px" }}
         >
-          <Menu.Item key="1">Season 1</Menu.Item>
-          <Menu.Item key="2">Season 2</Menu.Item>
-          <Menu.Item key="3">Season 3</Menu.Item>
+          {this.mapSeasons()}
         </Menu>
       </Header>
     );

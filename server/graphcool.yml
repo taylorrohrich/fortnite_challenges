@@ -19,11 +19,11 @@ types: ./types.graphql
 
 
 functions:
-  hello:
-    handler:
-      code: src/hello.js
+  createEntry:
     type: resolver
-    schema: src/hello.graphql
+    schema: src/createEntry.graphql
+    handler:
+      code: src/createEntry.js
 
 
 # Model/Relation permissions are used to limit the API access

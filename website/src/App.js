@@ -1,27 +1,27 @@
 import React, { Component } from "react";
-import logo from "./logo.svg";
 import "./App.css";
-import { BrowserRouter as Router, Route } from "react-router-dom";
 import Map from "./Map.js";
-import { ApolloProvider, graphql, compose } from "react-apollo";
-import { ApolloClient } from "apollo-client";
-import { HttpLink } from "apollo-link-http";
-import { InMemoryCache } from "apollo-cache-inmemory";
-import gql from "graphql-tag";
-import { withRouter } from "react-router-dom";
 import Navbar from "./Navbar.js";
-import Button from "antd/lib/button";
 import Sidebar from "./Sidebar.js";
-import { Layout, Menu, Breadcrumb, Icon } from "antd";
-const { SubMenu } = Menu;
-const { Header, Content, Sider } = Layout;
+import { handleLocalStorage, processData } from "./functions.js";
+
+//node modules
+import { graphql, compose } from "react-apollo";
+import { withRouter } from "react-router-dom";
+import { Layout } from "antd";
+import { seasonQuery, createChallenge } from "./Database.js";
+const { Content } = Layout;
+
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      season: null
+      selectedSeason: 4,
+      seasons: null,
+      localStorage: {}
     };
   }
+
   createProject = () => {
     const variables = {
       weekId: "cjgyc7naa0wnw0186tm8jujuy",
@@ -32,56 +32,65 @@ class App extends Component {
 
     this.props.createChallenge({ variables });
   };
-  processData = (data, season) => {
-    let number = data.number;
-    data = data.weeks;
-    let refinedData = [];
-    let seasonStorage = season;
-    console.log(season);
-    if (seasonStorage) {
-      for (let i = 0; i < data.length; i++) {
-        let challenges = data[i].challenges;
-        for (let j = 0; j < challenges.length; j++) {
-          console.log(seasonStorage["week" + (i + 1)]);
-          if (seasonStorage["week" + (i + 1)]["c" + challenges[j].number]) {
-            refinedData.push(challenges[j]);
-          }
-        }
-      }
-    }
-    return refinedData;
-  };
+
   updateSeason = season => {
-    this.setState({ season: season });
+    this.setState({ localStorage: season });
   };
+
+  updateSelectedSeason = number => {
+    this.setState({ selectedSeason: number });
+  };
+
+  grabSelectedSeason = number => {
+    return this.state.seasons.find(element => {
+      return element.number === number;
+    });
+  };
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (nextProps.allSeasonQuery && nextProps.allSeasonQuery.allSeasons) {
+      return {
+        seasons: nextProps.allSeasonQuery.allSeasons,
+        localStorage: handleLocalStorage(() => {
+          return prevState.seasons.find(element => {
+            return element.number === prevState.selectedSeason;
+          });
+        })
+      };
+    } else {
+      return {};
+    }
+  }
   render() {
     if (
       this.props.loading ||
       !this.props.allSeasonQuery ||
-      !this.props.allSeasonQuery.allSeasons
+      this.props.allSeasonQuery.loading
     ) {
       return <div />;
     } else {
       return (
         <div className="App">
-          {console.log(this.props)}
-          <Layout>
-            <Navbar />
+          <Layout style={{ height: "100vh" }}>
+            <Navbar
+              updateSelectedSeason={this.updateSelectedSeason}
+              data={this.props.allSeasonQuery.allSeasons}
+            />
+
             <Layout>
               <Sidebar
                 updateSeason={this.updateSeason}
-                data={this.props.allSeasonQuery.allSeasons[0]}
+                data={this.grabSelectedSeason(this.state.selectedSeason)}
+                localStorage={this.state.localStorage}
               />
-              <Layout style={{}}>
-                <Content style={{ padding: "50px" }}>
-                  <Map
-                    data={this.processData(
-                      this.props.allSeasonQuery.allSeasons[0],
-                      this.state.season
-                    )}
-                  />
-                </Content>
-              </Layout>
+              <Content>
+                <Map
+                  data={processData(
+                    this.grabSelectedSeason(this.state.selectedSeason),
+                    this.state.localStorage
+                  )}
+                />
+              </Content>
             </Layout>
           </Layout>
         </div>
@@ -90,46 +99,9 @@ class App extends Component {
   }
 }
 
-const ALL_SEASON_QUERY = gql`
-  query AllSeasonQuery {
-    allSeasons {
-      number
-      weeks {
-        number
-        challenges {
-          number
-          icon
-          description
-          coord
-        }
-      }
-    }
-  }
-`;
-
-const createChallenge = gql`
-  mutation(
-    $weekId: ID!
-    $description: String!
-    $coord: [Json!]!
-    $icon: String!
-  ) {
-    createChallenge(
-      weekId: $weekId
-      description: $description
-      coord: $coord
-      icon: $icon
-    ) {
-      id
-    }
-  }
-`;
 export default compose(
-  graphql(ALL_SEASON_QUERY, {
-    name: "allSeasonQuery",
-    options: {
-      fetchPolicy: "cache-and-network"
-    }
+  graphql(seasonQuery, {
+    name: "allSeasonQuery"
   }),
   graphql(createChallenge, { name: "createChallenge" })
 )(withRouter(App));

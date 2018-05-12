@@ -1,0 +1,14 @@
+type CreateEntryPayload {
+  id: ID!
+}
+
+extend type Mutation {
+  createEntry(
+    coord: [Json!]!
+    season: ID!
+    description: String!
+    icon: String!
+    week: Int!
+    number: Int!
+  ): CreateEntryPayload
+}

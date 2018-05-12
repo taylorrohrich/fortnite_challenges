@@ -19,6 +19,7 @@ type Challenge @model {
   description: String!
   icon: String!
   coord: [Json!]!
+  number: Int!
   week: Week @relation(name: "ChallengeOnWeek")
 }
 
