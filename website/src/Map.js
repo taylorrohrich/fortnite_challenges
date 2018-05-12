@@ -24,15 +24,16 @@ class Map extends Component {
     populateMap(this.props.data, length, markers);
     let map = L.map("mapid", {
       crs: L.CRS.Simple,
-      maxBoundsViscosity: 1,
-      layers: markers
+      maxBoundsViscosity: 1.0,
+      layers: markers,
+      dragging: false,
+      scrollWheelZoom: false
     });
     let imageUrl = fnmap;
     let imageBounds = [[0, 0], [length, length]];
     let currentimage = L.imageOverlay(imageUrl, imageBounds).addTo(map);
     map.fitBounds(imageBounds);
     map.setMaxBounds(imageBounds);
-    map.scrollWheelZoom.disable();
     this.setState({ map: map, markers: markers });
     map.on("resize", data => {
       let length = data.newSize.x;
@@ -45,6 +46,13 @@ class Map extends Component {
         map.setMaxBounds(imageBounds);
         map.fitBounds(imageBounds);
         map.invalidateSize();
+      }
+    });
+    map.on("zoom", data => {
+      if (map.getZoom() == 0) {
+        map.dragging.disable();
+      } else {
+        map.dragging.enable();
       }
     });
   };
