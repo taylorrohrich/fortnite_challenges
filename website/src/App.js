@@ -14,6 +14,8 @@ import { graphql, compose } from "react-apollo";
 import { withRouter } from "react-router-dom";
 import { Layout } from "antd";
 import { seasonQuery } from "./Database.js";
+import ReactGA from "react-ga";
+const googleAnalyticsId = process.env.REACT_APP_GOOGLE_ANALYTICS_ID;
 const { Content, Footer } = Layout;
 
 class App extends Component {
@@ -25,6 +27,8 @@ class App extends Component {
       localStorage: {},
       compWidth: window.innerWidth
     };
+    ReactGA.initialize(googleAnalyticsId);
+    ReactGA.pageview(window.location.pathname);
   }
 
   updateSeason = season => {
@@ -127,6 +131,9 @@ class App extends Component {
 
 export default compose(
   graphql(seasonQuery, {
-    name: "allSeasonQuery"
+    name: "allSeasonQuery",
+    options: {
+      fetchPolicy: "cache-and-network"
+    }
   })
 )(withRouter(App));
