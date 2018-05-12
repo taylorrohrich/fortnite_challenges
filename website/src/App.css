@@ -1,10 +1,10 @@
 @import "~antd/dist/antd.css";
 
 .App {
-  font-family: "Luckiest Guy";
   height: 100%;
 }
 .logo {
+  font-family: "Luckiest Guy";
   height: 100%;
   float: left;
   text-align: center;
@@ -14,38 +14,53 @@ h1 {
   margin: 0;
   color: white;
 }
+
+#mapid {
+  height: 320px;
+  width: 320px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 /* Custom, iPhone Retina */
 @media only screen and (min-width: 320px) {
   #mapid {
-    height: 240px;
-    width: 240px;
+    height: 320px;
+    width: 320px;
     display: block;
+    margin-left: auto;
+    margin-right: auto;
   }
 }
 
 /* Extra Small Devices, Phones */
 @media only screen and (min-width: 480px) {
   #mapid {
-    height: 360px;
-    width: 360px;
+    height: 480px;
+    width: 480px;
     display: block;
+    margin-left: auto;
+    margin-right: auto;
   }
 }
 
 /* Small Devices, Tablets */
 @media only screen and (min-width: 768px) {
   #mapid {
-    height: 575px;
-    width: 575px;
+    height: 760px;
+    width: 760px;
     display: block;
+    margin-left: auto;
+    margin-right: auto;
   }
 }
 
 /* Medium Devices, Desktops */
 @media only screen and (min-width: 992px) {
   #mapid {
-    height: 745px;
-    width: 745px;
+    height: 990px;
+    width: 990px;
     display: block;
   }
 }

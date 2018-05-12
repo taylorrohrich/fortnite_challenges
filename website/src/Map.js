@@ -16,23 +16,6 @@ class Map extends Component {
     };
   }
 
-  componentDidMount() {
-    // code to run just after the component "mounts" / DOM elements are created
-    // we could make an AJAX request for the GeoJSON data here if it wasn't stored locally
-    // create the Leaflet map object
-    if (!this.state.map) {
-      this.init();
-    }
-  }
-  componentDidUpdate() {
-    if (this.state.map) {
-      let length = getInitialBrowserHeight();
-      let markers = this.state.markers;
-      markers.clearLayers();
-      populateMap(this.props.data, length, markers);
-      this.state.map.invalidateSize();
-    }
-  }
   init = id => {
     if (this.state.map) return;
 
@@ -65,6 +48,21 @@ class Map extends Component {
       }
     });
   };
+
+  componentDidMount() {
+    if (!this.state.map) {
+      this.init();
+    }
+  }
+  componentDidUpdate() {
+    if (this.state.map) {
+      let length = getInitialBrowserHeight();
+      let markers = this.state.markers;
+      markers.clearLayers();
+      populateMap(this.props.data, length, markers);
+      this.state.map.invalidateSize();
+    }
+  }
   render() {
     if (this.props.loading) {
       return <div />;

@@ -12,18 +12,18 @@ import {
 
 export function getInitialBrowserHeight() {
   let width = window.innerWidth;
-  let res = 0;
+  let res = 320;
   if (width > 320) {
-    res = 240;
+    res = 320;
   }
   if (width > 480) {
-    res = 360;
+    res = 480;
   }
   if (width > 768) {
-    res = 575;
+    res = 760;
   }
   if (width > 992) {
-    res = 745;
+    res = 990;
   }
   if (width > 1200) {
     res = 900;
@@ -91,7 +91,8 @@ export function handleLocalStorage(season) {
         c4: true,
         c5: true,
         c6: true,
-        c7: true
+        c7: true,
+        c8: true
       };
     }
     localStorage.setItem("season" + season.number, JSON.stringify(seasonJSON));
@@ -113,8 +114,7 @@ export function processData(data, seasonStorage) {
       let challenges = data[i].challenges;
       for (let j = 0; j < challenges.length; j++) {
         if (
-          seasonStorage["week" + (i + 1)]["c" + challenges[j].number] ||
-          seasonStorage["week" + (i + 1)]["all"]
+          seasonStorage["week" + data[i].number]["c" + challenges[j].number]
         ) {
           refinedData.push(challenges[j]);
         }

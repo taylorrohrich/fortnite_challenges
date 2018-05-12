@@ -1,31 +1,21 @@
 import React, { Component } from "react";
 import "./App.css";
-import { getInitialBrowserHeight } from "./functions.js";
+
 //node modules
 import { Layout, Menu, Checkbox } from "antd";
 const { SubMenu } = Menu;
-const { Sider } = Layout;
+const { Sider, Footer } = Layout;
 
 class Sidebar extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      compWidth: window.innerWidth - getInitialBrowserHeight()
-    };
-  }
-  updateWidth = length => {
-    this.setState({ compWidth: window.innerWidth - getInitialBrowserHeight() });
-  };
-  componentDidMount() {
-    window.addEventListener("resize", this.updateWidth);
-  }
   toggleCheck = (week, challenge, season) => {
     if (challenge === "all") {
-      for (let i = 1; i <= 7; i++) {
+      for (let i = 1; i <= 8; i++) {
         season[week]["c" + i] = !season[week][challenge];
       }
+      season[week][challenge] = !season[week][challenge];
+    } else {
+      season[week][challenge] = !season[week][challenge];
     }
-    season[week][challenge] = !season[week][challenge];
     localStorage.setItem(
       "season" + this.props.data.number,
       JSON.stringify(season)
@@ -47,7 +37,10 @@ class Sidebar extends Component {
       } else {
         let challenges = data[i].challenges.map(challenge => {
           return (
-            <Menu.Item key={"week" + +"challenge" + challenge.number}>
+            <Menu.Item
+              style={{ fontSize: "12px" }}
+              key={"week" + +"challenge" + challenge.number}
+            >
               <Checkbox
                 disabled={!challenge.coord.length}
                 checked={
@@ -74,7 +67,10 @@ class Sidebar extends Component {
             key={"week" + data[i].number}
             title={<span>Week {data[i].number} </span>}
           >
-            <Menu.Item key={"week" + data[i].number + "all"}>
+            <Menu.Item
+              style={{ fontSize: "12px" }}
+              key={"week" + data[i].number + "all"}
+            >
               <Checkbox
                 checked={season["week" + data[i].number]["all"] ? true : false}
                 defaultChecked={true}
@@ -99,10 +95,8 @@ class Sidebar extends Component {
     }
     return (
       <Sider
-        width={
-          this.state.compWidth ? this.state.compWidth : window.innerWidth / 4
-        }
-        style={{ background: "#fff" }}
+        width={this.props.compWidth}
+        style={{ background: "#fff", display: "block" }}
       >
         <Menu mode="inline" style={{ height: "100%", borderRight: 0 }}>
           {this.props.data && this.props.data.weeks ? (

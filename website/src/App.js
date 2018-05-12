@@ -3,14 +3,18 @@ import "./App.css";
 import Map from "./Map.js";
 import Navbar from "./Navbar.js";
 import Sidebar from "./Sidebar.js";
-import { handleLocalStorage, processData } from "./functions.js";
+import {
+  handleLocalStorage,
+  processData,
+  getInitialBrowserHeight
+} from "./functions.js";
 
 //node modules
 import { graphql, compose } from "react-apollo";
 import { withRouter } from "react-router-dom";
 import { Layout } from "antd";
-import { seasonQuery, createChallenge } from "./Database.js";
-const { Content } = Layout;
+import { seasonQuery } from "./Database.js";
+const { Content, Footer } = Layout;
 
 class App extends Component {
   constructor(props) {
@@ -18,20 +22,10 @@ class App extends Component {
     this.state = {
       selectedSeason: 4,
       seasons: null,
-      localStorage: {}
+      localStorage: {},
+      compWidth: window.innerWidth
     };
   }
-
-  createProject = () => {
-    const variables = {
-      weekId: "cjgyc7naa0wnw0186tm8jujuy",
-      description: "Hello",
-      coord: [{ x: 0.5, y: 0.6 }],
-      icon: "challengeIcon"
-    };
-
-    this.props.createChallenge({ variables });
-  };
 
   updateSeason = season => {
     this.setState({ localStorage: season });
@@ -44,6 +38,11 @@ class App extends Component {
   grabSelectedSeason = number => {
     return this.state.seasons.find(element => {
       return element.number === number;
+    });
+  };
+  updateWidth = length => {
+    this.setState({
+      compWidth: window.innerWidth
     });
   };
 
@@ -61,6 +60,11 @@ class App extends Component {
       return {};
     }
   }
+
+  componentDidMount() {
+    window.addEventListener("resize", this.updateWidth);
+  }
+
   render() {
     if (
       this.props.loading ||
@@ -71,27 +75,49 @@ class App extends Component {
     } else {
       return (
         <div className="App">
-          <Layout style={{ height: "100vh" }}>
+          <Layout>
             <Navbar
               updateSelectedSeason={this.updateSelectedSeason}
               data={this.props.allSeasonQuery.allSeasons}
             />
-
-            <Layout>
-              <Sidebar
-                updateSeason={this.updateSeason}
-                data={this.grabSelectedSeason(this.state.selectedSeason)}
-                localStorage={this.state.localStorage}
-              />
-              <Content>
-                <Map
-                  data={processData(
-                    this.grabSelectedSeason(this.state.selectedSeason),
-                    this.state.localStorage
-                  )}
+            {this.state.compWidth > 1200 ? (
+              <Layout>
+                <Sidebar
+                  compWidth={this.state.compWidth - getInitialBrowserHeight()}
+                  updateSeason={this.updateSeason}
+                  data={this.grabSelectedSeason(this.state.selectedSeason)}
+                  localStorage={this.state.localStorage}
                 />
-              </Content>
-            </Layout>
+                <Content>
+                  <Map
+                    data={processData(
+                      this.grabSelectedSeason(this.state.selectedSeason),
+                      this.state.localStorage
+                    )}
+                  />
+                </Content>
+              </Layout>
+            ) : (
+              <Layout>
+                <Content>
+                  <Map
+                    data={processData(
+                      this.grabSelectedSeason(this.state.selectedSeason),
+                      this.state.localStorage
+                    )}
+                  />
+                  <Sidebar
+                    compWidth={this.state.compWidth}
+                    updateSeason={this.updateSeason}
+                    data={this.grabSelectedSeason(this.state.selectedSeason)}
+                    localStorage={this.state.localStorage}
+                  />
+                </Content>
+              </Layout>
+            )}
+            <Footer style={{ textAlign: "center", fontSize: "12px" }}>
+              Taylor Rohrich | github: 20rohrichtt | Made with React.js
+            </Footer>
           </Layout>
         </div>
       );
@@ -102,6 +128,5 @@ class App extends Component {
 export default compose(
   graphql(seasonQuery, {
     name: "allSeasonQuery"
-  }),
-  graphql(createChallenge, { name: "createChallenge" })
+  })
 )(withRouter(App));
