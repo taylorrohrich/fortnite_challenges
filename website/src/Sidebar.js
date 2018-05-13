@@ -4,7 +4,7 @@ import "./App.css";
 //node modules
 import { Layout, Menu, Checkbox } from "antd";
 const { SubMenu } = Menu;
-const { Sider, Footer } = Layout;
+const { Sider } = Layout;
 
 class Sidebar extends Component {
   toggleCheck = (week, challenge, season) => {

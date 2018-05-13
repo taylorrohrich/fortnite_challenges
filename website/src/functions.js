@@ -14,23 +14,21 @@ export function getInitialBrowserHeight() {
   let width = window.innerWidth;
   let res = 320;
   if (width > 320) {
-    res = 320;
+    res = width;
   }
   if (width > 480) {
-    res = 480;
+    res = width;
   }
   if (width > 768) {
-    res = 760;
+    res = width;
   }
   if (width > 992) {
-    res = 990;
+    res = 790;
   }
   if (width > 1200) {
     res = 900;
   }
-  if (width > 1600) {
-    res = 1200;
-  }
+
   return res;
 }
 export function populateMap(data, length, group) {

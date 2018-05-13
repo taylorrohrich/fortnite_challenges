@@ -27,7 +27,8 @@ class Map extends Component {
       maxBoundsViscosity: 1.0,
       layers: markers,
       dragging: false,
-      scrollWheelZoom: false
+      scrollWheelZoom: false,
+      tap: false
     });
     let imageUrl = fnmap;
     let imageBounds = [[0, 0], [length, length]];
@@ -49,7 +50,7 @@ class Map extends Component {
       }
     });
     map.on("zoom", data => {
-      if (map.getZoom() == 0) {
+      if (map.getZoom() === 0) {
         map.dragging.disable();
       } else {
         map.dragging.enable();

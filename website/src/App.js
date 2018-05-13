@@ -84,7 +84,7 @@ class App extends Component {
               updateSelectedSeason={this.updateSelectedSeason}
               data={this.props.allSeasonQuery.allSeasons}
             />
-            {this.state.compWidth > 1200 ? (
+            {this.state.compWidth > 992 ? (
               <Layout>
                 <Sidebar
                   compWidth={this.state.compWidth - getInitialBrowserHeight()}
@@ -119,9 +119,11 @@ class App extends Component {
                 </Content>
               </Layout>
             )}
-            <Footer style={{ textAlign: "center", fontSize: "12px" }}>
-              Taylor Rohrich | github: 20rohrichtt | Made with React.js
-            </Footer>
+            <Layout>
+              <Footer style={{ textAlign: "center", fontSize: "12px" }}>
+                Taylor Rohrich | github: 20rohrichtt | Made with React.js
+              </Footer>
+            </Layout>
           </Layout>
         </div>
       );

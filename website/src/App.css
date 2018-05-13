@@ -1,33 +1,39 @@
 @import "~antd/dist/antd.css";
-
 .App {
   height: 100%;
+  font-size: 8px;
 }
 .logo {
+  font-size: 1em;
   font-family: "Luckiest Guy";
   height: 100%;
   float: left;
   text-align: center;
-  line-height: "64px";
+  padding-left: 5%;
 }
 h1 {
   margin: 0;
   color: white;
 }
 
+.ant-menu-item {
+  padding: 0;
+}
 #mapid {
-  height: 320px;
-  width: 320px;
+  height: 100vw;
+  width: 100vw;
   display: block;
   margin-left: auto;
   margin-right: auto;
 }
-
 /* Custom, iPhone Retina */
 @media only screen and (min-width: 320px) {
+  .App {
+    font-size: 8px;
+  }
   #mapid {
-    height: 320px;
-    width: 320px;
+    height: 100vw;
+    width: 100vw;
     display: block;
     margin-left: auto;
     margin-right: auto;
@@ -36,9 +42,12 @@ h1 {
 
 /* Extra Small Devices, Phones */
 @media only screen and (min-width: 480px) {
+  .App {
+    font-size: 12px;
+  }
   #mapid {
-    height: 480px;
-    width: 480px;
+    height: 100vw;
+    width: 100vw;
     display: block;
     margin-left: auto;
     margin-right: auto;
@@ -47,9 +56,12 @@ h1 {
 
 /* Small Devices, Tablets */
 @media only screen and (min-width: 768px) {
+  .App {
+    font-size: 14px;
+  }
   #mapid {
-    height: 760px;
-    width: 760px;
+    height: 100vw;
+    width: 100vw;
     display: block;
     margin-left: auto;
     margin-right: auto;
@@ -58,29 +70,24 @@ h1 {
 
 /* Medium Devices, Desktops */
 @media only screen and (min-width: 992px) {
+  .App {
+    font-size: 16px;
+  }
   #mapid {
-    height: 990px;
-    width: 990px;
+    height: 790px;
+    width: 790px;
     display: block;
   }
 }
 
 /* Large Devices, Wide Screens */
 @media only screen and (min-width: 1200px) {
+  .App {
+    font-size: 16px;
+  }
   #mapid {
     height: 900px;
     width: 900px;
     display: block;
-  }
-}
-
-/* Large Devices, Wide Screens */
-@media only screen and (min-width: 1600px) {
-  #mapid {
-    height: 1200px;
-    width: 1200px;
-    display: block;
-    padding: 0;
-    margin: 0;
   }
 }
