@@ -11,7 +11,7 @@ class Navbar extends Component {
     return seasons.map(season => {
       return (
         <Menu.Item
-          style={{ marginLeft: "5%" }}
+          style={{ paddingLeft: "1%", paddingRight: "1%" }}
           onClick={() => {
             this.props.updateSelectedSeason(season.number);
           }}

@@ -51,14 +51,18 @@ class App extends Component {
   };
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    if (nextProps.allSeasonQuery && nextProps.allSeasonQuery.allSeasons) {
+    if (
+      nextProps.allSeasonQuery &&
+      nextProps.allSeasonQuery.allSeasons &&
+      !prevState.seasons
+    ) {
       return {
         seasons: nextProps.allSeasonQuery.allSeasons,
-        localStorage: handleLocalStorage(() => {
-          return prevState.seasons.find(element => {
+        localStorage: handleLocalStorage(
+          nextProps.allSeasonQuery.allSeasons.find(element => {
             return element.number === prevState.selectedSeason;
-          });
-        })
+          })
+        )
       };
     } else {
       return {};
@@ -121,7 +125,13 @@ class App extends Component {
             )}
             <Layout>
               <Footer style={{ textAlign: "center", fontSize: "12px" }}>
-                Taylor Rohrich | github: 20rohrichtt | Made with React.js
+                <p>Reddit user: tmant1234 | Made with React.js</p>
+                <p style={{ fontSize: "8px" }}>
+                  Portions of the materials used are trademarks and/or
+                  copyrighted works of Epic Games, Inc. All rights reserved by
+                  Epic. This material is not official and is not endorsed by
+                  Epic.
+                </p>
               </Footer>
             </Layout>
           </Layout>

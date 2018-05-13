@@ -15,6 +15,13 @@ class Sidebar extends Component {
       season[week][challenge] = !season[week][challenge];
     } else {
       season[week][challenge] = !season[week][challenge];
+      let allChecked = true;
+      for (let i = 1; i <= 8; i++) {
+        if (!season[week]["c" + i]) {
+          allChecked = false;
+        }
+      }
+      season[week]["all"] = allChecked;
     }
     localStorage.setItem(
       "season" + this.props.data.number,
