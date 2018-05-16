@@ -10,7 +10,7 @@ import {
 } from "./functions.js";
 
 //node modules
-import { graphql, compose } from "react-apollo";
+import { graphql } from "react-apollo";
 import { withRouter } from "react-router-dom";
 import { Layout } from "antd";
 import { seasonQuery } from "./Database.js";
@@ -40,9 +40,11 @@ class App extends Component {
   };
 
   grabSelectedSeason = number => {
-    return this.state.seasons.find(element => {
-      return element.number === number;
-    });
+    if (this.state.seasons) {
+      return this.state.seasons.find(element => {
+        return element.number === number;
+      });
+    }
   };
   updateWidth = length => {
     this.setState({
@@ -54,7 +56,8 @@ class App extends Component {
     if (
       nextProps.allSeasonQuery &&
       nextProps.allSeasonQuery.allSeasons &&
-      !prevState.seasons
+      !prevState.seasons &&
+      prevState.selectedSeason
     ) {
       return {
         seasons: nextProps.allSeasonQuery.allSeasons,
@@ -74,78 +77,66 @@ class App extends Component {
   }
 
   render() {
-    if (
-      this.props.loading ||
-      !this.props.allSeasonQuery ||
-      this.props.allSeasonQuery.loading
-    ) {
-      return <div />;
-    } else {
-      return (
-        <div className="App">
-          <Layout>
-            <Navbar
-              updateSelectedSeason={this.updateSelectedSeason}
-              data={this.props.allSeasonQuery.allSeasons}
-            />
-            {this.state.compWidth > 992 ? (
-              <Layout>
+    return (
+      <div className="App">
+        <Layout>
+          <Navbar
+            updateSelectedSeason={this.updateSelectedSeason}
+            data={this.props.allSeasonQuery.allSeasons}
+          />
+          {this.state.compWidth > 992 ? (
+            <Layout>
+              <Sidebar
+                compWidth={this.state.compWidth - getInitialBrowserHeight()}
+                updateSeason={this.updateSeason}
+                data={this.grabSelectedSeason(this.state.selectedSeason)}
+                localStorage={this.state.localStorage}
+              />
+              <Content>
+                <Map
+                  data={processData(
+                    this.grabSelectedSeason(this.state.selectedSeason),
+                    this.state.localStorage
+                  )}
+                />
+              </Content>
+            </Layout>
+          ) : (
+            <Layout>
+              <Content>
+                <Map
+                  data={processData(
+                    this.grabSelectedSeason(this.state.selectedSeason),
+                    this.state.localStorage
+                  )}
+                />
                 <Sidebar
-                  compWidth={this.state.compWidth - getInitialBrowserHeight()}
+                  compWidth={this.state.compWidth}
                   updateSeason={this.updateSeason}
                   data={this.grabSelectedSeason(this.state.selectedSeason)}
                   localStorage={this.state.localStorage}
                 />
-                <Content>
-                  <Map
-                    data={processData(
-                      this.grabSelectedSeason(this.state.selectedSeason),
-                      this.state.localStorage
-                    )}
-                  />
-                </Content>
-              </Layout>
-            ) : (
-              <Layout>
-                <Content>
-                  <Map
-                    data={processData(
-                      this.grabSelectedSeason(this.state.selectedSeason),
-                      this.state.localStorage
-                    )}
-                  />
-                  <Sidebar
-                    compWidth={this.state.compWidth}
-                    updateSeason={this.updateSeason}
-                    data={this.grabSelectedSeason(this.state.selectedSeason)}
-                    localStorage={this.state.localStorage}
-                  />
-                </Content>
-              </Layout>
-            )}
-            <Layout>
-              <Footer style={{ textAlign: "center", fontSize: "12px" }}>
-                <p>Reddit user: tmant1234 | Made with React.js</p>
-                <p style={{ fontSize: "8px" }}>
-                  Portions of the materials used are trademarks and/or
-                  copyrighted works of Epic Games, Inc. All rights reserved by
-                  Epic. This material is not official and is not endorsed by
-                  Epic.
-                </p>
-              </Footer>
+              </Content>
             </Layout>
+          )}
+          <Layout>
+            <Footer style={{ textAlign: "center", fontSize: "12px" }}>
+              <p>Reddit user: tmant1234 | Made with React.js</p>
+              <p style={{ fontSize: "8px" }}>
+                Portions of the materials used are trademarks and/or copyrighted
+                works of Epic Games, Inc. All rights reserved by Epic. This
+                material is not official and is not endorsed by Epic.
+              </p>
+            </Footer>
           </Layout>
-        </div>
-      );
-    }
+        </Layout>
+      </div>
+    );
   }
 }
 
-export default compose(
-  graphql(seasonQuery, {
-    name: "allSeasonQuery",
-    options: {
-      fetchPolicy: "cache-and-network"
-    }
-  })
-)(withRouter(App));
+const AppWithQuery = graphql(seasonQuery, {
+  name: "allSeasonQuery"
+})(withRouter(App));
+
+export default AppWithQuery;

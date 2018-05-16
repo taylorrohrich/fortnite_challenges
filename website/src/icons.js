@@ -7,6 +7,7 @@ import skull from "./images/skull.png";
 import camera from "./images/camera.png";
 import letters from "./images/letters.png";
 import hoprock from "./images/hoprock.png";
+import duck from "./images/duck.png";
 export const challengeIcon = L.icon({
   iconUrl: challenge,
   iconSize: [35, 35], // size of the icon
@@ -47,5 +48,11 @@ export const hoprockIcon = L.icon({
 export const lettersIcon = L.icon({
   iconUrl: letters,
   iconSize: [70, 44], // size of the icon
+  shadowSize: [50, 64] // size of the shadow
+});
+
+export const duckIcon = L.icon({
+  iconUrl: duck,
+  iconSize: [25, 34], // size of the icon
   shadowSize: [50, 64] // size of the shadow
 });

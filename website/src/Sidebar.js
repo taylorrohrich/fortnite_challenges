@@ -30,6 +30,15 @@ class Sidebar extends Component {
     this.props.updateSeason(season);
   };
   mapWeeks = (data, season) => {
+    if (data === "error") {
+      let errorArray = [];
+      for (let i = 0; i < 9; i++) {
+        errorArray.push(
+          <SubMenu key={"error" + i} title={<span>Loading...</span>} />
+        );
+      }
+      return errorArray;
+    }
     data = data.weeks;
     let menu = [];
     for (let i = 0; i < 9; i++) {
@@ -100,20 +109,25 @@ class Sidebar extends Component {
     if (this.props.loading) {
       return <div />;
     }
+    if (!this.props.data || !this.props.data.weeks) {
+      return (
+        <Sider
+          width={this.props.compWidth}
+          style={{ background: "#fff", display: "block" }}
+        >
+          <Menu mode="inline" style={{ height: "100%", borderRight: 0 }}>
+            {this.mapWeeks("error")}
+          </Menu>
+        </Sider>
+      );
+    }
     return (
       <Sider
         width={this.props.compWidth}
         style={{ background: "#fff", display: "block" }}
       >
         <Menu mode="inline" style={{ height: "100%", borderRight: 0 }}>
-          {this.props.data && this.props.data.weeks ? (
-            this.mapWeeks(this.props.data, this.props.localStorage)
-          ) : (
-            <SubMenu
-              key={"error"}
-              title={<span>Having Trouble Loading Data :/</span>}
-            />
-          )}
+          {this.mapWeeks(this.props.data, this.props.localStorage)}
         </Menu>
       </Sider>
     );

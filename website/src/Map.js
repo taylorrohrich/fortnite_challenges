@@ -27,8 +27,7 @@ class Map extends Component {
       maxBoundsViscosity: 1.0,
       layers: markers,
       dragging: false,
-      scrollWheelZoom: false,
-      tap: false
+      scrollWheelZoom: false
     });
     let imageUrl = fnmap;
     let imageBounds = [[0, 0], [length, length]];
@@ -64,7 +63,7 @@ class Map extends Component {
     }
   }
   componentDidUpdate() {
-    if (this.state.map) {
+    if (this.state.map && this.state.markers) {
       let length = getInitialBrowserHeight();
       let markers = this.state.markers;
       markers.clearLayers();

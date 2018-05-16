@@ -7,7 +7,8 @@ import {
   treasureIcon,
   cameraIcon,
   hoprockIcon,
-  lettersIcon
+  lettersIcon,
+  duckIcon
 } from "./icons.js";
 
 export function getInitialBrowserHeight() {
@@ -74,6 +75,9 @@ export function decideIcon(icon) {
   }
   if (icon === "hoprockIcon") {
     return hoprockIcon;
+  }
+  if (icon === "duckIcon") {
+    return duckIcon;
   }
 }
 export function handleLocalStorage(season) {
