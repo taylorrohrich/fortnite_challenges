@@ -42,6 +42,7 @@ export function populateMap(data, length, group) {
         for (let j = 0; j < coords.length; j++) {
           let m = L.marker([coords[j].x * length, coords[j].y * length], {
             // Make the icon dragable
+
             icon: decideIcon(chal.icon)
           }).bindPopup(chal.description); // Adjust the opacity
           group.addLayer(m);
