@@ -13,6 +13,7 @@ import {
 import { graphql } from "react-apollo";
 import { withRouter } from "react-router-dom";
 import { Layout } from "antd";
+
 import { seasonQuery } from "./Database.js";
 import ReactGA from "react-ga";
 const googleAnalyticsId = process.env.REACT_APP_GOOGLE_ANALYTICS_ID;
@@ -121,7 +122,7 @@ class App extends Component {
           )}
           <Layout>
             <Footer style={{ textAlign: "center", fontSize: "12px" }}>
-              <p>Reddit user: tmant1234 | Made with React.js</p>
+              <p>Made with React.js</p>
               <p style={{ fontSize: "8px" }}>
                 Portions of the materials used are trademarks and/or copyrighted
                 works of Epic Games, Inc. All rights reserved by Epic. This

@@ -32,7 +32,7 @@ class Sidebar extends Component {
   mapWeeks = (data, season) => {
     if (data === "error") {
       let errorArray = [];
-      for (let i = 0; i < 9; i++) {
+      for (let i = 0; i < 10; i++) {
         errorArray.push(
           <SubMenu key={"error" + i} title={<span>Loading...</span>} />
         );
@@ -41,7 +41,7 @@ class Sidebar extends Component {
     }
     data = data.weeks;
     let menu = [];
-    for (let i = 0; i < 9; i++) {
+    for (let i = 0; i < 10; i++) {
       if (!data[i]) {
         menu.push(
           <SubMenu
