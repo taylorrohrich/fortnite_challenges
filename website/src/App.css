@@ -20,24 +20,11 @@ h1 {
 .ant-menu-item {
   padding: 0;
 }
-#mapid {
-  height: 100vw;
-  width: 100vw;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-}
+
 /* Custom, iPhone Retina */
 @media only screen and (min-width: 320px) {
   .App {
     font-size: 8px;
-  }
-  #mapid {
-    height: 100vw;
-    width: 100vw;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
   }
 }
 
@@ -46,26 +33,12 @@ h1 {
   .App {
     font-size: 12px;
   }
-  #mapid {
-    height: 100vw;
-    width: 100vw;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-  }
 }
 
 /* Small Devices, Tablets */
 @media only screen and (min-width: 768px) {
   .App {
     font-size: 14px;
-  }
-  #mapid {
-    height: 100vw;
-    width: 100vw;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
   }
 }
 
@@ -74,21 +47,11 @@ h1 {
   .App {
     font-size: 16px;
   }
-  #mapid {
-    height: 790px;
-    width: 790px;
-    display: block;
-  }
 }
 
 /* Large Devices, Wide Screens */
 @media only screen and (min-width: 1200px) {
   .App {
     font-size: 16px;
-  }
-  #mapid {
-    height: 900px;
-    width: 900px;
-    display: block;
   }
 }

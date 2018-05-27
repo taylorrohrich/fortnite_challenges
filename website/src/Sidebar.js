@@ -112,8 +112,13 @@ class Sidebar extends Component {
     if (!this.props.data || !this.props.data.weeks) {
       return (
         <Sider
-          width={this.props.compWidth}
-          style={{ background: "#fff", display: "block" }}
+          width={this.props.sideBarLength}
+          style={{
+            height: "100%",
+            background: "#fff",
+            display: "block",
+            position: "fixed"
+          }}
         >
           <Menu mode="inline" style={{ height: "100%", borderRight: 0 }}>
             {this.mapWeeks("error")}
@@ -123,8 +128,14 @@ class Sidebar extends Component {
     }
     return (
       <Sider
-        width={this.props.compWidth}
-        style={{ background: "#fff", display: "block" }}
+        width={this.props.sideBarLength}
+        style={{
+          maxHeight: this.props.sideBarHeight,
+          background: "#fff",
+          display: "block",
+          left: 0,
+          overflow: "auto"
+        }}
       >
         <Menu mode="inline" style={{ height: "100%", borderRight: 0 }}>
           {this.mapWeeks(this.props.data, this.props.localStorage)}

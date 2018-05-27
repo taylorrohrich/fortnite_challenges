@@ -11,27 +11,6 @@ import {
   duckIcon
 } from "./icons.js";
 
-export function getInitialBrowserHeight() {
-  let width = window.innerWidth;
-  let res = 320;
-  if (width > 320) {
-    res = width;
-  }
-  if (width > 480) {
-    res = width;
-  }
-  if (width > 768) {
-    res = width;
-  }
-  if (width > 992) {
-    res = 790;
-  }
-  if (width > 1200) {
-    res = 900;
-  }
-
-  return res;
-}
 export function populateMap(data, length, group) {
   if (data) {
     for (let i = 0; i < data.length; i++) {

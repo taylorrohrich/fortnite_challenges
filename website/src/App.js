@@ -3,25 +3,23 @@ import "./App.css";
 import Map from "./Map.js";
 import Navbar from "./Navbar.js";
 import Sidebar from "./Sidebar.js";
-import {
-  handleLocalStorage,
-  processData,
-  getInitialBrowserHeight
-} from "./functions.js";
+import { handleLocalStorage, processData } from "./functions.js";
 
 //node modules
 import { graphql } from "react-apollo";
 import { withRouter } from "react-router-dom";
 import { Layout } from "antd";
-
+import { Row, Col } from "antd";
 import { seasonQuery } from "./Database.js";
 import ReactGA from "react-ga";
 const googleAnalyticsId = process.env.REACT_APP_GOOGLE_ANALYTICS_ID;
-const { Content, Footer } = Layout;
+const { Footer } = Layout;
 
 class App extends Component {
   constructor(props) {
     super(props);
+    this.sideBar = React.createRef();
+    this.map = React.createRef();
     this.state = {
       selectedSeason: 4,
       seasons: null,
@@ -80,47 +78,46 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <Layout>
-          <Navbar
-            updateSelectedSeason={this.updateSelectedSeason}
-            data={this.props.allSeasonQuery.allSeasons}
-          />
-          {this.state.compWidth > 992 ? (
-            <Layout>
-              <Sidebar
-                compWidth={this.state.compWidth - getInitialBrowserHeight()}
-                updateSeason={this.updateSeason}
-                data={this.grabSelectedSeason(this.state.selectedSeason)}
-                localStorage={this.state.localStorage}
-              />
-              <Content>
-                <Map
-                  data={processData(
-                    this.grabSelectedSeason(this.state.selectedSeason),
-                    this.state.localStorage
-                  )}
-                />
-              </Content>
-            </Layout>
-          ) : (
-            <Layout>
-              <Content>
-                <Map
-                  data={processData(
-                    this.grabSelectedSeason(this.state.selectedSeason),
-                    this.state.localStorage
-                  )}
-                />
-                <Sidebar
-                  compWidth={this.state.compWidth}
-                  updateSeason={this.updateSeason}
-                  data={this.grabSelectedSeason(this.state.selectedSeason)}
-                  localStorage={this.state.localStorage}
-                />
-              </Content>
-            </Layout>
-          )}
-          <Layout>
+        <Row>
+          <Col span={24}>
+            <Navbar
+              updateSelectedSeason={this.updateSelectedSeason}
+              data={this.props.allSeasonQuery.allSeasons}
+            />
+          </Col>
+        </Row>
+        <Row type="flex">
+          <Col xs={{ span: 24, order: 2 }} sm={{ span: 8, order: 1 }}>
+            <div ref={this.sideBar}>
+              {this.sideBar.current &&
+                this.map.current && (
+                  <Sidebar
+                    sideBarLength={this.sideBar.current.offsetWidth}
+                    sideBarHeight={this.map.current.offsetWidth}
+                    updateSeason={this.updateSeason}
+                    data={this.grabSelectedSeason(this.state.selectedSeason)}
+                    localStorage={this.state.localStorage}
+                  />
+                )}
+            </div>
+          </Col>
+          <Col xs={{ span: 24, order: 1 }} sm={{ span: 16, order: 2 }}>
+            <div ref={this.map}>
+              {this.state.seasons &&
+                this.map.current && (
+                  <Map
+                    mapLength={this.map.current.offsetWidth}
+                    data={processData(
+                      this.grabSelectedSeason(this.state.selectedSeason),
+                      this.state.localStorage
+                    )}
+                  />
+                )}
+            </div>
+          </Col>
+        </Row>
+        <Row>
+          <Col span={24}>
             <Footer style={{ textAlign: "center", fontSize: "12px" }}>
               <p>Made with React.js</p>
               <p style={{ fontSize: "8px" }}>
@@ -129,8 +126,8 @@ class App extends Component {
                 material is not official and is not endorsed by Epic.
               </p>
             </Footer>
-          </Layout>
-        </Layout>
+          </Col>
+        </Row>
       </div>
     );
   }

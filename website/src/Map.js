@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import "./App.css";
 
 import fnmap from "./images/fnmap.jpg";
-import { getInitialBrowserHeight, populateMap } from "./functions.js";
+import { populateMap } from "./functions.js";
 
 //node modules
 import L from "leaflet";
@@ -12,16 +12,16 @@ class Map extends Component {
     super(props);
     this.state = {
       map: null,
-      markers: null
+      markers: null,
+      mapLength: null,
+      data: null
     };
   }
 
   init = id => {
     if (this.state.map) return;
-
-    let length = getInitialBrowserHeight();
+    let length = this.props.mapLength;
     let markers = L.layerGroup();
-    populateMap(this.props.data, length, markers);
     let map = L.map("mapid", {
       crs: L.CRS.Simple,
       maxBoundsViscosity: 1.0,
@@ -29,20 +29,20 @@ class Map extends Component {
       dragging: false,
       scrollWheelZoom: false
     });
-    let imageUrl = fnmap;
+    populateMap(this.props.data, length, markers);
     let imageBounds = [[0, 0], [length, length]];
-    let currentimage = L.imageOverlay(imageUrl, imageBounds).addTo(map);
+    let currentImage = L.imageOverlay(fnmap, imageBounds).addTo(map);
     map.fitBounds(imageBounds);
     map.setMaxBounds(imageBounds);
     this.setState({ map: map, markers: markers });
     map.on("resize", data => {
       let length = data.newSize.x;
       if (length !== 0) {
-        map.removeLayer(currentimage);
+        map.removeLayer(currentImage);
         markers.clearLayers();
         populateMap(this.props.data, length, markers);
         imageBounds = [[0, 0], [length, length]];
-        currentimage = L.imageOverlay(imageUrl, imageBounds).addTo(map);
+        currentImage = L.imageOverlay(fnmap, imageBounds).addTo(map);
         map.setMaxBounds(imageBounds);
         map.fitBounds(imageBounds);
         map.invalidateSize();
@@ -62,20 +62,32 @@ class Map extends Component {
       this.init();
     }
   }
-  componentDidUpdate() {
-    if (this.state.map && this.state.markers) {
-      let length = getInitialBrowserHeight();
-      let markers = this.state.markers;
-      markers.clearLayers();
-      populateMap(this.props.data, length, markers);
-      this.state.map.invalidateSize();
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (prevState.map) {
+      if (nextProps.mapLength === prevState.mapLength) {
+        let length = nextProps.mapLength;
+        let markers = prevState.markers;
+        let map = prevState.map;
+        markers.clearLayers();
+        populateMap(nextProps.data, length, markers);
+        map.invalidateSize();
+      }
+      return {
+        mapLength: nextProps.mapLength,
+        data: nextProps.data
+      };
     }
+    return {};
   }
   render() {
-    if (this.props.loading) {
-      return <div />;
-    }
-    return <div id="mapid" />;
+    return (
+      <div>
+        <div
+          style={{ width: this.props.mapLength, height: this.props.mapLength }}
+          id="mapid"
+        />
+      </div>
+    );
   }
 }
 
