@@ -12,19 +12,18 @@ import { Layout } from "antd";
 import { Row, Col } from "antd";
 import { seasonQuery } from "./Database.js";
 import ReactGA from "react-ga";
+import ContainerDimensions from "react-container-dimensions";
+
 const googleAnalyticsId = process.env.REACT_APP_GOOGLE_ANALYTICS_ID;
 const { Footer } = Layout;
 
 class App extends Component {
   constructor(props) {
     super(props);
-    this.sideBar = React.createRef();
-    this.map = React.createRef();
     this.state = {
       selectedSeason: 4,
       seasons: null,
-      localStorage: {},
-      compWidth: window.innerWidth
+      localStorage: {}
     };
     ReactGA.initialize(googleAnalyticsId);
     ReactGA.pageview(window.location.pathname);
@@ -44,11 +43,6 @@ class App extends Component {
         return element.number === number;
       });
     }
-  };
-  updateWidth = length => {
-    this.setState({
-      compWidth: window.innerWidth
-    });
   };
 
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -71,10 +65,6 @@ class App extends Component {
     }
   }
 
-  componentDidMount() {
-    window.addEventListener("resize", this.updateWidth);
-  }
-
   render() {
     return (
       <div className="App">
@@ -87,33 +77,30 @@ class App extends Component {
           </Col>
         </Row>
         <Row type="flex">
-          <Col xs={{ span: 24, order: 2 }} sm={{ span: 8, order: 1 }}>
-            <div ref={this.sideBar}>
-              {this.sideBar.current &&
-                this.map.current && (
-                  <Sidebar
-                    sideBarLength={this.sideBar.current.offsetWidth}
-                    sideBarHeight={this.map.current.offsetWidth}
-                    updateSeason={this.updateSeason}
-                    data={this.grabSelectedSeason(this.state.selectedSeason)}
-                    localStorage={this.state.localStorage}
-                  />
-                )}
-            </div>
+          <Col sm={{ span: 24, order: 2 }} md={{ span: 8, order: 1 }}>
+            <ContainerDimensions>
+              {({ height }) => (
+                <Sidebar
+                  sidebarHeight={height}
+                  updateSeason={this.updateSeason}
+                  data={this.grabSelectedSeason(this.state.selectedSeason)}
+                  localStorage={this.state.localStorage}
+                />
+              )}
+            </ContainerDimensions>
           </Col>
-          <Col xs={{ span: 24, order: 1 }} sm={{ span: 16, order: 2 }}>
-            <div ref={this.map}>
-              {this.state.seasons &&
-                this.map.current && (
-                  <Map
-                    mapLength={this.map.current.offsetWidth}
-                    data={processData(
-                      this.grabSelectedSeason(this.state.selectedSeason),
-                      this.state.localStorage
-                    )}
-                  />
-                )}
-            </div>
+          <Col sm={{ span: 24, order: 1 }} md={{ span: 16, order: 2 }}>
+            <ContainerDimensions>
+              {({ width }) => (
+                <Map
+                  mapLength={width}
+                  data={processData(
+                    this.grabSelectedSeason(this.state.selectedSeason),
+                    this.state.localStorage
+                  )}
+                />
+              )}
+            </ContainerDimensions>
           </Col>
         </Row>
         <Row>

@@ -7,6 +7,14 @@ const { SubMenu } = Menu;
 const { Sider } = Layout;
 
 class Sidebar extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      sidebarLength: null,
+      sidebarHeight: null
+    };
+  }
+
   toggleCheck = (week, challenge, season) => {
     if (challenge === "all") {
       for (let i = 1; i <= 8; i++) {
@@ -112,8 +120,11 @@ class Sidebar extends Component {
     if (!this.props.data || !this.props.data.weeks) {
       return (
         <Sider
-          width={this.props.sideBarLength}
+          className="Sidebar"
+          width={{}}
           style={{
+            maxHeight:
+              window.innerWidth >= 576 ? this.props.sidebarHeight : "none",
             background: "#fff",
             display: "block",
             left: 0
@@ -128,10 +139,10 @@ class Sidebar extends Component {
     return (
       <Sider
         className="Sidebar"
-        width={this.props.sideBarLength}
+        width={{}}
         style={{
           maxHeight:
-            window.innerWidth >= 576 ? this.props.sideBarHeight : "none",
+            window.innerWidth >= 768 ? this.props.sidebarHeight : "none",
           background: "#fff",
           display: "block",
           left: 0
