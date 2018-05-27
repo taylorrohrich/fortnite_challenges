@@ -77,7 +77,11 @@ class App extends Component {
           </Col>
         </Row>
         <Row type="flex">
-          <Col sm={{ span: 24, order: 2 }} md={{ span: 8, order: 1 }}>
+          <Col
+            xs={{ span: 24, order: 2 }}
+            sm={{ span: 24, order: 2 }}
+            md={{ span: 8, order: 1 }}
+          >
             <ContainerDimensions>
               {({ height }) => (
                 <Sidebar
@@ -89,7 +93,11 @@ class App extends Component {
               )}
             </ContainerDimensions>
           </Col>
-          <Col sm={{ span: 24, order: 1 }} md={{ span: 16, order: 2 }}>
+          <Col
+            xs={{ span: 24, order: 1 }}
+            sm={{ span: 24, order: 1 }}
+            md={{ span: 16, order: 2 }}
+          >
             <ContainerDimensions>
               {({ width }) => (
                 <Map
