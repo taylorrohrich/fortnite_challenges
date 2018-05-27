@@ -84,12 +84,14 @@ class App extends Component {
           >
             <ContainerDimensions>
               {({ height }) => (
-                <Sidebar
-                  sidebarHeight={height}
-                  updateSeason={this.updateSeason}
-                  data={this.grabSelectedSeason(this.state.selectedSeason)}
-                  localStorage={this.state.localStorage}
-                />
+                <div>
+                  <Sidebar
+                    sidebarHeight={height}
+                    updateSeason={this.updateSeason}
+                    data={this.grabSelectedSeason(this.state.selectedSeason)}
+                    localStorage={this.state.localStorage}
+                  />
+                </div>
               )}
             </ContainerDimensions>
           </Col>

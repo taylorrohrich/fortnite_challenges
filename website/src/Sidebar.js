@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import "./App.css";
 
 //node modules
-import { Layout, Menu, Checkbox } from "antd";
+import { Layout, Menu, Switch } from "antd";
 const { SubMenu } = Menu;
 const { Sider } = Layout;
 
@@ -63,9 +63,9 @@ class Sidebar extends Component {
           return (
             <Menu.Item
               style={{ fontSize: "12px" }}
-              key={"week" + +"challenge" + challenge.number}
+              key={"week" + "challenge" + challenge.number}
             >
-              <Checkbox
+              <Switch
                 disabled={!challenge.coord.length}
                 checked={
                   season["week" + data[i].number]["c" + challenge.number]
@@ -73,7 +73,7 @@ class Sidebar extends Component {
                     : false
                 }
                 defaultChecked={true}
-                style={{ padding: "5px" }}
+                style={{ margin: "5px" }}
                 onChange={() =>
                   this.toggleCheck(
                     "week" + data[i].number,
@@ -95,15 +95,15 @@ class Sidebar extends Component {
               style={{ fontSize: "12px" }}
               key={"week" + data[i].number + "all"}
             >
-              <Checkbox
+              <Switch
                 checked={season["week" + data[i].number]["all"] ? true : false}
                 defaultChecked={true}
-                style={{ padding: "5px" }}
+                style={{ margin: "5px" }}
                 onChange={() =>
                   this.toggleCheck("week" + data[i].number, "all", season)
                 }
               />
-              Check all
+              <b>Check all </b>
             </Menu.Item>
             {challenges}
           </SubMenu>
