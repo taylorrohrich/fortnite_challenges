@@ -114,10 +114,9 @@ class Sidebar extends Component {
         <Sider
           width={this.props.sideBarLength}
           style={{
-            height: "100%",
             background: "#fff",
             display: "block",
-            position: "fixed"
+            left: 0
           }}
         >
           <Menu mode="inline" style={{ height: "100%", borderRight: 0 }}>
@@ -128,13 +127,14 @@ class Sidebar extends Component {
     }
     return (
       <Sider
+        className="Sidebar"
         width={this.props.sideBarLength}
         style={{
-          maxHeight: this.props.sideBarHeight,
+          maxHeight:
+            window.innerWidth >= 576 ? this.props.sideBarHeight : "none",
           background: "#fff",
           display: "block",
-          left: 0,
-          overflow: "auto"
+          left: 0
         }}
       >
         <Menu mode="inline" style={{ height: "100%", borderRight: 0 }}>
