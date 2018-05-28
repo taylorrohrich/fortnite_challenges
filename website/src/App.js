@@ -6,7 +6,7 @@ import Sidebar from "./Sidebar.js";
 import { handleLocalStorage, processData } from "./functions.js";
 import github from "./images/github.png";
 import reddit from "./images/reddit.png";
-import MobileMapLockButton from "./MapLockButton";
+import MapLockButton from "./MapLockButton";
 //node modules
 import { graphql } from "react-apollo";
 import { withRouter } from "react-router-dom";
@@ -104,7 +104,7 @@ class App extends Component {
             <ContainerDimensions>
               {({ width }) => (
                 <React.Fragment>
-                  <MobileMapLockButton
+                  <MapLockButton
                     onClick={() => {
                       this.setState((state) => ({
                           ...state,
