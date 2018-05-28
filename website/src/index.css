@@ -3,3 +3,55 @@ body {
   padding: 0;
   font-family: sans-serif;
 }
+
+.challenges-column {
+  z-index: 1002; /* bring the column above the map lock button */
+}
+
+.cn--map-lock-btn {
+  position: -webkit-sticky;
+  position: sticky;
+  z-index: 1001; /* bring the button above leaflet and attribution */
+  top: 0;
+  float: right;
+  margin-right: 50px;
+  height: 0;
+  width: 0;
+}
+
+.map-lock-btn {
+  width: 40px;
+  height: 40px;
+  margin-top: 10px;
+
+  border-radius: 2px;
+  box-shadow: 0 0 5px rgba(0,0,0, 1);
+  background: white;
+
+  cursor: pointer;
+  user-select: none;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.map-lock-btn:hover {
+  background-color: #f4f4f4;
+  color: black;
+}
+
+.map-lock-btn-icn {
+  width: 80%;
+  height: 80%;
+  background: no-repeat center;
+  background-size: contain;
+}
+
+.map-lock-btn-icn.lock {
+  background-image: url('./images/lock.png');
+}
+
+.map-lock-btn-icn.unlock {
+  background-image: url('./images/unlock.png');
+}

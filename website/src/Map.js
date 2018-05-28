@@ -28,7 +28,8 @@ class Map extends Component {
       maxBoundsViscosity: 1.0,
       layers: markers,
       dragging: false,
-      scrollWheelZoom: false
+      scrollWheelZoom: false,
+      tap: true,
     });
     let imageBounds = [[0, 0], [length, length]];
     let currentImage = L.imageOverlay(fnmap, imageBounds).addTo(map);
@@ -39,7 +40,9 @@ class Map extends Component {
       if (map.getZoom() === 0) {
         map.dragging.disable();
       } else {
-        map.dragging.enable();
+        if (!this.props.isMapLocked) {
+          map.dragging.enable();
+        }
       }
     });
   };
@@ -49,6 +52,7 @@ class Map extends Component {
       this.init();
     }
   }
+
   static getDerivedStateFromProps(nextProps, prevState) {
     if (prevState.map) {
       let markers = prevState.markers;
@@ -79,6 +83,24 @@ class Map extends Component {
           }, 400);
         }
       }
+      if (nextProps.isMapLocked) {
+        let map = prevState.map;
+        map.dragging.disable();
+        map.touchZoom.disable();
+        map.doubleClickZoom.disable();
+        map.boxZoom.disable();
+        map.keyboard.disable();
+        map.zoomControl.disable();
+        if (map.tap) map.tap.disable();
+      } else {
+        let map = prevState.map;
+        map.touchZoom.enable();
+        map.doubleClickZoom.enable();
+        map.boxZoom.enable();
+        map.keyboard.enable();
+        map.zoomControl.enable();
+        if (map.tap) map.tap.enable();
+      }
       return {
         mapLength: nextProps.mapLength,
         data: nextProps.data,
@@ -88,6 +110,7 @@ class Map extends Component {
     }
     return {};
   }
+
   render() {
     return (
       <div
