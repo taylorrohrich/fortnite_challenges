@@ -6,6 +6,7 @@ import Sidebar from "./Sidebar.js";
 import { handleLocalStorage, processData } from "./functions.js";
 import github from "./images/github.png";
 import reddit from "./images/reddit.png";
+import MobileMapLockButton from "./MapLockButton";
 //node modules
 import { graphql } from "react-apollo";
 import { withRouter } from "react-router-dom";
@@ -22,7 +23,8 @@ class App extends Component {
     this.state = {
       selectedSeason: 4,
       seasons: null,
-      localStorage: {}
+      localStorage: {},
+      isMapLocked: false,
     };
     ReactGA.initialize(googleAnalyticsId);
     ReactGA.pageview(window.location.pathname);
@@ -79,6 +81,7 @@ class App extends Component {
             md={{ span: 24, order: 2 }}
             lg={{ span: 8, order: 1 }}
             xl={{ span: 12, order: 1 }}
+            className={"challenges-column"}
           >
             <ContainerDimensions>
               {({ height }) => (
@@ -100,13 +103,25 @@ class App extends Component {
           >
             <ContainerDimensions>
               {({ width }) => (
-                <Map
-                  mapLength={width}
-                  data={processData(
-                    this.grabSelectedSeason(this.state.selectedSeason),
-                    this.state.localStorage
-                  )}
-                />
+                <React.Fragment>
+                  <MobileMapLockButton
+                    onClick={() => {
+                      this.setState((state) => ({
+                          ...state,
+                          isMapLocked: !state.isMapLocked
+                      }));
+                    }}
+                    isMapLocked={this.state.isMapLocked}
+                  />
+                  <Map
+                    mapLength={width}
+                    data={processData(
+                      this.grabSelectedSeason(this.state.selectedSeason),
+                      this.state.localStorage
+                    )}
+                    isMapLocked={this.state.isMapLocked}
+                  />
+                </React.Fragment>
               )}
             </ContainerDimensions>
           </Col>
@@ -136,7 +151,7 @@ class App extends Component {
               style={{ textDecoration: "none", color: "black" }}
               href="https://www.flaticon.com/authors/pixel-perfect"
             >
-              Social Media Icons designed by pixel-perfect from Flaticon
+              Social Media Icons and Lock Icons designed by pixel-perfect from Flaticon
             </a>
           </div>
         </Row>
