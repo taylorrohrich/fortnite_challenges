@@ -73,7 +73,7 @@ class Sidebar extends Component {
                     : false
                 }
                 defaultChecked={true}
-                style={{ margin: "5px" }}
+                style={{ marginRight: "15px" }}
                 onChange={() =>
                   this.toggleCheck(
                     "week" + data[i].number,
@@ -98,7 +98,7 @@ class Sidebar extends Component {
               <Switch
                 checked={season["week" + data[i].number]["all"] ? true : false}
                 defaultChecked={true}
-                style={{ margin: "5px" }}
+                style={{ marginRight: "15px" }}
                 onChange={() =>
                   this.toggleCheck("week" + data[i].number, "all", season)
                 }

@@ -29,7 +29,6 @@ class Map extends Component {
       dragging: false,
       scrollWheelZoom: false
     });
-    populateMap(this.props.data, length, markers);
     let imageBounds = [[0, 0], [length, length]];
     let currentImage = L.imageOverlay(fnmap, imageBounds).addTo(map);
     map.fitBounds(imageBounds);
@@ -41,6 +40,7 @@ class Map extends Component {
         map.removeLayer(currentImage);
         markers.clearLayers();
         populateMap(this.props.data, length, markers);
+
         imageBounds = [[0, 0], [length, length]];
         currentImage = L.imageOverlay(fnmap, imageBounds).addTo(map);
         map.setMaxBounds(imageBounds);
@@ -64,17 +64,22 @@ class Map extends Component {
   }
   static getDerivedStateFromProps(nextProps, prevState) {
     if (prevState.map) {
-      if (nextProps.mapLength === prevState.mapLength) {
+      let markers = prevState.markers;
+      if (
+        !(JSON.stringify(nextProps.data) === JSON.stringify(prevState.data))
+      ) {
         let length = nextProps.mapLength;
-        let markers = prevState.markers;
         let map = prevState.map;
+        map.removeLayer(markers);
         markers.clearLayers();
         populateMap(nextProps.data, length, markers);
+        map.addLayer(markers);
         map.invalidateSize();
       }
       return {
         mapLength: nextProps.mapLength,
-        data: nextProps.data
+        data: nextProps.data,
+        markers: markers
       };
     }
     return {};
