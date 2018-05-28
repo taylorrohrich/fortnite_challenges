@@ -3,21 +3,18 @@ import "./App.css";
 import Map from "./Map.js";
 import Navbar from "./Navbar.js";
 import Sidebar from "./Sidebar.js";
-import {
-  handleLocalStorage,
-  processData,
-  getInitialBrowserHeight
-} from "./functions.js";
-
+import { handleLocalStorage, processData } from "./functions.js";
+import github from "./images/github.png";
+import reddit from "./images/reddit.png";
 //node modules
 import { graphql } from "react-apollo";
 import { withRouter } from "react-router-dom";
-import { Layout } from "antd";
-
+import { Row, Col } from "antd";
 import { seasonQuery } from "./Database.js";
 import ReactGA from "react-ga";
+import ContainerDimensions from "react-container-dimensions";
+
 const googleAnalyticsId = process.env.REACT_APP_GOOGLE_ANALYTICS_ID;
-const { Content, Footer } = Layout;
 
 class App extends Component {
   constructor(props) {
@@ -25,8 +22,7 @@ class App extends Component {
     this.state = {
       selectedSeason: 4,
       seasons: null,
-      localStorage: {},
-      compWidth: window.innerWidth
+      localStorage: {}
     };
     ReactGA.initialize(googleAnalyticsId);
     ReactGA.pageview(window.location.pathname);
@@ -46,11 +42,6 @@ class App extends Component {
         return element.number === number;
       });
     }
-  };
-  updateWidth = length => {
-    this.setState({
-      compWidth: window.innerWidth
-    });
   };
 
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -73,64 +64,82 @@ class App extends Component {
     }
   }
 
-  componentDidMount() {
-    window.addEventListener("resize", this.updateWidth);
-  }
-
   render() {
     return (
       <div className="App">
-        <Layout>
-          <Navbar
-            updateSelectedSeason={this.updateSelectedSeason}
-            data={this.props.allSeasonQuery.allSeasons}
-          />
-          {this.state.compWidth > 992 ? (
-            <Layout>
-              <Sidebar
-                compWidth={this.state.compWidth - getInitialBrowserHeight()}
-                updateSeason={this.updateSeason}
-                data={this.grabSelectedSeason(this.state.selectedSeason)}
-                localStorage={this.state.localStorage}
-              />
-              <Content>
-                <Map
-                  data={processData(
-                    this.grabSelectedSeason(this.state.selectedSeason),
-                    this.state.localStorage
-                  )}
-                />
-              </Content>
-            </Layout>
-          ) : (
-            <Layout>
-              <Content>
-                <Map
-                  data={processData(
-                    this.grabSelectedSeason(this.state.selectedSeason),
-                    this.state.localStorage
-                  )}
-                />
+        <Navbar
+          updateSelectedSeason={this.updateSelectedSeason}
+          data={this.props.allSeasonQuery.allSeasons}
+        />
+
+        <Row type="flex">
+          <Col
+            xs={{ span: 24, order: 2 }}
+            sm={{ span: 24, order: 2 }}
+            md={{ span: 24, order: 2 }}
+            lg={{ span: 8, order: 1 }}
+            xl={{ span: 12, order: 1 }}
+          >
+            <ContainerDimensions>
+              {({ height }) => (
                 <Sidebar
-                  compWidth={this.state.compWidth}
+                  sidebarHeight={height}
                   updateSeason={this.updateSeason}
                   data={this.grabSelectedSeason(this.state.selectedSeason)}
                   localStorage={this.state.localStorage}
                 />
-              </Content>
-            </Layout>
-          )}
-          <Layout>
-            <Footer style={{ textAlign: "center", fontSize: "12px" }}>
-              <p>Made with React.js</p>
-              <p style={{ fontSize: "8px" }}>
-                Portions of the materials used are trademarks and/or copyrighted
-                works of Epic Games, Inc. All rights reserved by Epic. This
-                material is not official and is not endorsed by Epic.
-              </p>
-            </Footer>
-          </Layout>
-        </Layout>
+              )}
+            </ContainerDimensions>
+          </Col>
+          <Col
+            xs={{ span: 24, order: 1 }}
+            sm={{ span: 24, order: 1 }}
+            md={{ span: 24, order: 1 }}
+            lg={{ span: 16, order: 2 }}
+            xl={{ span: 12, order: 2 }}
+          >
+            <ContainerDimensions>
+              {({ width }) => (
+                <Map
+                  mapLength={width}
+                  data={processData(
+                    this.grabSelectedSeason(this.state.selectedSeason),
+                    this.state.localStorage
+                  )}
+                />
+              )}
+            </ContainerDimensions>
+          </Col>
+        </Row>
+        <Row className="footer">
+          <a href="https://github.com/20rohrichtt/fortnite_challenges">
+            <img
+              className="socialMediaIcon"
+              src={github}
+              alt=""
+              style={{ width: "30px", height: "30px" }}
+            />
+          </a>
+          <a href="https://www.reddit.com/user/tmant1234/">
+            <img
+              className="socialMediaIcon"
+              src={reddit}
+              alt=""
+              style={{ width: "30px", height: "30px" }}
+            />
+          </a>
+          <div className="footerText">
+            Portions of the materials used are trademarks and/or copyrighted
+            works of Epic Games, Inc. All rights reserved by Epic. This material
+            is not official and is not endorsed by Epic.{" "}
+            <a
+              style={{ textDecoration: "none", color: "black" }}
+              href="https://www.flaticon.com/authors/pixel-perfect"
+            >
+              Social Media Icons designed by pixel-perfect from Flaticon
+            </a>
+          </div>
+        </Row>
       </div>
     );
   }

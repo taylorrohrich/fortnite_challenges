@@ -2,11 +2,19 @@ import React, { Component } from "react";
 import "./App.css";
 
 //node modules
-import { Layout, Menu, Checkbox } from "antd";
+import { Layout, Menu, Switch } from "antd";
 const { SubMenu } = Menu;
 const { Sider } = Layout;
 
 class Sidebar extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      sidebarLength: null,
+      sidebarHeight: null
+    };
+  }
+
   toggleCheck = (week, challenge, season) => {
     if (challenge === "all") {
       for (let i = 1; i <= 8; i++) {
@@ -55,9 +63,9 @@ class Sidebar extends Component {
           return (
             <Menu.Item
               style={{ fontSize: "12px" }}
-              key={"week" + +"challenge" + challenge.number}
+              key={"week" + i + "challenge" + challenge.number}
             >
-              <Checkbox
+              <Switch
                 disabled={!challenge.coord.length}
                 checked={
                   season["week" + data[i].number]["c" + challenge.number]
@@ -65,7 +73,7 @@ class Sidebar extends Component {
                     : false
                 }
                 defaultChecked={true}
-                style={{ padding: "5px" }}
+                style={{ marginRight: "15px" }}
                 onChange={() =>
                   this.toggleCheck(
                     "week" + data[i].number,
@@ -87,15 +95,15 @@ class Sidebar extends Component {
               style={{ fontSize: "12px" }}
               key={"week" + data[i].number + "all"}
             >
-              <Checkbox
+              <Switch
                 checked={season["week" + data[i].number]["all"] ? true : false}
                 defaultChecked={true}
-                style={{ padding: "5px" }}
+                style={{ marginRight: "15px" }}
                 onChange={() =>
                   this.toggleCheck("week" + data[i].number, "all", season)
                 }
               />
-              Check all
+              <b>Check all </b>
             </Menu.Item>
             {challenges}
           </SubMenu>
@@ -112,8 +120,15 @@ class Sidebar extends Component {
     if (!this.props.data || !this.props.data.weeks) {
       return (
         <Sider
-          width={this.props.compWidth}
-          style={{ background: "#fff", display: "block" }}
+          className="Sidebar"
+          width={{}}
+          style={{
+            maxHeight:
+              window.innerWidth >= 768 ? this.props.sidebarHeight : "none",
+            background: "#fff",
+            display: "block",
+            left: 0
+          }}
         >
           <Menu mode="inline" style={{ height: "100%", borderRight: 0 }}>
             {this.mapWeeks("error")}
@@ -123,8 +138,15 @@ class Sidebar extends Component {
     }
     return (
       <Sider
-        width={this.props.compWidth}
-        style={{ background: "#fff", display: "block" }}
+        className="Sidebar"
+        width={{}}
+        style={{
+          maxHeight:
+            window.innerWidth >= 768 ? this.props.sidebarHeight : "none",
+          background: "#fff",
+          display: "block",
+          left: 0
+        }}
       >
         <Menu mode="inline" style={{ height: "100%", borderRight: 0 }}>
           {this.mapWeeks(this.props.data, this.props.localStorage)}

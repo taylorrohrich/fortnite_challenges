@@ -4,54 +4,55 @@
   font-size: 8px;
 }
 .logo {
-  font-size: 1em;
+  font-size: 1.5em;
   font-family: "Luckiest Guy";
   height: 100%;
   float: left;
   text-align: center;
   padding-left: 5%;
   padding-right: 5%;
-}
-h1 {
-  margin: 0;
   color: white;
 }
 
-.ant-menu-item {
-  padding: 0;
-}
 #mapid {
-  height: 100vw;
-  width: 100vw;
   display: block;
-  margin-left: auto;
-  margin-right: auto;
 }
+.Sidebar {
+  overflow: visible;
+}
+.socialMediaIcon {
+  float: left;
+  margin-left: 15px;
+  margin-right: 15px;
+}
+.footer {
+  background-color: rgb(248, 247, 247);
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  vertical-align: middle;
+  padding: 10px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+.footerText {
+  display: block;
+  float: left;
+  margin-left: 15px;
+  font-size: 0.7em;
+}
+
 /* Custom, iPhone Retina */
 @media only screen and (min-width: 320px) {
   .App {
-    font-size: 8px;
-  }
-  #mapid {
-    height: 100vw;
-    width: 100vw;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
+    font-size: 10px;
   }
 }
 
 /* Extra Small Devices, Phones */
-@media only screen and (min-width: 480px) {
+@media only screen and (min-width: 576px) {
   .App {
     font-size: 12px;
-  }
-  #mapid {
-    height: 100vw;
-    width: 100vw;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
   }
 }
 
@@ -60,12 +61,8 @@ h1 {
   .App {
     font-size: 14px;
   }
-  #mapid {
-    height: 100vw;
-    width: 100vw;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
+  .Sidebar {
+    overflow: auto;
   }
 }
 
@@ -74,21 +71,11 @@ h1 {
   .App {
     font-size: 16px;
   }
-  #mapid {
-    height: 790px;
-    width: 790px;
-    display: block;
-  }
 }
 
 /* Large Devices, Wide Screens */
 @media only screen and (min-width: 1200px) {
   .App {
     font-size: 16px;
-  }
-  #mapid {
-    height: 900px;
-    width: 900px;
-    display: block;
   }
 }
