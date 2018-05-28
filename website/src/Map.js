@@ -14,7 +14,8 @@ class Map extends Component {
       map: null,
       markers: null,
       mapLength: null,
-      data: null
+      data: null,
+      currentImage: null
     };
   }
 
@@ -33,21 +34,7 @@ class Map extends Component {
     let currentImage = L.imageOverlay(fnmap, imageBounds).addTo(map);
     map.fitBounds(imageBounds);
     map.setMaxBounds(imageBounds);
-    this.setState({ map: map, markers: markers });
-    map.on("resize", data => {
-      let length = data.newSize.x;
-      if (length !== 0) {
-        map.removeLayer(currentImage);
-        markers.clearLayers();
-        populateMap(this.props.data, length, markers);
-
-        imageBounds = [[0, 0], [length, length]];
-        currentImage = L.imageOverlay(fnmap, imageBounds).addTo(map);
-        map.setMaxBounds(imageBounds);
-        map.fitBounds(imageBounds);
-        map.invalidateSize();
-      }
-    });
+    this.setState({ map: map, markers: markers, currentImage: currentImage });
     map.on("zoom", data => {
       if (map.getZoom() === 0) {
         map.dragging.disable();
@@ -65,6 +52,7 @@ class Map extends Component {
   static getDerivedStateFromProps(nextProps, prevState) {
     if (prevState.map) {
       let markers = prevState.markers;
+      let currentImage = prevState.currentImage;
       if (
         !(JSON.stringify(nextProps.data) === JSON.stringify(prevState.data))
       ) {
@@ -74,24 +62,41 @@ class Map extends Component {
         markers.clearLayers();
         populateMap(nextProps.data, length, markers);
         map.addLayer(markers);
-        map.invalidateSize();
+      }
+      if (prevState.mapLength != nextProps.mapLength) {
+        if (nextProps.mapLength && nextProps.mapLength !== 0) {
+          let length = nextProps.mapLength;
+          let map = prevState.map;
+          map.removeLayer(currentImage);
+          markers.clearLayers();
+          populateMap(nextProps.data, length, markers);
+          let imageBounds = [[0, 0], [length, length]];
+          map.fitBounds(imageBounds);
+          map.setMaxBounds(imageBounds);
+          currentImage = L.imageOverlay(fnmap, imageBounds).addTo(map);
+          setTimeout(() => {
+            map.invalidateSize();
+          }, 400);
+        }
       }
       return {
         mapLength: nextProps.mapLength,
         data: nextProps.data,
-        markers: markers
+        markers: markers,
+        currentImage: currentImage
       };
     }
     return {};
   }
   render() {
     return (
-      <div>
-        <div
-          style={{ width: this.props.mapLength, height: this.props.mapLength }}
-          id="mapid"
-        />
-      </div>
+      <div
+        style={{
+          width: this.props.mapLength,
+          height: this.props.mapLength
+        }}
+        id="mapid"
+      />
     );
   }
 }
