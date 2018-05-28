@@ -63,7 +63,7 @@ class Map extends Component {
         populateMap(nextProps.data, length, markers);
         map.addLayer(markers);
       }
-      if (prevState.mapLength != nextProps.mapLength) {
+      if (prevState.mapLength !== nextProps.mapLength) {
         if (nextProps.mapLength && nextProps.mapLength !== 0) {
           let length = nextProps.mapLength;
           let map = prevState.map;

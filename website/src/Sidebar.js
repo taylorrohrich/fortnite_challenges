@@ -63,7 +63,7 @@ class Sidebar extends Component {
           return (
             <Menu.Item
               style={{ fontSize: "12px" }}
-              key={"week" + "challenge" + challenge.number}
+              key={"week" + i + "challenge" + challenge.number}
             >
               <Switch
                 disabled={!challenge.coord.length}
