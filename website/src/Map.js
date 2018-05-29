@@ -66,6 +66,7 @@ class Map extends Component {
       if (prevState.mapLength !== nextProps.mapLength) {
         if (nextProps.mapLength && nextProps.mapLength !== 0) {
           let length = nextProps.mapLength;
+          if (nextProps.updateHeight) nextProps.updateHeight(length);
           let map = prevState.map;
           map.removeLayer(currentImage);
           markers.clearLayers();

@@ -29,9 +29,7 @@ class Navbar extends Component {
     if (!this.props.data) {
       return (
         <Header style={{ padding: "0px" }} className="header">
-          <div className="logo">
-            <h1>FortFriend</h1>
-          </div>
+          <div className="logo">FortFriend</div>
           <Menu
             theme="dark"
             mode="horizontal"

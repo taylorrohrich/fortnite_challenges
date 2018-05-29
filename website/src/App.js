@@ -22,7 +22,8 @@ class App extends Component {
     this.state = {
       selectedSeason: 4,
       seasons: null,
-      localStorage: {}
+      localStorage: {},
+      height: null
     };
     ReactGA.initialize(googleAnalyticsId);
     ReactGA.pageview(window.location.pathname);
@@ -30,6 +31,10 @@ class App extends Component {
 
   updateSeason = season => {
     this.setState({ localStorage: season });
+  };
+
+  updateHeight = height => {
+    this.setState({ height: height });
   };
 
   updateSelectedSeason = number => {
@@ -80,16 +85,12 @@ class App extends Component {
             lg={{ span: 8, order: 1 }}
             xl={{ span: 12, order: 1 }}
           >
-            <ContainerDimensions>
-              {({ height }) => (
-                <Sidebar
-                  sidebarHeight={height}
-                  updateSeason={this.updateSeason}
-                  data={this.grabSelectedSeason(this.state.selectedSeason)}
-                  localStorage={this.state.localStorage}
-                />
-              )}
-            </ContainerDimensions>
+            <Sidebar
+              sidebarHeight={this.state.height}
+              updateSeason={this.updateSeason}
+              data={this.grabSelectedSeason(this.state.selectedSeason)}
+              localStorage={this.state.localStorage}
+            />
           </Col>
           <Col
             xs={{ span: 24, order: 1 }}
@@ -102,6 +103,7 @@ class App extends Component {
               {({ width }) => (
                 <Map
                   mapLength={width}
+                  updateHeight={this.updateHeight}
                   data={processData(
                     this.grabSelectedSeason(this.state.selectedSeason),
                     this.state.localStorage
