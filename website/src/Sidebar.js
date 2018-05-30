@@ -113,23 +113,21 @@ class Sidebar extends Component {
     return menu;
   };
 
+  handleSiderStyle = () => {
+    return {
+      maxHeight: window.innerWidth >= 992 ? this.props.sidebarHeight : "none",
+      background: "#fff",
+      display: "block",
+      left: 0
+    };
+  };
   render() {
     if (this.props.loading) {
       return <div />;
     }
     if (!this.props.data || !this.props.data.weeks) {
       return (
-        <Sider
-          className="Sidebar"
-          width={{}}
-          style={{
-            maxHeight:
-              window.innerWidth >= 768 ? this.props.sidebarHeight : "none",
-            background: "#fff",
-            display: "block",
-            left: 0
-          }}
-        >
+        <Sider className="Sidebar" width={{}} style={this.handleSiderStyle()}>
           <Menu mode="inline" style={{ height: "100%", borderRight: 0 }}>
             {this.mapWeeks("error")}
           </Menu>
@@ -137,17 +135,7 @@ class Sidebar extends Component {
       );
     }
     return (
-      <Sider
-        className="Sidebar"
-        width={{}}
-        style={{
-          maxHeight:
-            window.innerWidth >= 768 ? this.props.sidebarHeight : "none",
-          background: "#fff",
-          display: "block",
-          left: 0
-        }}
-      >
+      <Sider className="Sidebar" width={{}} style={this.handleSiderStyle()}>
         <Menu mode="inline" style={{ height: "100%", borderRight: 0 }}>
           {this.mapWeeks(this.props.data, this.props.localStorage)}
         </Menu>
