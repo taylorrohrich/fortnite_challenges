@@ -115,7 +115,7 @@ class Sidebar extends Component {
 
   handleSiderStyle = () => {
     return {
-      maxHeight: window.innerWidth >= 768 ? this.props.sidebarHeight : "none",
+      maxHeight: window.innerWidth >= 992 ? this.props.sidebarHeight : "none",
       background: "#fff",
       display: "block",
       left: 0

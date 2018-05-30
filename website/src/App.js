@@ -13,7 +13,6 @@ import { Row, Col } from "antd";
 import { seasonQuery } from "./Database.js";
 import ReactGA from "react-ga";
 import ContainerDimensions from "react-container-dimensions";
-import ReactDisqusComments from "react-disqus-comments";
 
 const googleAnalyticsId = process.env.REACT_APP_GOOGLE_ANALYTICS_ID;
 
@@ -126,7 +125,9 @@ class App extends Component {
             </ContainerDimensions>
           </Col>
         </Row>
-        <div id="disqus_thread" />
+        <div className="disqusContainer">
+          <div id="disqus_thread" />
+        </div>
         <Row>
           <div className="footer">
             <a href="https://github.com/20rohrichtt/fortnite_challenges">
@@ -159,6 +160,7 @@ class App extends Component {
                 style={{ textDecoration: "none", color: "black" }}
                 href="https://www.flaticon.com/authors/pixel-perfect"
               >
+                {" "}
                 Social Media Icons designed by pixel-perfect from Flaticon
               </a>
             </div>

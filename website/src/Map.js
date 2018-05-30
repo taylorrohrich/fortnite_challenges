@@ -28,7 +28,7 @@ class Map extends Component {
       maxBoundsViscosity: 1.0,
       layers: markers,
       dragging: false,
-      scrollWheelZoom: false
+      scrollWheelZoom: true
     });
     let imageBounds = [[0, 0], [length, length]];
     let currentImage = L.imageOverlay(fnmap, imageBounds).addTo(map);
@@ -74,6 +74,11 @@ class Map extends Component {
           let imageBounds = [[0, 0], [length, length]];
           map.fitBounds(imageBounds);
           map.setMaxBounds(imageBounds);
+          if (window.innerWidth >= 992) {
+            map.scrollWheelZoom.enable();
+          } else {
+            map.scrollWheelZoom.disable();
+          }
           currentImage = L.imageOverlay(fnmap, imageBounds).addTo(map);
           setTimeout(() => {
             map.invalidateSize();
