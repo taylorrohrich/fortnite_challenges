@@ -13,8 +13,21 @@ import { Row, Col } from "antd";
 import { seasonQuery } from "./Database.js";
 import ReactGA from "react-ga";
 import ContainerDimensions from "react-container-dimensions";
+import ReactDisqusComments from "react-disqus-comments";
 
 const googleAnalyticsId = process.env.REACT_APP_GOOGLE_ANALYTICS_ID;
+
+// var disqus_config = function() {
+//   this.page.url = "https://fort-friend.com";
+// };
+(function() {
+  // DON'T EDIT BELOW THIS LINE
+  var d = document,
+    s = d.createElement("script");
+  s.src = "https://fort-friend.disqus.com/embed.js";
+  s.setAttribute("data-timestamp", +new Date());
+  (d.head || d.body).appendChild(s);
+})();
 
 class App extends Component {
   constructor(props) {
@@ -113,33 +126,42 @@ class App extends Component {
             </ContainerDimensions>
           </Col>
         </Row>
-        <Row className="footer">
-          <a href="https://github.com/20rohrichtt/fortnite_challenges">
-            <img
-              className="socialMediaIcon"
-              src={github}
-              alt=""
-              style={{ width: "30px", height: "30px" }}
-            />
-          </a>
-          <a href="https://www.reddit.com/user/tmant1234/">
-            <img
-              className="socialMediaIcon"
-              src={reddit}
-              alt=""
-              style={{ width: "30px", height: "30px" }}
-            />
-          </a>
-          <div className="footerText">
-            Portions of the materials used are trademarks and/or copyrighted
-            works of Epic Games, Inc. All rights reserved by Epic. This material
-            is not official and is not endorsed by Epic.{" "}
-            <a
-              style={{ textDecoration: "none", color: "black" }}
-              href="https://www.flaticon.com/authors/pixel-perfect"
-            >
-              Social Media Icons designed by pixel-perfect from Flaticon
+        <div id="disqus_thread" />
+        <Row>
+          <div className="footer">
+            <a href="https://github.com/20rohrichtt/fortnite_challenges">
+              <img
+                className="socialMediaIcon"
+                src={github}
+                alt=""
+                style={{ width: "30px", height: "30px" }}
+              />
             </a>
+            <a href="https://www.reddit.com/user/tmant1234/">
+              <img
+                className="socialMediaIcon"
+                src={reddit}
+                alt=""
+                style={{ width: "30px", height: "30px" }}
+              />
+            </a>
+            <div className="footerText">
+              Contact Me: taylorrohrich@fort-friend.com
+            </div>
+          </div>
+          <div className="disclaimer">
+            <hr className="separator" />
+            <div className="disclaimerText">
+              Portions of the materials used are trademarks and/or copyrighted
+              works of Epic Games, Inc. All rights reserved by Epic. This
+              material is not official and is not endorsed by Epic.
+              <a
+                style={{ textDecoration: "none", color: "black" }}
+                href="https://www.flaticon.com/authors/pixel-perfect"
+              >
+                Social Media Icons designed by pixel-perfect from Flaticon
+              </a>
+            </div>
           </div>
         </Row>
       </div>
