@@ -13,7 +13,7 @@ FortFriend allows you to track your progress on the Battle Pass for Fortnite Bat
 
 ## Update 5/30/18
 
-* Allow user to scroll in/out on map (until map becomes full width)
+* Allow user to scroll in/out on map if they click on the map (lasts until user's mouse exits map)
 * Fixed issue with ultrawide displays and a horizontal scroll bar displaying
 * Fixed issue with scroll overflow not happening at proper cutoffs
 * Added Disqus for a discussion section
