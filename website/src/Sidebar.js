@@ -66,7 +66,6 @@ class Sidebar extends Component {
               key={"week" + i + "challenge" + challenge.number}
             >
               <Switch
-                disabled={!challenge.coord.length}
                 checked={
                   season["week" + data[i].number]["c" + challenge.number]
                     ? true

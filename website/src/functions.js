@@ -8,7 +8,8 @@ import {
   cameraIcon,
   hoprockIcon,
   lettersIcon,
-  duckIcon
+  duckIcon,
+  discoIcon
 } from "./icons.js";
 
 export function populateMap(data, length, group) {
@@ -23,7 +24,11 @@ export function populateMap(data, length, group) {
             // Make the icon dragable
 
             icon: decideIcon(chal.icon)
-          }).bindPopup(chal.description); // Adjust the opacity
+          }).bindPopup(
+            chal.url
+              ? "<img src=" + chal.url + " />" + chal.description
+              : chal.description
+          ); // Adjust the opacity
           group.addLayer(m);
         }
       }
@@ -59,22 +64,30 @@ export function decideIcon(icon) {
   if (icon === "duckIcon") {
     return duckIcon;
   }
+  if (icon === "discoIcon") {
+    return discoIcon;
+  }
+  return challengeIcon;
 }
 export function handleLocalStorage(season) {
   if (!localStorage.getItem("season" + season.number)) {
-    // localStorage.setItem("lastname", "Smith");
+    let currentWeek = season.weeks.reduce((accum, curVal) => {
+      if (curVal.number > accum) accum = curVal.number;
+      return accum;
+    }, 0);
     let seasonJSON = {};
     for (let j = 1; j <= 10; j++) {
+      let defaultOpen = j === currentWeek;
       seasonJSON["week" + [j]] = {
-        all: true,
-        c1: true,
-        c2: true,
-        c3: true,
-        c4: true,
-        c5: true,
-        c6: true,
-        c7: true,
-        c8: true
+        all: defaultOpen,
+        c1: defaultOpen,
+        c2: defaultOpen,
+        c3: defaultOpen,
+        c4: defaultOpen,
+        c5: defaultOpen,
+        c6: defaultOpen,
+        c7: defaultOpen,
+        c8: defaultOpen
       };
     }
     localStorage.setItem("season" + season.number, JSON.stringify(seasonJSON));

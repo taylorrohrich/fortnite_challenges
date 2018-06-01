@@ -18,3 +18,9 @@ FortFriend allows you to track your progress on the Battle Pass for Fortnite Bat
 * Fixed issue with scroll overflow not happening at proper cutoffs
 * Added Disqus for a discussion section
 * General styling updates
+
+## Update 5/31/18
+
+* Added higher resolution map
+* Non-location image switches are no longer disabled, allowing you to check them when you are done (subject to change)
+* New users to the site should only have the most recent challenges selected by default
