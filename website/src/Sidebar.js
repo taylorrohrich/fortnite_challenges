@@ -88,22 +88,29 @@ class Sidebar extends Component {
         menu.push(
           <SubMenu
             key={"week" + data[i].number}
-            title={<span>Week {data[i].number} </span>}
+            title={
+              <span>
+                <span
+                  onClick={e => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                  }}
+                >
+                  <Switch
+                    checked={
+                      season["week" + data[i].number]["all"] ? true : false
+                    }
+                    defaultChecked={true}
+                    style={{ marginRight: "15px" }}
+                    onChange={() =>
+                      this.toggleCheck("week" + data[i].number, "all", season)
+                    }
+                  />
+                </span>
+                Week {data[i].number}
+              </span>
+            }
           >
-            <Menu.Item
-              style={{ fontSize: "12px" }}
-              key={"week" + data[i].number + "all"}
-            >
-              <Switch
-                checked={season["week" + data[i].number]["all"] ? true : false}
-                defaultChecked={true}
-                style={{ marginRight: "15px" }}
-                onChange={() =>
-                  this.toggleCheck("week" + data[i].number, "all", season)
-                }
-              />
-              <b>Check all </b>
-            </Menu.Item>
             {challenges}
           </SubMenu>
         );
@@ -127,7 +134,11 @@ class Sidebar extends Component {
     if (!this.props.data || !this.props.data.weeks) {
       return (
         <Sider className="Sidebar" width={{}} style={this.handleSiderStyle()}>
-          <Menu mode="inline" style={{ height: "100%", borderRight: 0 }}>
+          <Menu
+            inlineIndent={15}
+            mode="inline"
+            style={{ height: "100%", borderRight: 0 }}
+          >
             {this.mapWeeks("error")}
           </Menu>
         </Sider>
@@ -135,7 +146,11 @@ class Sidebar extends Component {
     }
     return (
       <Sider className="Sidebar" width={{}} style={this.handleSiderStyle()}>
-        <Menu mode="inline" style={{ height: "100%", borderRight: 0 }}>
+        <Menu
+          inlineIndent={15}
+          mode="inline"
+          style={{ height: "100%", borderRight: 0 }}
+        >
           {this.mapWeeks(this.props.data, this.props.localStorage)}
         </Menu>
       </Sider>

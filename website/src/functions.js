@@ -9,8 +9,11 @@ import {
   hoprockIcon,
   lettersIcon,
   duckIcon,
-  discoIcon
+  discoIcon,
+  vendingIcon
 } from "./icons.js";
+
+import youtube from "./images/youtube.png";
 
 export function populateMap(data, length, group) {
   if (data) {
@@ -18,15 +21,33 @@ export function populateMap(data, length, group) {
       let chal = data[i];
       if (chal.coord.length) {
         let coords = chal.coord;
-
         for (let j = 0; j < coords.length; j++) {
           let m = L.marker([coords[j].x * length, coords[j].y * length], {
             // Make the icon dragable
-
             icon: decideIcon(chal.icon)
           }).bindPopup(
-            chal.url
-              ? "<img src=" + chal.url + " />" + chal.description
+            coords[j].url
+              ? "<img" +
+                " style='height:auto;width:100%'" +
+                " src=" +
+                coords[j].url +
+                " />" +
+                "<b>" +
+                chal.description +
+                "</b>" +
+                "<br/>" +
+                (coords[j].credit
+                  ? "credit: " +
+                    (coords[j].refLink
+                      ? "<a href=" +
+                        coords[j].refLink +
+                        " target='_blank' ><img src=" +
+                        youtube +
+                        " style='height:auto;width:15px;margin-left:5px;margin-right:5px'" +
+                        " /></a>"
+                      : "") +
+                    coords[j].credit
+                  : "")
               : chal.description
           ); // Adjust the opacity
           group.addLayer(m);
@@ -66,6 +87,9 @@ export function decideIcon(icon) {
   }
   if (icon === "discoIcon") {
     return discoIcon;
+  }
+  if (icon === "vendingIcon") {
+    return vendingIcon;
   }
   return challengeIcon;
 }
