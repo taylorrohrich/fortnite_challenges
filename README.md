@@ -34,3 +34,4 @@ FortFriend allows you to track your progress on the Battle Pass for Fortnite Bat
 ## Update 6/4/18
 
 - Credited u/thesquatingdog for map locations
+- Added ability on backend to credit users for image locations
