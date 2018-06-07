@@ -16,11 +16,7 @@ import ContainerDimensions from "react-container-dimensions";
 
 const googleAnalyticsId = process.env.REACT_APP_GOOGLE_ANALYTICS_ID;
 
-// var disqus_config = function() {
-//   this.page.url = "https://fort-friend.com";
-// };
 (function() {
-  // DON'T EDIT BELOW THIS LINE
   var d = document,
     s = d.createElement("script");
   s.src = "https://fort-friend.disqus.com/embed.js";

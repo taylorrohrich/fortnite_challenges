@@ -23,13 +23,13 @@ class Sidebar extends Component {
       season[week][challenge] = !season[week][challenge];
     } else {
       season[week][challenge] = !season[week][challenge];
-      let allChecked = true;
+      let singleChecked = false;
       for (let i = 1; i <= 8; i++) {
-        if (!season[week]["c" + i]) {
-          allChecked = false;
+        if (season[week]["c" + i]) {
+          singleChecked = true;
         }
       }
-      season[week]["all"] = allChecked;
+      season[week]["all"] = singleChecked;
     }
     localStorage.setItem(
       "season" + this.props.data.number,
@@ -37,6 +37,7 @@ class Sidebar extends Component {
     );
     this.props.updateSeason(season);
   };
+
   mapWeeks = (data, season) => {
     if (data === "error") {
       let errorArray = [];

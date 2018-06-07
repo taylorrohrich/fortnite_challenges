@@ -68,3 +68,17 @@ export const vendingIcon = L.icon({
   iconSize: [20, 35], // size of the icon
   shadowSize: [50, 64] // size of the shadow
 });
+
+export const iconArray = [
+  "challengeIcon",
+  "searchIcon",
+  "treasureIcon",
+  "xIcon",
+  "skullIcon",
+  "cameraIcon",
+  "hoprockIcon",
+  "lettersIcon",
+  "duckIcon",
+  "discoIcon",
+  "vendingIcon"
+];
