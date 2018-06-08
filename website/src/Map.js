@@ -45,6 +45,22 @@ class Map extends Component {
         map.scrollWheelZoom.enable();
       }
     });
+    const updateModerator = this.props.updateModerator;
+    if (updateModerator) {
+      map.on("click", e => {
+        let coord = e.latlng.toString().split(",");
+        let lat = coord[0].split("(");
+        let lng = coord[1].split(")");
+        let coordDict = { x: lat[1] / length, y: lng[0] / length };
+        updateModerator(coordDict);
+      });
+      map.on("mousemove", e => {
+        let coord = e.latlng.toString().split(",");
+        let lat = coord[0].split("(");
+        let lng = coord[1].split(")");
+        console.log(lat[1] / length, lng[0] / length);
+      });
+    }
     map.on("mouseout", res => {
       if (map.scrollWheelZoom.enabled()) {
         map.scrollWheelZoom.disable();
@@ -89,6 +105,14 @@ class Map extends Component {
           let imageBounds = [[0, 0], [length, length]];
           map.fitBounds(imageBounds);
           map.setMaxBounds(imageBounds);
+          map.off("popupclose");
+          map.on("popupclose", () => {
+            map.setMaxBounds(imageBounds);
+          });
+          map.off("popupopen");
+          map.on("popupopen", () => {
+            map.setMaxBounds();
+          });
           if (map.scrollWheelZoom.enabled()) {
             map.scrollWheelZoom.disable();
           }

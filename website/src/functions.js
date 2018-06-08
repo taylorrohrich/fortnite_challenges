@@ -10,14 +10,13 @@ import {
   lettersIcon,
   duckIcon,
   discoIcon,
-  vendingIcon
+  vendingIcon,
+  posterIcon
 } from "./icons.js";
 import youtube from "./images/youtube.png";
 
 function getMarker(coordinate, length, icon, description) {
-  return L.marker([coordinate.x * length, coordinate.y * length], {
-    icon: decideIcon(icon)
-  }).bindPopup(
+  const popup = L.popup({ keepInView: true }).setContent(
     coordinate.url
       ? "<img" +
         " style='height:auto;width:100%'" +
@@ -42,6 +41,9 @@ function getMarker(coordinate, length, icon, description) {
           : "")
       : description
   );
+  return L.marker([coordinate.x * length, coordinate.y * length], {
+    icon: decideIcon(icon)
+  }).bindPopup(popup);
 }
 export function populateMap(data, length, group) {
   if (data) {
@@ -86,6 +88,8 @@ export function decideIcon(icon) {
       return discoIcon;
     case "vendingIcon":
       return vendingIcon;
+    case "posterIcon":
+      return posterIcon;
     default:
       return challengeIcon;
   }

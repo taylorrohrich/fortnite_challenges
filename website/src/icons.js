@@ -10,6 +10,7 @@ import hoprock from "./images/hoprock.png";
 import duck from "./images/duck.png";
 import disco from "./images/disco.png";
 import vending from "./images/vending.png";
+import poster from "./images/poster.png";
 export const challengeIcon = L.icon({
   iconUrl: challenge,
   iconSize: [35, 35], // size of the icon
@@ -68,6 +69,11 @@ export const vendingIcon = L.icon({
   iconSize: [20, 35], // size of the icon
   shadowSize: [50, 64] // size of the shadow
 });
+export const posterIcon = L.icon({
+  iconUrl: poster,
+  iconSize: [25, 35], // size of the icon
+  shadowSize: [50, 64] // size of the shadow
+});
 
 export const iconArray = [
   "challengeIcon",
@@ -80,5 +86,6 @@ export const iconArray = [
   "lettersIcon",
   "duckIcon",
   "discoIcon",
-  "vendingIcon"
+  "vendingIcon",
+  "posterIcon"
 ];
