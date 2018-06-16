@@ -1,101 +1,59 @@
 import L from "leaflet";
-import {
-  challengeIcon,
-  searchIcon,
-  skullIcon,
-  xIcon,
-  treasureIcon,
-  cameraIcon,
-  hoprockIcon,
-  lettersIcon,
-  duckIcon,
-  discoIcon,
-  vendingIcon
-} from "./icons.js";
-
+import { decideIcon } from "./icons.js";
 import youtube from "./images/youtube.png";
 
+function getMarker(coordinate, length, icon, description) {
+  const popup = L.popup({ keepInView: true }).setContent(
+    coordinate.url
+      ? "<img" +
+        " style='height:auto;width:100%'" +
+        " src=" +
+        coordinate.url +
+        " />" +
+        "<b>" +
+        description +
+        "</b>" +
+        "<br/>" +
+        (coordinate.credit
+          ? "credit: " +
+            (coordinate.refLink
+              ? "<a href=" +
+                coordinate.refLink +
+                " target='_blank' ><img src=" +
+                youtube +
+                " style='height:auto;width:15px;margin-left:5px;margin-right:5px'" +
+                " /></a>"
+              : "") +
+            coordinate.credit
+          : "")
+      : description
+  );
+  return L.marker([coordinate.x * length, coordinate.y * length], {
+    icon: decideIcon(icon)
+  }).bindPopup(popup);
+}
 export function populateMap(data, length, group) {
   if (data) {
-    for (let i = 0; i < data.length; i++) {
-      let chal = data[i];
+    data.forEach(chal => {
       if (chal.coord.length) {
-        let coords = chal.coord;
-        for (let j = 0; j < coords.length; j++) {
-          let m = L.marker([coords[j].x * length, coords[j].y * length], {
-            // Make the icon dragable
-            icon: decideIcon(chal.icon)
-          }).bindPopup(
-            coords[j].url
-              ? "<img" +
-                " style='height:auto;width:100%'" +
-                " src=" +
-                coords[j].url +
-                " />" +
-                "<b>" +
-                chal.description +
-                "</b>" +
-                "<br/>" +
-                (coords[j].credit
-                  ? "credit: " +
-                    (coords[j].refLink
-                      ? "<a href=" +
-                        coords[j].refLink +
-                        " target='_blank' ><img src=" +
-                        youtube +
-                        " style='height:auto;width:15px;margin-left:5px;margin-right:5px'" +
-                        " /></a>"
-                      : "") +
-                    coords[j].credit
-                  : "")
-              : chal.description
-          ); // Adjust the opacity
-          group.addLayer(m);
-        }
+        const coordinates = chal.coord;
+        coordinates.forEach(coordinate => {
+          const marker = getMarker(
+            coordinate,
+            length,
+            chal.icon,
+            chal.description
+          );
+          group.addLayer(marker);
+        });
       }
-    }
+    });
   }
 }
 
-export function decideIcon(icon) {
-  if (icon === "challengeIcon") {
-    return challengeIcon;
-  }
-  if (icon === "xIcon") {
-    return xIcon;
-  }
-  if (icon === "searchIcon") {
-    return searchIcon;
-  }
-  if (icon === "treasureIcon") {
-    return treasureIcon;
-  }
-  if (icon === "skullIcon") {
-    return skullIcon;
-  }
-  if (icon === "cameraIcon") {
-    return cameraIcon;
-  }
-  if (icon === "lettersIcon") {
-    return lettersIcon;
-  }
-  if (icon === "hoprockIcon") {
-    return hoprockIcon;
-  }
-  if (icon === "duckIcon") {
-    return duckIcon;
-  }
-  if (icon === "discoIcon") {
-    return discoIcon;
-  }
-  if (icon === "vendingIcon") {
-    return vendingIcon;
-  }
-  return challengeIcon;
-}
 export function handleLocalStorage(season) {
   if (!localStorage.getItem("season" + season.number)) {
-    let currentWeek = season.weeks.reduce((accum, curVal) => {
+    const currentWeek = season.weeks.reduce((accum, curVal) => {
       if (curVal.number > accum) accum = curVal.number;
       return accum;
     }, 0);
@@ -122,23 +80,21 @@ export function handleLocalStorage(season) {
     return seasonStorage;
   }
 }
+
 export function processData(data, seasonStorage) {
   if (!data || !data.weeks) {
     return;
   }
   data = data.weeks;
-  let refinedData = [];
-  if (seasonStorage) {
-    for (let i = 0; i < data.length; i++) {
-      let challenges = data[i].challenges;
-      for (let j = 0; j < challenges.length; j++) {
-        if (
-          seasonStorage["week" + data[i].number]["c" + challenges[j].number]
-        ) {
-          refinedData.push(challenges[j]);
-        }
-      }
-    }
-  }
+  const refinedData = seasonStorage
+    ? data.reduce((accum, curVal) => {
+        const challenges = curVal.challenges;
+        challenges.forEach(challenge => {
+          if (seasonStorage["week" + curVal.number]["c" + challenge.number])
+            accum.push(challenge);
+        });
+        return accum;
+      }, [])
+    : [];
   return refinedData;
 }

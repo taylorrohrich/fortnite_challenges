@@ -6,6 +6,7 @@ import Sidebar from "./Sidebar.js";
 import { handleLocalStorage, processData } from "./functions.js";
 import github from "./images/github.png";
 import reddit from "./images/reddit.png";
+import Promote from "./Promote.js";
 //node modules
 import { graphql } from "react-apollo";
 import { withRouter } from "react-router-dom";
@@ -16,11 +17,7 @@ import ContainerDimensions from "react-container-dimensions";
 
 const googleAnalyticsId = process.env.REACT_APP_GOOGLE_ANALYTICS_ID;
 
-// var disqus_config = function() {
-//   this.page.url = "https://fort-friend.com";
-// };
 (function() {
-  // DON'T EDIT BELOW THIS LINE
   var d = document,
     s = d.createElement("script");
   s.src = "https://fort-friend.disqus.com/embed.js";
@@ -94,8 +91,9 @@ class App extends Component {
             xs={{ span: 24, order: 2 }}
             sm={{ span: 24, order: 2 }}
             md={{ span: 24, order: 2 }}
-            lg={{ span: 8, order: 1 }}
-            xl={{ span: 12, order: 1 }}
+            lg={{ span: 10, order: 1 }}
+            xl={{ span: 10, order: 1 }}
+            xxl={{ span: 8, order: 1 }}
           >
             <Sidebar
               sidebarHeight={this.state.height}
@@ -108,8 +106,9 @@ class App extends Component {
             xs={{ span: 24, order: 1 }}
             sm={{ span: 24, order: 1 }}
             md={{ span: 24, order: 1 }}
-            lg={{ span: 16, order: 2 }}
-            xl={{ span: 12, order: 2 }}
+            lg={{ span: 14, order: 2 }}
+            xl={{ span: 14, order: 2 }}
+            xxl={{ span: 16, order: 2 }}
           >
             <ContainerDimensions>
               {({ width }) => (
@@ -125,6 +124,7 @@ class App extends Component {
             </ContainerDimensions>
           </Col>
         </Row>
+        <Promote />
         <div className="disqusContainer">
           <div id="disqus_thread" />
         </div>

@@ -10,61 +10,65 @@ import hoprock from "./images/hoprock.png";
 import duck from "./images/duck.png";
 import disco from "./images/disco.png";
 import vending from "./images/vending.png";
-export const challengeIcon = L.icon({
-  iconUrl: challenge,
-  iconSize: [35, 35], // size of the icon
-  shadowSize: [50, 64] // size of the shadow
-});
-export const searchIcon = L.icon({
-  iconUrl: search,
-  iconAnchor: [18, 35],
-  iconSize: [35, 35], // size of the icon
-  shadowSize: [50, 64] // size of the shadow
-});
-export const treasureIcon = L.icon({
-  iconUrl: treasure,
-  iconSize: [35, 35], // size of the icon
-  shadowSize: [50, 64] // size of the shadow
-});
-export const xIcon = L.icon({
-  iconUrl: x,
-  iconSize: [35, 35], // size of the icon
-  shadowSize: [50, 64] // size of the shadow
-});
-export const skullIcon = L.icon({
-  iconUrl: skull,
-  iconSize: [35, 35], // size of the icon
-  shadowSize: [50, 64] // size of the shadow
-});
-export const cameraIcon = L.icon({
-  iconUrl: camera,
-  iconSize: [35, 35], // size of the icon
-  shadowSize: [50, 64] // size of the shadow
-});
+import poster from "./images/poster.png";
+import soccer from "./images/soccer.png";
+import consumable from "./images/consumable.png";
 
-export const hoprockIcon = L.icon({
-  iconUrl: hoprock,
-  iconSize: [90, 60], // size of the icon
-  shadowSize: [50, 64] // size of the shadow
-});
-export const lettersIcon = L.icon({
-  iconUrl: letters,
-  iconSize: [70, 44], // size of the icon
-  shadowSize: [50, 64] // size of the shadow
-});
+export function decideIcon(icon) {
+  const multiplier = window.innerWidth >= 576 ? 1 : 0.6;
+  switch (icon) {
+    case "challengeIcon":
+      return getIcon(challenge, 35, 35, multiplier);
+    case "xIcon":
+      return getIcon(x, 35, 35, multiplier);
+    case "searchIcon":
+      return getIcon(search, 35, 35, multiplier);
+    case "treasureIcon":
+      return getIcon(treasure, 35, 35, multiplier);
+    case "skullIcon":
+      return getIcon(skull, 35, 35, multiplier);
+    case "cameraIcon":
+      return getIcon(camera, 35, 35, multiplier);
+    case "lettersIcon":
+      return getIcon(letters, 70, 44, multiplier);
+    case "hoprockIcon":
+      return getIcon(hoprock, 90, 60, multiplier);
+    case "duckIcon":
+      return getIcon(duck, 25, 34, multiplier);
+    case "discoIcon":
+      return getIcon(disco, 25, 25, multiplier);
+    case "vendingIcon":
+      return getIcon(vending, 20, 35, multiplier);
+    case "posterIcon":
+      return getIcon(poster, 25, 35, multiplier);
+    case "consumableIcon":
+      return getIcon(consumable, 25, 25, multiplier);
+    case "soccerIcon":
+      return getIcon(soccer, 25, 25, multiplier);
+    default:
+      return getIcon(challenge, 35, 35, multiplier);
+  }
+}
+export const getIcon = (type, x, y, multiplier) => {
+  return L.icon({
+    iconUrl: [type],
+    iconSize: [multiplier * x, multiplier * y] // size of the icon
+  });
+};
 
-export const duckIcon = L.icon({
-  iconUrl: duck,
-  iconSize: [25, 34], // size of the icon
-  shadowSize: [50, 64] // size of the shadow
-});
-export const discoIcon = L.icon({
-  iconUrl: disco,
-  iconSize: [25, 25], // size of the icon
-  shadowSize: [50, 64] // size of the shadow
-});
-export const vendingIcon = L.icon({
-  iconUrl: vending,
-  iconSize: [20, 35], // size of the icon
-  shadowSize: [50, 64] // size of the shadow
-});
+export const iconArray = [
+  "challengeIcon",
+  "searchIcon",
+  "treasureIcon",
+  "xIcon",
+  "skullIcon",
+  "cameraIcon",
+  "hoprockIcon",
+  "lettersIcon",
+  "duckIcon",
+  "discoIcon",
+  "vendingIcon",
+  "posterIcon",
+  "soccerIcon",
+  "consumableIcon"
+];

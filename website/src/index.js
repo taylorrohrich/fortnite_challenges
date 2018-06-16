@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
-
+import Moderator from "./Moderator";
 //node modules
 import registerServiceWorker from "./registerServiceWorker";
 import { BrowserRouter as Router, Route } from "react-router-dom";
@@ -25,6 +25,7 @@ ReactDOM.render(
     <Router>
       <div>
         <Route exact path="/" component={App} />
+        <Route exact path="/moderator" component={Moderator} />
       </div>
     </Router>
   </ApolloProvider>,
