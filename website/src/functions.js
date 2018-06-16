@@ -1,18 +1,5 @@
 import L from "leaflet";
-import {
-  challengeIcon,
-  searchIcon,
-  skullIcon,
-  xIcon,
-  treasureIcon,
-  cameraIcon,
-  hoprockIcon,
-  lettersIcon,
-  duckIcon,
-  discoIcon,
-  vendingIcon,
-  posterIcon
-} from "./icons.js";
+import { decideIcon } from "./icons.js";
 import youtube from "./images/youtube.png";
 
 function getMarker(coordinate, length, icon, description) {
@@ -61,37 +48,6 @@ export function populateMap(data, length, group) {
         });
       }
     });
-  }
-}
-
-export function decideIcon(icon) {
-  switch (icon) {
-    case "challengeIcon":
-      return challengeIcon;
-    case "xIcon":
-      return xIcon;
-    case "searchIcon":
-      return searchIcon;
-    case "treasureIcon":
-      return treasureIcon;
-    case "skullIcon":
-      return skullIcon;
-    case "cameraIcon":
-      return cameraIcon;
-    case "lettersIcon":
-      return lettersIcon;
-    case "hoprockIcon":
-      return hoprockIcon;
-    case "duckIcon":
-      return duckIcon;
-    case "discoIcon":
-      return discoIcon;
-    case "vendingIcon":
-      return vendingIcon;
-    case "posterIcon":
-      return posterIcon;
-    default:
-      return challengeIcon;
   }
 }
 

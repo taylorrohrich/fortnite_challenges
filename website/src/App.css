@@ -97,7 +97,21 @@
   border-radius: 5px;
   cursor: pointer;
 }
+.Promote {
+  min-height: 200px;
+  overflow-x: scroll;
+  white-space: nowrap;
+  width: 100%;
+  background-color: #eceaea;
+}
 
+.PromoteCard {
+  margin: 15px;
+  margin-right: 0px;
+  width: 150px;
+  height: auto;
+  display: inline-block;
+}
 /* Custom, iPhone Retina */
 @media only screen and (min-width: 320px) {
   .App {
@@ -120,6 +134,9 @@
   .Sidebar {
     overflow-y: auto;
     overflow-x: hidden;
+  }
+  .PromoteCard {
+    width: 200px;
   }
 }
 

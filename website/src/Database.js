@@ -39,3 +39,22 @@ export const createChallenge = gql`
     }
   }
 `;
+
+export const createPromotedContent = gql`
+  mutation($title: String!, $media: String!, $imageUrl: String!) {
+    createPromotedContent(title: $title, media: $media, imageUrl: $imageUrl) {
+      id
+    }
+  }
+`;
+export const promotedContentQuery = gql`
+  query {
+    allPromotedContents {
+      id
+      title
+      media
+      imageUrl
+      link
+    }
+  }
+`;

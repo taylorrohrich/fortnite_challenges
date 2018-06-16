@@ -60,21 +60,24 @@ class Navbar extends Component {
             <div style={{ padding: "10px" }}>
               <p style={{ fontSize: ".85em", paddingBottom: "10px" }}>
                 My name is Taylor, although you may better know me on Reddit as
-                u/tmant1234. In the first two weeks since the launch of the
-                website, I am proud to say that there have had over 60,000
-                unique users to the site! I am ecstatic and humbled that so many
-                people find my personal project so useful; however the huge
-                amount of users had such a strain on my previous website hosting
-                services that I had to pay for higher-end services that can
-                support the load on the site. This is what brings us here: I
-                have no intention of profiting off of FortFriend, simply
-                breaking even. Want to donate? Great! I really appreciate any
-                amount to help keep the (internet) lights on:{" "}
-                <b>you can find my link to Donorbox below.</b> Holding off on
-                donating? Thats ok too! You will still get complete access to
-                fort-friend.com. I look forward to continuing support for
-                fort-friend.com and keeping you up to date with challenges each
-                week! <br /> -Taylor, developer of FortFriend
+                u/tmant1234. In the past several weeks since I have launched
+                fort-friend.com, I have been completely overjoyed by the
+                positive support from the Fortnite community: rest assured the
+                site is here to stay and will be updated every week. In the
+                first two weeks since the launch of the website, I am proud to
+                say there has been over 60,000 unique users to the site! I am
+                ecstatic and humbled that so many people find my project useful;
+                however, this amount of traffic put enough strain on my previous
+                website hosting services that it was necessary to pay for
+                higher-end services that can support the load on the site. This
+                is what brings us here: I have no intention of profiting from
+                FortFriend, simply breaking even. Want to donate? Great! I
+                really appreciate any amount to help keep the (internet) lights
+                on: <b>you can find my link to Donorbox below.</b> Holding off
+                on donating? That’s ok too! You will still get complete access
+                to fort-friend.com. I look forward to continuing support and
+                keeping you up to date with challenges each week! <br />-Taylor,
+                developer of FortFriend
               </p>
               <a href="https://donorbox.org/fort-friend">
                 <img

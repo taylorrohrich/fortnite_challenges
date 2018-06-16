@@ -6,6 +6,7 @@ import Sidebar from "./Sidebar.js";
 import { handleLocalStorage, processData } from "./functions.js";
 import github from "./images/github.png";
 import reddit from "./images/reddit.png";
+import Promote from "./Promote.js";
 //node modules
 import { graphql } from "react-apollo";
 import { withRouter } from "react-router-dom";
@@ -123,6 +124,7 @@ class App extends Component {
             </ContainerDimensions>
           </Col>
         </Row>
+        <Promote />
         <div className="disqusContainer">
           <div id="disqus_thread" />
         </div>
