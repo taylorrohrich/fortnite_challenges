@@ -35,3 +35,15 @@ FortFriend allows you to track your progress on the Battle Pass for Fortnite Bat
 
 - Credited u/thesquatingdog for map locations
 - Added ability on backend to credit users for image locations
+
+## Update 6/13/18
+
+- Lots of work on backend to make updating challenges easier
+- Navbar has a new look!
+- Added optional donation button as a way to support website costs
+
+## Update 3/16/19
+
+- Updated map
+- Added "Friends of Fortfriend" section
+- Updated size of map markers for mobile

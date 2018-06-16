@@ -20,7 +20,6 @@ const mapCards = promotedContent => {
     return (
       <a key={item.title + index} href={item.link}>
         <Card
-          hoverable
           className="PromoteCard"
           cover={<img alt="example" src={item.imageUrl} />}
         >
