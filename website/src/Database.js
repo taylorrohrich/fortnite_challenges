@@ -18,35 +18,6 @@ export const seasonQuery = gql`
   }
 `;
 
-export const createChallenge = gql`
-  mutation(
-    $season: ID!
-    $week: Int!
-    $description: String!
-    $coord: [Json!]!
-    $icon: String!
-    $number: Int!
-  ) {
-    createEntry(
-      week: $week
-      season: $season
-      description: $description
-      coord: $coord
-      icon: $icon
-      number: $number
-    ) {
-      id
-    }
-  }
-`;
-
-export const createPromotedContent = gql`
-  mutation($title: String!, $media: String!, $imageUrl: String!) {
-    createPromotedContent(title: $title, media: $media, imageUrl: $imageUrl) {
-      id
-    }
-  }
-`;
 export const promotedContentQuery = gql`
   query {
     allPromotedContents {
@@ -55,6 +26,18 @@ export const promotedContentQuery = gql`
       media
       imageUrl
       link
+    }
+  }
+`;
+
+export const iconQuery = gql`
+  query {
+    allIcons {
+      id
+      name
+      width
+      height
+      imageUrl
     }
   }
 `;

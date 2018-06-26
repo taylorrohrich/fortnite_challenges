@@ -9,7 +9,7 @@
 # production
 /build
 /.env
-/src/Moderator.js
+/src/Moderator
 
 # misc
 .DS_Store

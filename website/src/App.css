@@ -17,7 +17,6 @@
   padding-right: 20px;
   color: white;
 }
-
 #mapid {
   display: block;
 }
@@ -108,7 +107,7 @@
 .PromoteCard {
   margin: 15px;
   margin-right: 0px;
-  width: 150px;
+  width: 160px;
   height: auto;
   display: inline-block;
 }

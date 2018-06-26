@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import "./App.css";
 import Map from "./Map.js";
 import Navbar from "./Navbar.js";
-import Sidebar from "./Sidebar.js";
+import Sidebar from "./Sidebar/Sidebar.js";
 import { handleLocalStorage, processData } from "./functions.js";
 import github from "./images/github.png";
 import reddit from "./images/reddit.png";

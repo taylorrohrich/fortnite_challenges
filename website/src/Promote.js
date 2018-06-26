@@ -18,24 +18,34 @@ const loadingPromotedContent = [
 const mapCards = promotedContent => {
   return promotedContent.map((item, index) => {
     return (
-      <a key={item.title + index} href={item.link}>
+      <span key={item.title + index}>
         <Card
           className="PromoteCard"
-          cover={<img alt="example" src={item.imageUrl} />}
+          cover={
+            <span style={{ width: "100%" }}>
+              <a href={item.link}>
+                <img
+                  style={{ width: "100%" }}
+                  alt="example"
+                  src={item.imageUrl}
+                />
+              </a>
+            </span>
+          }
         >
           <Meta
             title={<div style={{ fontSize: ".8em" }}>{item.title}</div>}
             description={<div style={{ fontSize: ".7em" }}>{item.media}</div>}
           />
         </Card>
-      </a>
+      </span>
     );
   });
 };
 
 class Promote extends Component {
   render() {
-    if (this.props.promotedContentQuery.loading) {
+    if (this.props.loading || this.props.promotedContentQuery.loading) {
       return (
         <Card title={"Friends of FortFriend"}>
           <div className="Promote">{mapCards(loadingPromotedContent)}</div>

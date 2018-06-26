@@ -3,9 +3,12 @@ import "./App.css";
 
 import fnmap from "./images/fnmap.jpg";
 import { populateMap } from "./functions.js";
+import { iconQuery } from "./Database.js";
 
 //node modules
 import L from "leaflet";
+import { graphql } from "react-apollo";
+import { withRouter } from "react-router-dom";
 
 class Map extends Component {
   constructor(props) {
@@ -85,13 +88,19 @@ class Map extends Component {
       let markers = prevState.markers;
       let currentImage = prevState.currentImage;
       if (
+        nextProps.iconQuery.allIcons !== prevState.icons ||
         !(JSON.stringify(nextProps.data) === JSON.stringify(prevState.data))
       ) {
         let length = nextProps.mapLength;
         let map = prevState.map;
         map.removeLayer(markers);
         markers.clearLayers();
-        populateMap(nextProps.data, length, markers);
+        populateMap(
+          nextProps.data,
+          length,
+          markers,
+          nextProps.iconQuery.allIcons
+        );
         map.addLayer(markers);
       }
       if (prevState.mapLength !== nextProps.mapLength) {
@@ -101,7 +110,12 @@ class Map extends Component {
           let map = prevState.map;
           map.removeLayer(currentImage);
           markers.clearLayers();
-          populateMap(nextProps.data, length, markers);
+          populateMap(
+            nextProps.data,
+            length,
+            markers,
+            nextProps.iconQuery.allIcons
+          );
           let imageBounds = [[0, 0], [length, length]];
           map.fitBounds(imageBounds);
           map.setMaxBounds(imageBounds);
@@ -126,11 +140,13 @@ class Map extends Component {
         mapLength: nextProps.mapLength,
         data: nextProps.data,
         markers: markers,
-        currentImage: currentImage
+        currentImage: currentImage,
+        icons: nextProps.iconQuery.allIcons
       };
     }
     return {};
   }
+
   render() {
     return (
       <div
@@ -144,4 +160,8 @@ class Map extends Component {
   }
 }
 
-export default Map;
+const MapWithQuery = graphql(iconQuery, {
+  name: "iconQuery"
+})(withRouter(Map));
+
+export default MapWithQuery;
