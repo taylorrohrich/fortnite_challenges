@@ -1,0 +1,10 @@
+type CreateActiveSeasonPayload {
+  id: ID!
+}
+
+extend type Mutation {
+  createActiveSeason(
+    isActive: Boolean!
+    number: Int!
+  ): CreateActiveSeasonPayload
+}

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "./../App.css";
-import Week from "./Week.js";
+import Week from "./Week";
 
 //node modules
 import { Layout, Menu } from "antd";

@@ -1,11 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
-import App from "./App";
-import Moderator from "./Moderator/Moderator.js";
+import Routes from "./Routes";
 //node modules
 import registerServiceWorker from "./registerServiceWorker";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 import { ApolloProvider } from "react-apollo";
 import { ApolloClient } from "apollo-client";
 import { HttpLink } from "apollo-link-http";
@@ -23,10 +22,7 @@ const client = new ApolloClient({
 ReactDOM.render(
   <ApolloProvider client={client}>
     <Router>
-      <div>
-        <Route exact path="/" component={App} />
-        <Route exact path="/moderator" component={Moderator} />
-      </div>
+      <Routes />
     </Router>
   </ApolloProvider>,
 

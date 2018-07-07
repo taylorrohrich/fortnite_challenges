@@ -1,6 +1,9 @@
 import React from "react";
 import "./../App.css";
-import { checkIfUpdatedWeek, checkIfUpdatedChallenge } from "./../functions";
+import {
+  checkIfUpdatedWeek,
+  checkIfUpdatedChallenge
+} from "../Utils/functions";
 import { Menu, Switch, Checkbox } from "antd";
 
 const toggleCheck = (

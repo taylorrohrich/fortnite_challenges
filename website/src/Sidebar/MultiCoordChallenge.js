@@ -1,7 +1,7 @@
 import React from "react";
 import "./../App.css";
 import ChallengeMenuItem from "./ChallengeMenuItem";
-import { toggleAll, checkIfUpdatedWeek } from "./../functions.js";
+import { toggleAll, checkIfUpdatedWeek } from "../Utils/functions";
 import { Menu, Switch } from "antd";
 const { SubMenu } = Menu;
 

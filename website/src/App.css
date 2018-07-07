@@ -3,25 +3,20 @@
   height: 100%;
   font-size: 8px;
 }
-.logo {
-  border-style: solid;
-  border-color: rgb(212, 212, 214);
-  letter-spacing: 1px;
-  background-color: rgb(26, 27, 71);
-  font-size: 1.25em;
-  font-family: "Luckiest Guy";
-  height: 100%;
-  float: left;
-  text-align: center;
-  padding-left: 20px;
-  padding-right: 20px;
-  color: white;
-}
+
 #mapid {
   display: block;
 }
 .Sidebar {
   overflow-y: visible;
+}
+
+.Error {
+  text-align: center;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .socialMediaIcon {
   float: left;
@@ -31,26 +26,6 @@
 .disqusContainer {
   padding-left: 1%;
   padding-right: 1%;
-}
-
-.header {
-  background-color: rgb(47, 47, 48);
-}
-
-.headerItem {
-  font-family: "Arial Black", Gadget, sans-serif;
-  letter-spacing: 1px;
-  display: block;
-  font-size: 0.9em;
-  width: 100px;
-  float: right;
-  text-align: center;
-  color: rgb(239, 239, 241);
-  cursor: pointer;
-}
-.headerItem:hover {
-  background-color: rgb(26, 27, 71);
-  color: white;
 }
 
 .footer {
@@ -88,14 +63,6 @@
   padding: 10px;
 }
 
-.donorButton {
-  width: 50%;
-  height: auto;
-  display: block;
-  margin: auto;
-  border-radius: 5px;
-  cursor: pointer;
-}
 .Promote {
   min-height: 200px;
   overflow-x: scroll;
