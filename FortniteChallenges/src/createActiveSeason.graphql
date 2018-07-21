@@ -3,8 +3,5 @@ type CreateActiveSeasonPayload {
 }
 
 extend type Mutation {
-  createActiveSeason(
-    isActive: Boolean!
-    number: Int!
-  ): CreateActiveSeasonPayload
+  createActiveSeason(seasonId: ID!): CreateActiveSeasonPayload
 }

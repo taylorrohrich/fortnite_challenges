@@ -34,7 +34,10 @@ class Navbar extends Component {
         {this.state.showMenu && (
           <HamburgerMenu
             toggleModal={() =>
-              this.setState({ showModal: !this.state.showModal })
+              this.setState({
+                showModal: !this.state.showModal,
+                showMenu: !this.state.showMenu
+              })
             }
             toggleMenu={() => this.setState({ showMenu: !this.state.showMenu })}
           />

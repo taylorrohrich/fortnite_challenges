@@ -42,24 +42,30 @@ FortFriend allows you to track your progress on the Battle Pass for Fortnite Bat
 - Navbar has a new look!
 - Added optional donation button as a way to support website costs
 
-## Update 3/16/18
+## Update 6/16/18
 
 - Updated map
 - Added "Friends of Fortfriend" section
 - Updated size of map markers for mobile
 
-## Update 3/17/18
+## Update 6/17/18
 
 - Higher res map
 - Moved image logic to backend
 - Further Progress on Moderator Page
 
-## Update 3/26/18
+## Update 6/26/18
 
 - Improved marker image size
 - You can now select individual coordinates to display on the map
 
-## Update 4/7/18
+## Update 7/7/18
 
 - Added routing for the start of Season 5
 - Added hamburger menu for navigation
+
+## Update 7/20/18
+
+- Updated for Season 5
+- Responsive font size
+- General code organization

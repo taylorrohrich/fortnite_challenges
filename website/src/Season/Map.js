@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import "./../App.css";
-import { fnmap } from "./../Images";
-import { populateMap } from "../Utils/functions";
+import { populateMap, decideMap } from "../Utils";
 import { iconQuery } from "./../Database";
 
 //node modules
@@ -17,7 +16,8 @@ class Map extends Component {
       markers: null,
       mapLength: null,
       data: null,
-      currentImage: null
+      currentImage: null,
+      number: null
     };
   }
 
@@ -34,7 +34,10 @@ class Map extends Component {
       attributionControl: false
     });
     let imageBounds = [[0, 0], [length, length]];
-    let currentImage = L.imageOverlay(fnmap, imageBounds).addTo(map);
+    let currentImage = L.imageOverlay(
+      decideMap(this.props.number),
+      imageBounds
+    ).addTo(map);
     map.fitBounds(imageBounds);
     map.setMaxBounds(imageBounds);
     L.control.attribution({ position: "topright" }).addTo(map);
@@ -102,7 +105,10 @@ class Map extends Component {
         );
         map.addLayer(markers);
       }
-      if (prevState.mapLength !== nextProps.mapLength) {
+      if (
+        prevState.mapLength !== nextProps.mapLength ||
+        prevState.number !== nextProps.number
+      ) {
         if (nextProps.mapLength && nextProps.mapLength !== 0) {
           let length = nextProps.mapLength;
           if (nextProps.updateHeight) nextProps.updateHeight(length);
@@ -129,7 +135,10 @@ class Map extends Component {
           if (map.scrollWheelZoom.enabled()) {
             map.scrollWheelZoom.disable();
           }
-          currentImage = L.imageOverlay(fnmap, imageBounds).addTo(map);
+          currentImage = L.imageOverlay(
+            decideMap(nextProps.number),
+            imageBounds
+          ).addTo(map);
           setTimeout(() => {
             map.invalidateSize();
           }, 400);
@@ -140,7 +149,8 @@ class Map extends Component {
         data: nextProps.data,
         markers: markers,
         currentImage: currentImage,
-        icons: nextProps.iconQuery.allIcons
+        icons: nextProps.iconQuery.allIcons,
+        number: nextProps.number
       };
     }
     return {};

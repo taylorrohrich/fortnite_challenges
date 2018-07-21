@@ -1,9 +1,6 @@
 import React from "react";
 import "./../App.css";
-import {
-  checkIfUpdatedWeek,
-  checkIfUpdatedChallenge
-} from "../Utils/functions";
+import { checkIfUpdatedWeek, checkIfUpdatedChallenge } from "../Utils";
 import { Menu, Switch, Checkbox } from "antd";
 
 const toggleCheck = (
@@ -58,8 +55,8 @@ const ChallengeMenuItem = props => {
   delete divProps.data;
   return (
     <Menu.Item
+      style={{ fontSize: ".8em" }}
       {...divProps}
-      style={{ fontsize: "1em" }}
       key={"week" + weekNumber + "challenge" + number}
     >
       <Toggle

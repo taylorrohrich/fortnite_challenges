@@ -1,6 +1,6 @@
 import React from "react";
 import "./../App.css";
-import Season from "./Season";
+import Season from "./../Season";
 import { activeSeasonNumberQuery } from "./../Database";
 //node modules
 import { graphql, compose } from "react-apollo";
@@ -16,7 +16,7 @@ const SeasonRouteHandler = props => {
       props.activeSeasonNumberQuery.allSeasons[0].number;
     props.history.push(`/season/${activeSeasonNumber}`);
   }
-  return <Season number={Number(seasonNumber)} />;
+  return <Season number={seasonNumber && Number(seasonNumber)} />;
 };
 const SeasonRouteHandlerWithQuery = compose(
   graphql(activeSeasonNumberQuery, {

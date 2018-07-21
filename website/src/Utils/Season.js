@@ -1,85 +1,4 @@
-import L from "leaflet";
-import { youtube, challenge } from "./../Images";
-
-export const getIcon = icon => {
-  const multiplier = window.innerWidth >= 576 ? 1 : 0.6;
-  if (icon) {
-    return L.icon({
-      iconUrl: icon.imageUrl,
-      iconSize: [multiplier * icon.width, multiplier * icon.height]
-    });
-  }
-  return L.icon({
-    iconUrl: challenge,
-    iconSize: [multiplier * 35, multiplier * 35]
-  });
-};
-
-function getMarker(coordinate, length, icon, description) {
-  const popupWidth = window.innerWidth >= 576 ? 400 : 250;
-  const popup = L.popup({ keepInView: true, maxWidth: popupWidth }).setContent(
-    coordinate.url
-      ? "<div style='width:100%;text-align:center'>" +
-        "<img" +
-        " style='width:" +
-        popupWidth +
-        "px;height:auto'" +
-        " src=" +
-        coordinate.url +
-        " />" +
-        "<b>" +
-        description +
-        "</b>" +
-        "<br/>" +
-        (coordinate.locationDescription
-          ? "<i>" + coordinate.locationDescription + "</i>"
-          : "") +
-        (coordinate.credit
-          ? (coordinate.refLink
-              ? "<a href=" +
-                coordinate.refLink +
-                " target='_blank' ><img src=" +
-                youtube +
-                " style='height:auto;width:15px;margin-left:5px;margin-right:5px'" +
-                " /></a>"
-              : "") + coordinate.credit
-          : "") +
-        "</div>"
-      : description
-  );
-  return L.marker([coordinate.x * length, coordinate.y * length], {
-    icon: getIcon(icon)
-  }).bindPopup(popup);
-}
-export function populateMap(data, length, group, icons) {
-  if (data && icons) {
-    const iconDictionary = icons.reduce((acc, item) => {
-      return {
-        ...acc,
-        [item.name]: {
-          width: item.width,
-          height: item.height,
-          imageUrl: item.imageUrl
-        }
-      };
-    }, {});
-    data.forEach(chal => {
-      if (chal.coord.length) {
-        const coordinates = chal.coord;
-        coordinates.forEach(coordinate => {
-          const marker = getMarker(
-            coordinate,
-            length,
-            iconDictionary[chal.icon],
-            chal.description
-          );
-          group.addLayer(marker);
-        });
-      }
-    });
-  }
-}
-
+import { isEqual } from "lodash";
 const updateLocalStorageFromData = (seasonJSON, season) => {
   const updatedSeasonJSON = season.weeks.reduce((acc, week) => {
     const updatedWeek = week.challenges.reduce((acc, challenge) => {
@@ -99,7 +18,7 @@ const updateLocalStorageFromData = (seasonJSON, season) => {
   return updatedSeasonJSON;
 };
 
-export function handleLocalStorage(season) {
+export const handleLocalStorage = season => {
   if (!localStorage.getItem("season" + season.number)) {
     const currentWeek = season.weeks.reduce((accum, curVal) => {
       if (curVal.number > accum) accum = curVal.number;
@@ -131,21 +50,20 @@ export function handleLocalStorage(season) {
     );
     return updatedSeasonJSON;
   } else {
-    const seasonJSON = localStorage.getItem("season" + season.number);
-    const updatedSeasonJSON = updateLocalStorageFromData(
-      JSON.parse(seasonJSON),
-      season
-    );
-    if (seasonJSON !== JSON.stringify(updatedSeasonJSON))
+    const seasonJSON = localStorage.getItem("season" + season.number),
+      parsedSeasonJSON = JSON.parse(seasonJSON),
+      updatedSeasonJSON = updateLocalStorageFromData(parsedSeasonJSON, season);
+    if (!isEqual(parsedSeasonJSON, updatedSeasonJSON)) {
       localStorage.setItem(
         "season" + season.number,
         JSON.stringify(updatedSeasonJSON)
       );
+    }
     return updatedSeasonJSON;
   }
-}
+};
 
-export function processData(data, seasonStorage) {
+export const processData = (data, seasonStorage) => {
   if (!data || !data.weeks) {
     return;
   }
@@ -175,7 +93,7 @@ export function processData(data, seasonStorage) {
       }, [])
     : [];
   return refinedData;
-}
+};
 
 export const checkIfUpdatedWeek = (localStorage, weekNumber) => {
   const updatedWeek = localStorage[weekNumber];

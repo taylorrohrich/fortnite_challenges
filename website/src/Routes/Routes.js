@@ -1,5 +1,5 @@
 import React from "react";
-import SeasonRouteHandler from "./../Season";
+import SeasonRouteHandler from "./SeasonRouteHandler";
 import Moderator from "./../Moderator/Moderator";
 import Error from "./Error";
 //node modules

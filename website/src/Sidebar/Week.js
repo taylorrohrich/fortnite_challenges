@@ -3,7 +3,7 @@ import "./../App.css";
 import ChallengeMenuItem from "./ChallengeMenuItem";
 import MultiCoordChallenge from "./MultiCoordChallenge";
 import { Menu, Switch } from "antd";
-import { toggleAll } from "../Utils/functions";
+import { toggleAll } from "../Utils";
 const { SubMenu } = Menu;
 
 const mapChallenges = (

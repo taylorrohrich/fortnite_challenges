@@ -20,8 +20,15 @@ export const allSeasonQuery = gql`
 `;
 
 export const createActiveSeason = gql`
-  mutation($number: Int!, $isActive: Boolean!) {
-    createActiveSeason(number: $number, isActive: $isActive) {
+  mutation($seasonId: ID!) {
+    createActiveSeason(seasonId: $seasonId) {
+      id
+    }
+  }
+`;
+export const createSeason = gql`
+  mutation($number: Int!) {
+    createSeason(number: $number) {
       id
     }
   }

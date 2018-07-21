@@ -83,7 +83,7 @@ class Sidebar extends Component {
     return (
       <Sider className="Sidebar" width={{}} style={this.handleSiderStyle()}>
         <Menu
-          inlineIndent={15}
+          inlineIndent={10}
           mode="inline"
           style={{ height: "100%", borderRight: 0 }}
         >

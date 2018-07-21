@@ -4,6 +4,7 @@ import "./index.css";
 import Routes from "./Routes";
 //node modules
 import registerServiceWorker from "./registerServiceWorker";
+import { unregister } from "./registerServiceWorker";
 import { BrowserRouter as Router } from "react-router-dom";
 import { ApolloProvider } from "react-apollo";
 import { ApolloClient } from "apollo-client";

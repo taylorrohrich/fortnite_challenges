@@ -1,7 +1,7 @@
 import React from "react";
 import "./../App.css";
 import ChallengeMenuItem from "./ChallengeMenuItem";
-import { toggleAll, checkIfUpdatedWeek } from "../Utils/functions";
+import { toggleAll, checkIfUpdatedWeek } from "../Utils";
 import { Menu, Switch } from "antd";
 const { SubMenu } = Menu;
 
@@ -78,10 +78,10 @@ const MultiCoordChallenge = props => {
   delete divProps.data;
   return (
     <SubMenu
-      style={{ fontsize: "1em" }}
+      style={{ fontSize: ".8em" }}
       {...divProps}
       title={
-        <span>
+        <span style={{ fontSize: ".8em" }}>
           <span
             onClick={e => {
               e.preventDefault();

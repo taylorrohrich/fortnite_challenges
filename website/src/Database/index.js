@@ -13,7 +13,8 @@ import {
   deletePromotedContent,
   createIcon,
   updateIcon,
-  deleteIcon
+  deleteIcon,
+  createSeason
 } from "./Moderator";
 export {
   activeSeasonNumberQuery,
@@ -28,5 +29,6 @@ export {
   deletePromotedContent,
   createIcon,
   updateIcon,
-  deleteIcon
+  deleteIcon,
+  createSeason
 };
