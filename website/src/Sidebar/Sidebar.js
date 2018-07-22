@@ -56,12 +56,25 @@ class Sidebar extends Component {
   };
 
   handleSiderStyle = () => {
-    return {
-      maxHeight: window.innerWidth >= 992 ? this.props.sidebarHeight : "none",
-      background: "#fff",
-      display: "block",
-      left: 0
-    };
+    const style =
+      window.innerWidth >= 992
+        ? {
+            maxHeight:
+              window.innerWidth >= 992 ? this.props.sidebarHeight : "none",
+            background: "#fff",
+            flexGrow: 1,
+            flexShrink: 1,
+            flexBasis: 0,
+            left: 0
+          }
+        : {
+            maxHeight:
+              window.innerWidth >= 992 ? this.props.sidebarHeight : "none",
+            background: "#fff",
+            flexGrow: 1,
+            left: 0
+          };
+    return style;
   };
   render() {
     if (this.props.loading) {
@@ -85,7 +98,12 @@ class Sidebar extends Component {
         <Menu
           inlineIndent={10}
           mode="inline"
-          style={{ height: "100%", borderRight: 0 }}
+          style={{
+            width: "100%",
+            textOverflow: "elipsis",
+            height: "100%",
+            borderRight: 0
+          }}
         >
           {this.mapWeeks(this.props.data, this.props.localStorage)}
         </Menu>

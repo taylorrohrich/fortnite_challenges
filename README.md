@@ -69,3 +69,7 @@ FortFriend allows you to track your progress on the Battle Pass for Fortnite Bat
 - Updated for Season 5
 - Responsive font size
 - General code organization
+
+## Update 7/22/18
+
+- Map is resizable by dragging on left side

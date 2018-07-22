@@ -6,9 +6,10 @@ import { handleLocalStorage, processData } from "../Utils";
 //node modules
 import { graphql, compose } from "react-apollo";
 import { withRouter } from "react-router-dom";
-import { Row, Col } from "antd";
+import { Row } from "antd";
 import { seasonQuery } from "./../Database";
 import ContainerDimensions from "react-container-dimensions";
+import Rnd from "react-rnd";
 
 class SidebarMapContainer extends Component {
   constructor(props) {
@@ -57,33 +58,59 @@ class SidebarMapContainer extends Component {
     }
   }
   render() {
-    return (
-      <Row type="flex">
-        <Col
-          xs={{ span: 24, order: 2 }}
-          sm={{ span: 24, order: 2 }}
-          md={{ span: 24, order: 2 }}
-          lg={{ span: 10, order: 1 }}
-          xl={{ span: 10, order: 1 }}
-          xxl={{ span: 8, order: 1 }}
-        >
+    if (window.innerWidth >= 992) {
+      return (
+        <Row type="flex">
           <Sidebar
             sidebarHeight={this.state.height}
             updateSeason={this.updateSeason}
             data={this.state.season}
             localStorage={this.state.localStorage}
           />
-        </Col>
-        <Col
-          xs={{ span: 24, order: 1 }}
-          sm={{ span: 24, order: 1 }}
-          md={{ span: 24, order: 1 }}
-          lg={{ span: 14, order: 2 }}
-          xl={{ span: 14, order: 2 }}
-          xxl={{ span: 16, order: 2 }}
-        >
-          <ContainerDimensions>
-            {({ width }) => (
+          <Rnd
+            disableDragging
+            enableResizing={{
+              bottom: false,
+              bottomLeft: false,
+              bottomRight: false,
+              left: true,
+              right: false,
+              top: false,
+              topLeft: false,
+              topRight: false
+            }}
+            default={{
+              width: "60%"
+            }}
+            maxWidth={"70%"}
+            minWidth={"30%"}
+            style={{ position: "static" }}
+          >
+            <ContainerDimensions>
+              {({ width }) => {
+                return (
+                  <Map
+                    updateModerator={this.props.updateModerator}
+                    mapLength={width}
+                    updateHeight={this.updateHeight}
+                    number={this.props.number}
+                    data={processData(
+                      this.state.season,
+                      this.state.localStorage
+                    )}
+                  />
+                );
+              }}
+            </ContainerDimensions>
+          </Rnd>
+        </Row>
+      );
+    }
+    return (
+      <Row type="flex">
+        <ContainerDimensions style={{ width: "100%" }}>
+          {({ width }) => {
+            return (
               <Map
                 updateModerator={this.props.updateModerator}
                 mapLength={width}
@@ -91,9 +118,16 @@ class SidebarMapContainer extends Component {
                 number={this.props.number}
                 data={processData(this.state.season, this.state.localStorage)}
               />
-            )}
-          </ContainerDimensions>
-        </Col>
+            );
+          }}
+        </ContainerDimensions>
+        <Sidebar
+          style={{ width: "100%" }}
+          sidebarHeight={this.state.height}
+          updateSeason={this.updateSeason}
+          data={this.state.season}
+          localStorage={this.state.localStorage}
+        />
       </Row>
     );
   }

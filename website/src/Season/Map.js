@@ -7,7 +7,6 @@ import { iconQuery } from "./../Database";
 import L from "leaflet";
 import { graphql } from "react-apollo";
 import { withRouter } from "react-router-dom";
-
 class Map extends Component {
   constructor(props) {
     super(props);
@@ -42,7 +41,7 @@ class Map extends Component {
     map.setMaxBounds(imageBounds);
     L.control.attribution({ position: "topright" }).addTo(map);
     map.attributionControl.addAttribution(
-      'map locations generously provided by <a href="https://www.reddit.com/user/thesquatingdog", class="your_class">/u/thesquatingdog</a>'
+      '<a href="https://www.reddit.com/user/thesquatingdog", class="your_class">/u/thesquatingdog</a>'
     );
     this.setState({ map: map, markers: markers, currentImage: currentImage });
     map.on("click", res => {
