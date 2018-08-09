@@ -1,5 +1,5 @@
 [Settings]
-ID = process.env.REACT_APP_NETLIFY_ID
+ID = REACT_APP_NETLIFY_ID_PLACEHOLDER
 
 # Settings in the [build] context are global and are applied to all contexts unless otherwise overridden by more specific contexts.  
 
