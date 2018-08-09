@@ -9,7 +9,6 @@
 # production
 /build
 /.env
-/src/Moderator
 
 # misc
 .DS_Store

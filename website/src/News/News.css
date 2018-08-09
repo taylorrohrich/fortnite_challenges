@@ -1,0 +1,61 @@
+@import "~antd/dist/antd.css";
+
+.newsSection {
+  flex: 1;
+  justify-content: center;
+  text-align: center;
+}
+
+.newsSection:hover {
+  color: lightgrey;
+}
+.newsHeader {
+  display: flex;
+  background-color: white;
+  width: 100%;
+  height: 50px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+.postThumbnail {
+  flex: 0 1;
+  max-width: 100%;
+  min-width: 100%;
+  margin-bottom: 20px;
+}
+
+.postThumbnailContainer {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  max-width: 100%;
+  min-width: 50%;
+}
+.adSidebar {
+  display: none;
+}
+.adFooter {
+  display: block;
+  height: 75px;
+  width: 100%;
+  color: black;
+}
+.newsContent {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+/* Small Devices, Tablets */
+@media only screen and (min-width: 768px) {
+  .adSidebar {
+    display: block;
+    min-width: 25%;
+    max-width: 25%;
+    height: 100vh;
+  }
+  .adFooter {
+    display: none;
+  }
+}

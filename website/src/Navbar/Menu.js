@@ -54,6 +54,12 @@ class HamburgerMenu extends React.Component {
         <div onClick={() => this.props.history.push("/")} className="menuItem">
           Home
         </div>
+        <div
+          onClick={() => this.props.history.push("/news")}
+          className="menuItem"
+        >
+          News
+        </div>
         <div onClick={() => this.props.toggleModal()} className="menuItem">
           Donate
         </div>
