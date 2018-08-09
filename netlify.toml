@@ -6,3 +6,4 @@ ID = "97b1a348-d845-45be-a4dc-883b25582fc"
 [build]
   # This is the directory to change to before starting a build.
   base    = "website/"
+  publish = "website/build"
