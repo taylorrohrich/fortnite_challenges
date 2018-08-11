@@ -5,3 +5,16 @@
   # This is the directory to change to before starting a build.
   base    = "website/"
   publish = "website/build"
+
+
+[[redirects]]
+  from = "/api/*"
+  to = "http://142.93.14.162:8080"
+  status = 200
+  force = true
+  headers = {X-From = "netlify", X-Custom-Token = "my custom token"}
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
