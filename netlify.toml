@@ -12,6 +12,7 @@
   to = "http://142.93.14.162:8080/:splat"
   status = 200
   force = true
+  signed ="REACT_APP_API_SECRET"
 
 [[redirects]]
   from = "/*"
