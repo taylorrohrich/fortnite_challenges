@@ -9,10 +9,9 @@
 
 [[redirects]]
   from = "/api/*"
-  to = "http://142.93.14.162:8080"
+  to = "http://142.93.14.162:8080/:splat"
   status = 200
   force = true
-  headers = {X-From = "netlify", X-Custom-Token = "my custom token"}
 
 [[redirects]]
   from = "/*"
