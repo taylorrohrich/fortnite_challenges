@@ -6,24 +6,17 @@ export const apiRequest = (name, parameters) => {
     websiteUrl =
       process.env.NODE_ENV === "development"
         ? "http://localhost:8080"
-        : "https://gallant-franklin-bab9b7.netlify.com/api",
+        : "https://gallant-franklin-bab9b7.netlify.com/api", //change when domain changes
     url = websiteUrl + "/database",
-    body = JSON.stringify({
-      ...parameters
-      // api_secret: process.env.REACT_APP_API_SECRET
-    }),
+    body =
+      parameters &&
+      JSON.stringify({
+        parameters
+      }),
     fetchData = {
       url,
-      method: "get",
+      method,
       body
     };
-  console.log(url, fetchData);
   axios(fetchData);
-  // fetch(url, fetchData)
-  //   .then(function(data) {
-  //     console.log(data);
-  //   })
-  //   .catch(function(error) {
-  //     console.log(error);
-  //   });
 };
