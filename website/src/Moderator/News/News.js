@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import "./../../App.css";
 import Dropzone from "react-dropzone";
 import { Button } from "antd";
+import { apiRequest } from "./../../Controllers/utils";
 class News extends Component {
   state = {
     files: []
@@ -69,7 +70,7 @@ class News extends Component {
       <div>
         {console.log(this.state)}
         <Dropzone onDrop={this.onDrop} accept="image/*" multiple={false} />
-        <Button onClick={() => this.submitPictures()}> Submit </Button>
+        <Button onClick={() => apiRequest("getStatus")}> Submit </Button>
       </div>
     );
   }
