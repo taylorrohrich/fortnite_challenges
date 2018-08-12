@@ -7,7 +7,7 @@ export const apiRequest = (name, parameters) => {
       process.env.NODE_ENV === "development"
         ? "http://localhost:8080"
         : "https://gallant-franklin-bab9b7.netlify.com/api", //change when domain changes
-    url = websiteUrl + "/database",
+    url = websiteUrl + routes[name][0],
     body =
       parameters &&
       JSON.stringify({
