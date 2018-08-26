@@ -87,11 +87,11 @@ const getMarker = (
       : challengeName
   );
   return L.marker([coordinate.x * length, coordinate.y * length], {
-    icon: getIcon(icon)
+    icon
   }).bindPopup(popup);
 };
 
-export const getIcon = (options, iconURL) => {
+const getIcon = (options, iconURL) => {
   const multiplier = window.innerWidth >= 576 ? 1 : 0.6;
   if (iconURL && options) {
     const { width, height } = options;
@@ -99,9 +99,10 @@ export const getIcon = (options, iconURL) => {
       iconUrl: iconURL,
       iconSize: [multiplier * width, multiplier * height]
     });
+  } else {
+    return L.icon({
+      iconUrl: challenge,
+      iconSize: [multiplier * 35, multiplier * 35]
+    });
   }
-  return L.icon({
-    iconUrl: challenge,
-    iconSize: [multiplier * 35, multiplier * 35]
-  });
 };
