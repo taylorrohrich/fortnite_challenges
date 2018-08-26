@@ -1,18 +1,16 @@
-import { mutation } from "./Database";
 import { decideMap, populateMap, getIcon } from "./Map";
 import {
-  handleLocalStorage,
+  getLocalStorage,
   processData,
   checkIfUpdatedWeek,
   checkIfUpdatedChallenge,
   toggleAll
 } from "./Season.js";
 export {
-  mutation,
   decideMap,
   populateMap,
   getIcon,
-  handleLocalStorage,
+  getLocalStorage,
   processData,
   checkIfUpdatedWeek,
   checkIfUpdatedChallenge,

@@ -3,16 +3,25 @@ import "./Navbar.css";
 import HamburgerMenu from "./Menu";
 import { hamburger } from "./../Images";
 import { Modal } from "antd";
+import apiRequest from "./../Controllers";
 
 class Navbar extends Component {
   constructor(props) {
     super(props);
     this.state = {
       showModal: false,
-      showMenu: false
+      showMenu: false,
+      seasonList: null
     };
   }
 
+  componentDidMount() {
+    apiRequest({ name: "getSeasonList" }).then(response => {
+      this.setState({
+        seasonList: response.data
+      });
+    });
+  }
   render() {
     return (
       <div className="header">
@@ -40,6 +49,7 @@ class Navbar extends Component {
               })
             }
             toggleMenu={() => this.setState({ showMenu: !this.state.showMenu })}
+            seasonList={this.state.seasonList}
           />
         )}
         <Modal
@@ -67,8 +77,8 @@ class Navbar extends Component {
               <b>you can find my link to Donorbox below.</b> Holding off on
               donating? That’s ok too! You will still get complete access to
               fort-friend.com. I look forward to continuing support and keeping
-              you up to date with challenges each week! <br />-Taylor, developer
-              of FortFriend
+              you up to date with challenges each week! <br />
+              -Taylor, developer of FortFriend
             </p>
             <a href="https://donorbox.org/fort-friend">
               <img

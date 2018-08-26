@@ -3,7 +3,7 @@ import { youtube, challenge, fnmap4, fnmap5, placeholder } from "./../Images";
 
 export const decideMap = seasonNumber => {
   let map = null;
-  switch (seasonNumber) {
+  switch (Number(seasonNumber)) {
     case 4:
       map = fnmap4;
       break;
@@ -16,80 +16,88 @@ export const decideMap = seasonNumber => {
   return map;
 };
 
-export const populateMap = (data, length, group, icons) => {
-  if (data && icons) {
-    const iconDictionary = icons.reduce((acc, item) => {
-      return {
-        ...acc,
-        [item.name]: {
-          width: item.width,
-          height: item.height,
-          imageUrl: item.imageUrl
-        }
-      };
-    }, {});
-    data.forEach(chal => {
-      if (chal.coord.length) {
-        const coordinates = chal.coord;
-        coordinates.forEach(coordinate => {
-          const marker = getMarker(
-            coordinate,
-            length,
-            iconDictionary[chal.icon],
-            chal.description
-          );
-          group.addLayer(marker);
-        });
-      }
+export const populateMap = (locations, length, group) => {
+  if (locations && locations.length) {
+    locations.forEach(location => {
+      const coordinate = location.Coordinates
+          ? JSON.parse(location.Coordinates)
+          : null,
+        locationDescription = location.LocationDescription,
+        challengeName = location.ChallengeName,
+        imageURL = location.ImageURL,
+        iconURL = location.IconURL,
+        options = location.Options ? JSON.parse(location.Options) : null,
+        referral = location.Referral,
+        credit = location.Credit,
+        icon = getIcon(options, iconURL),
+        marker = getMarker(
+          coordinate,
+          length,
+          icon,
+          locationDescription,
+          challengeName,
+          imageURL,
+          referral,
+          credit
+        );
+      group.addLayer(marker);
     });
   }
 };
 
-const getMarker = (coordinate, length, icon, description) => {
+const getMarker = (
+  coordinate,
+  length,
+  icon,
+  locationDescription,
+  challengeName,
+  imageURL,
+  referral,
+  credit
+) => {
   const popupWidth = window.innerWidth >= 576 ? 400 : 250;
   const popup = L.popup({ keepInView: true, maxWidth: popupWidth }).setContent(
-    coordinate.url
+    imageURL
       ? "<div style='width:100%;text-align:center'>" +
         "<img" +
         " style='width:" +
         popupWidth +
         "px;height:auto'" +
         " src=" +
-        coordinate.url +
+        imageURL +
         " />" +
         "<b>" +
-        description +
+        challengeName +
         "</b>" +
         "<br/>" +
-        (coordinate.locationDescription
-          ? "<i>" + coordinate.locationDescription + "</i>"
-          : "") +
-        (coordinate.credit
-          ? coordinate.refLink
+        (locationDescription ? "<i>" + locationDescription + "</i>" : "") +
+        (credit
+          ? referral
             ? "<a href=" +
-              coordinate.refLink +
+              referral +
               " target='_blank' ><img src=" +
               youtube +
               " style='height:auto;width:15px;margin-left:5px;margin-right:5px'" +
               " />" +
-              coordinate.credit +
+              credit +
               "</a>"
-            : coordinate.credit
+            : credit
           : "") +
         "</div>"
-      : description
+      : challengeName
   );
   return L.marker([coordinate.x * length, coordinate.y * length], {
     icon: getIcon(icon)
   }).bindPopup(popup);
 };
 
-export const getIcon = icon => {
+export const getIcon = (options, iconURL) => {
   const multiplier = window.innerWidth >= 576 ? 1 : 0.6;
-  if (icon) {
+  if (iconURL && options) {
+    const { width, height } = options;
     return L.icon({
-      iconUrl: icon.imageUrl,
-      iconSize: [multiplier * icon.width, multiplier * icon.height]
+      iconUrl: iconURL,
+      iconSize: [multiplier * width, multiplier * height]
     });
   }
   return L.icon({

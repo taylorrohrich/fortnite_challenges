@@ -2,15 +2,15 @@ import React, { Component } from "react";
 import "./../App.css";
 import Map from "../Season/Map";
 import Sidebar from "./../Sidebar";
-import { handleLocalStorage, processData } from "../Utils";
+import { getLocalStorage, processData } from "../Utils";
+import apiRequest from "./../Controllers";
 //node modules
-import { graphql, compose } from "react-apollo";
 import { withRouter } from "react-router-dom";
 import { Row } from "antd";
-import { seasonQuery } from "./../Database";
 import ContainerDimensions from "react-container-dimensions";
 import Rnd from "react-rnd";
 
+/*TODO*/
 class SidebarMapContainer extends Component {
   constructor(props) {
     super(props);
@@ -33,38 +33,54 @@ class SidebarMapContainer extends Component {
     this.setState({ selectedSeason: number });
   };
 
-  grabSelectedSeason = number => {
-    if (this.state.seasons) {
-      return this.state.seasons.find(element => {
-        return element.number === number;
-      });
+  componentDidMount = () => {
+    const seasonNumber = this.props.number;
+    if (seasonNumber) {
+      apiRequest({ name: "getSeason", parameters: { seasonNumber } }).then(
+        response => {
+          if (response.data) {
+            const season = response.data,
+              localStorage = getLocalStorage(season);
+            this.setState({
+              season,
+              localStorage
+            });
+          } else {
+            this.props.history.push(`/error`);
+          }
+        }
+      );
     }
   };
-
-  static getDerivedStateFromProps(nextProps) {
-    const seasonQuery = nextProps.seasonQuery;
-    if (seasonQuery && seasonQuery.allSeasons) {
-      const selectedSeason = seasonQuery.allSeasons;
-      if (!selectedSeason.length) {
-        nextProps.history.push(`/error`);
-      } else {
-        return {
-          season: selectedSeason[0],
-          localStorage: handleLocalStorage(selectedSeason[0])
-        };
-      }
-    } else {
-      return {};
+  componentDidUpdate = prevProps => {
+    const prevSeasonNumber = prevProps.number,
+      seasonNumber = this.props.number;
+    if (seasonNumber !== prevSeasonNumber && seasonNumber !== null) {
+      apiRequest({ name: "getSeason", parameters: { seasonNumber } }).then(
+        response => {
+          if (response.data) {
+            const season = response.data,
+              localStorage = getLocalStorage(season);
+            this.setState({
+              season,
+              localStorage
+            });
+          } else {
+            this.props.history.push(`/error`);
+          }
+        }
+      );
     }
-  }
+  };
   render() {
     if (window.innerWidth >= 992) {
       return (
         <Row type="flex">
           <Sidebar
+            style={{ width: "100%" }}
             sidebarHeight={this.state.height}
             updateSeason={this.updateSeason}
-            data={this.state.season}
+            season={this.state.season}
             localStorage={this.state.localStorage}
           />
           <Rnd
@@ -125,23 +141,12 @@ class SidebarMapContainer extends Component {
           style={{ width: "100%" }}
           sidebarHeight={this.state.height}
           updateSeason={this.updateSeason}
-          data={this.state.season}
+          season={this.state.season}
           localStorage={this.state.localStorage}
         />
       </Row>
     );
   }
 }
-const SidebarMapContainerWithQuery = compose(
-  graphql(seasonQuery, {
-    name: "seasonQuery",
-    skip: props => !props.number,
-    options: props => ({
-      variables: {
-        number: props.number
-      }
-    })
-  })
-)(withRouter(SidebarMapContainer));
 
-export default SidebarMapContainerWithQuery;
+export default withRouter(SidebarMapContainer);

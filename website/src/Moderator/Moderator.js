@@ -1,25 +1,27 @@
 import React, { Component } from "react";
 import "./../App.css";
-import { handleLocalStorage } from "../Utils";
-import { allSeasonQuery } from "./../Database";
 import SidebarMapContainer from "./../Season/SidebarMapContainer";
-import Challenge from "./Challenge";
+import Week from "./Week";
 import Icon from "./Icon/Icon";
 import Promote from "./Promote/Promote";
 import SeasonTab from "./Season/Season";
 import News from "./News";
+import Challenge from "./Challenge";
+import apiRequest from "./../Controllers";
 //node modules
-import { graphql, compose } from "react-apollo";
 import { withRouter } from "react-router-dom";
-import { Form, Icon as AntdIcon, Input, Modal, Card } from "antd";
-import { cloneDeep } from "lodash";
+import { Form, Icon as AntdIcon, Input, Modal, Card, Select } from "antd";
 const moderatorUsername = process.env.REACT_APP_USERNAME;
 const moderatorPassword = process.env.REACT_APP_PASSWORD;
 const FormItem = Form.Item;
 const tabList = [
   {
-    key: "Map",
-    tab: "Map"
+    key: "Challenge",
+    tab: "Challenge"
+  },
+  {
+    key: "Week",
+    tab: "Week"
   },
   {
     key: "PromotedContent",
@@ -43,70 +45,81 @@ class Moderator extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedSeason: null,
-      seasons: null,
+      seasonID: null,
+      season: null,
       localStorage: {},
-      key: "Map",
-      selectedCoords: [],
-      coordIndex: null,
+      key: "Challenge",
+      coordinate: null,
+      locationIndex: null,
       authenticated: false,
       username: "",
-      password: ""
+      password: "",
+      seasonNumber: 5
     };
   }
 
+  componentDidMount() {
+    apiRequest({ name: "getSeasonList" }).then(response => {
+      this.setState({
+        seasonList: response.data
+      });
+    });
+  }
   changeNormalState(name, value) {
     this.setState({
       [name]: value
     });
   }
-
-  static getDerivedStateFromProps(nextProps, prevState) {
-    if (
-      nextProps.allSeasonQuery &&
-      nextProps.allSeasonQuery.allSeasons &&
-      !prevState.seasons
-    ) {
-      const selectedSeason = nextProps.allSeasonQuery.allSeasons.filter(
-        element => element.isActive === true
-      )[0].number;
-      return {
-        seasons: nextProps.allSeasonQuery.allSeasons,
-        localStorage: handleLocalStorage(
-          nextProps.allSeasonQuery.allSeasons.find(element => {
-            return element.number === selectedSeason;
-          })
-        ),
-        selectedSeason
-      };
-    } else {
-      return {};
+  childDidUpdate = () => {
+    this.setState({
+      updated: true
+    });
+  };
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.seasonID !== this.state.seasonID || this.state.updated) {
+      apiRequest({
+        name: "getSeason",
+        parameters: { seasonID: this.state.seasonID }
+      }).then(response => {
+        this.setState({
+          season: response.data,
+          updated: false
+        });
+      });
     }
   }
-  pushCoordinate = coord => {
-    let newCoords = cloneDeep(this.state.selectedCoords),
-      coordIndex = this.state.coordIndex;
-    if (coordIndex != null) {
-      newCoords[coordIndex] = coord;
-      this.setState({ selectedCoords: newCoords, coordIndex: null });
-    } else {
-      newCoords.push(coord);
-      this.setState({ selectedCoords: newCoords });
-    }
+  pushCoordinate = coordinate => {
+    this.setState({ coordinate });
   };
 
   contentList = type => {
-    if (type === "Map") {
+    if (type === "Challenge") {
       return (
         <Challenge
+          seasonID={this.state.seasonID}
+          season={this.state.season ? this.state.season.weeks : null}
+          coordinate={this.state.coordinate}
+          locationIndex={this.state.locationIndex}
+          childDidUpdate={this.childDidUpdate}
+          changeParentState={locationIndex =>
+            this.setState({
+              locationIndex
+            })
+          }
+        />
+      );
+    }
+    if (type === "Week") {
+      return (
+        <Week
           changeModeratorState={(name, value) => {
             this.setState({
               [name]: value
             });
           }}
-          seasons={this.state.seasons}
-          coordIndex={this.state.coordIndex}
-          selectedCoords={this.state.selectedCoords}
+          seasonID={this.state.seasonID}
+          season={this.state.season ? this.state.season.weeks : null}
+          childDidUpdate={this.childDidUpdate}
         />
       );
     }
@@ -134,87 +147,100 @@ class Moderator extends Component {
     }
   };
 
-  render() {
-    if (
-      this.props.loading ||
-      !this.props.allSeasonQuery ||
-      this.props.allSeasonQuery.loading
-    ) {
-      return <div />;
-    } else {
+  mapSeasonListOptions = () => {
+    const seasonList = this.state.seasonList;
+    return seasonList.map((season, i) => {
       return (
-        <div className="App">
-          {!this.state.authenticated ? (
-            <Modal
-              visible={true}
-              title="Moderator Login"
-              okText="Login"
-              onOk={() => this.handleAuthentication()}
-            >
-              <Form onSubmit={this.handleSubmit} className="login-form">
-                <FormItem>
-                  {
-                    <Input
-                      onChange={e =>
-                        this.changeNormalState("username", e.target.value)
-                      }
-                      value={this.state.username}
-                      prefix={
-                        <AntdIcon
-                          type="user"
-                          style={{ color: "rgba(0,0,0,.25)" }}
-                        />
-                      }
-                      placeholder="Username"
-                    />
-                  }
-                </FormItem>
-                <FormItem>
-                  {
-                    <Input
-                      onChange={e =>
-                        this.changeNormalState("password", e.target.value)
-                      }
-                      value={this.state.password}
-                      prefix={
-                        <AntdIcon
-                          type="lock"
-                          style={{ color: "rgba(0,0,0,.25)" }}
-                        />
-                      }
-                      type="password"
-                      placeholder="Password"
-                    />
-                  }
-                </FormItem>
-              </Form>
-            </Modal>
-          ) : (
-            <div>
-              <SidebarMapContainer
-                number={this.state.selectedSeason}
-                updateModerator={this.pushCoordinate}
-              />
-              <Card
-                style={{ width: "100%" }}
-                title="Moderator Page"
-                tabList={tabList}
-                onTabChange={key => {
-                  this.changeNormalState("key", key);
-                }}
-              >
-                {this.contentList(this.state.key)}
-              </Card>
-            </div>
-          )}
-        </div>
+        <Select.Option
+          title={"Select Season"}
+          key={season.ID + i}
+          value={season.ID}
+        >
+          {season.name}
+        </Select.Option>
       );
+    });
+  };
+  render() {
+    if (!this.state.seasonList) {
+      return <div />;
     }
+    return (
+      <div className="App">
+        {this.state.authenticated ? (
+          <Modal
+            visible={true}
+            title="Moderator Login"
+            okText="Login"
+            onOk={() => this.handleAuthentication()}
+          >
+            <Form onSubmit={this.handleSubmit} className="login-form">
+              <FormItem>
+                {
+                  <Input
+                    onChange={e =>
+                      this.changeNormalState("username", e.target.value)
+                    }
+                    value={this.state.username}
+                    prefix={
+                      <AntdIcon
+                        type="user"
+                        style={{ color: "rgba(0,0,0,.25)" }}
+                      />
+                    }
+                    placeholder="Username"
+                  />
+                }
+              </FormItem>
+              <FormItem>
+                {
+                  <Input
+                    onChange={e =>
+                      this.changeNormalState("password", e.target.value)
+                    }
+                    value={this.state.password}
+                    prefix={
+                      <AntdIcon
+                        type="lock"
+                        style={{ color: "rgba(0,0,0,.25)" }}
+                      />
+                    }
+                    type="password"
+                    placeholder="Password"
+                  />
+                }
+              </FormItem>
+            </Form>
+          </Modal>
+        ) : (
+          <div>
+            <SidebarMapContainer
+              number={this.state.seasonNumber}
+              updateModerator={this.pushCoordinate}
+            />
+            <Select
+              value={this.state.seasonID}
+              onChange={seasonID => {
+                this.setState({ seasonID: seasonID });
+              }}
+            >
+              {this.mapSeasonListOptions()}
+            </Select>
+            <Card
+              style={{ width: "100%" }}
+              title="Moderator Page"
+              tabList={tabList}
+              onTabChange={key => {
+                this.changeNormalState("key", key);
+              }}
+            >
+              {this.contentList(this.state.key)}
+            </Card>
+          </div>
+        )}
+      </div>
+    );
   }
 }
 
-export default compose(
-  graphql(allSeasonQuery, {
-    name: "allSeasonQuery"
-  })
-)(withRouter(Moderator));
+export default withRouter(Moderator);

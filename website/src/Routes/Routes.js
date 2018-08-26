@@ -16,7 +16,7 @@ const Routes = props => {
       />
       <Route exact path="/season/:number?" component={SeasonRouteHandler} />
       <Route exact path="/moderator" component={Moderator} />
-      <Route exact path="/news" component={News} />
+      {/* <Route exact path="/news" component={News} /> */}
       <Route component={Error} />
     </Switch>
   );

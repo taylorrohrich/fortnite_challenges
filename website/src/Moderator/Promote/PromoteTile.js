@@ -1,27 +1,61 @@
 import React, { Component } from "react";
 import "./../../App.css";
-import {
-  createPromotedContent,
-  updatePromotedContent,
-  deletePromotedContent
-} from "./../../Database";
-import { mutation } from "./../../Utils";
+import apiRequest from "../../Controllers";
+import Dropzone from "./../../Dropzone";
 import { Icon, Input, Button, Col, Row, Card } from "antd";
-import { graphql, compose } from "react-apollo";
-import { withRouter } from "react-router-dom";
 
 class PromoteTile extends Component {
+  state = {
+    title: null,
+    media: null,
+    link: null,
+    url: null,
+    id: null,
+    file: null
+  };
   static getDerivedStateFromProps(nextProps) {
-    const { title, media, link, imageUrl, id } = nextProps.promotedContent;
-    return {
-      title,
-      media,
-      link,
-      imageUrl,
-      id
-    };
+    const promotedContent = nextProps.promotedContent;
+    if (promotedContent) {
+      const { ID, Options, URL } = promotedContent,
+        { title, media, link } = JSON.parse(Options);
+      return {
+        title,
+        media,
+        link,
+        url: URL,
+        id: ID
+      };
+    }
+    return {};
   }
+  createPromotedContent = () => {
+    const { title, media, link, file } = this.state;
+    if (title && media && link && file) {
+      const formData = {
+        options: JSON.stringify({ title, media, link }),
+        file,
+        type: "promote"
+      };
+      apiRequest({ name: "postImageCreate", formData }).then(response => {
+        this.props.childDidUpdate();
+      });
+    }
+  };
 
+  updatePromotedContent = () => {
+    const { id, title, media, link, file } = this.state;
+    if (id && title && media && link) {
+      const formData = {
+        options: JSON.stringify({ title, media, link }),
+        file,
+        type: "promote",
+        imageID: id
+      };
+      apiRequest({ name: "postImageUpdate", formData }).then(response => {
+        this.props.childDidUpdate();
+      });
+    }
+  };
   changeNormalState(name, value) {
     this.setState({
       [name]: value
@@ -29,7 +63,7 @@ class PromoteTile extends Component {
   }
 
   render() {
-    const { title, media, link, imageUrl, id } = this.state;
+    const { url } = this.state;
     return (
       <Card title={this.state.title} style={{ width: "100%" }}>
         <Row style={{ padding: "15px" }} gutter={16}>
@@ -51,12 +85,12 @@ class PromoteTile extends Component {
           </Col>
         </Row>
         <Row style={{ padding: "15px" }} gutter={16}>
-          <Input
-            onChange={e => this.changeNormalState("imageUrl", e.target.value)}
-            prefix={<Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />}
-            placeholder="image link"
-            value={this.state.imageUrl}
+          <Dropzone
+            callback={file => {
+              this.setState({ file });
+            }}
           />
+          {url && <img src={url} alt="upload" />}
         </Row>
         <Row style={{ padding: "15px" }} gutter={16}>
           <Input
@@ -70,36 +104,26 @@ class PromoteTile extends Component {
           <Row gutter={16} type="flex" justify="end">
             <Col span={4}>
               <Button
+                onClick={() => this.updatePromotedContent()}
                 style={{ width: "100%" }}
                 type="primary"
-                onClick={() =>
-                  mutation(
-                    {
-                      title,
-                      media,
-                      link,
-                      imageUrl,
-                      id
-                    },
-                    this.props.updatePromotedContent
-                  )
-                }
               >
                 Update
               </Button>
             </Col>
             <Col span={4}>
               <Button
+                onClick={() => {
+                  const id = this.state.id;
+                  apiRequest({
+                    name: "postImageDelete",
+                    body: { imageID: id }
+                  }).then(response => {
+                    this.props.childDidUpdate();
+                  });
+                }}
                 style={{ width: "100%" }}
                 type="danger"
-                onClick={() =>
-                  mutation(
-                    {
-                      id
-                    },
-                    this.props.deletePromotedContent
-                  )
-                }
               >
                 Delete
               </Button>
@@ -109,19 +133,9 @@ class PromoteTile extends Component {
           <Row gutter={16} type="flex" justify="end">
             <Col span={4}>
               <Button
+                onClick={() => this.createPromotedContent()}
                 style={{ width: "100%" }}
                 type="primary"
-                onClick={() =>
-                  mutation(
-                    {
-                      title,
-                      media,
-                      link,
-                      imageUrl
-                    },
-                    this.props.createPromotedContent
-                  )
-                }
               >
                 Create
               </Button>
@@ -133,14 +147,4 @@ class PromoteTile extends Component {
   }
 }
 
-export default compose(
-  graphql(createPromotedContent, {
-    name: "createPromotedContent"
-  }),
-  graphql(updatePromotedContent, {
-    name: "updatePromotedContent"
-  }),
-  graphql(deletePromotedContent, {
-    name: "deletePromotedContent"
-  })
-)(withRouter(PromoteTile));
+export default PromoteTile;

@@ -1,35 +1,59 @@
 import React, { Component } from "react";
 import "./../../App.css";
-import { iconQuery } from "./../../Database";
 import IconTile from "./IconTile";
-import { graphql, compose } from "react-apollo";
-import { withRouter } from "react-router-dom";
-
+import apiRequest from "./../../Controllers";
 class Icon extends Component {
+  state = {
+    iconList: null,
+    updated: false
+  };
+  componentDidMount() {
+    apiRequest({ name: "getImageType", parameters: { type: "icon" } }).then(
+      response => {
+        this.setState({ iconList: response.data });
+      }
+    );
+  }
+  componentDidUpdate() {
+    if (this.state.updated) {
+      apiRequest({ name: "getImageType", parameters: { type: "icon" } }).then(
+        response => {
+          this.setState({ iconList: response.data, updated: false });
+        }
+      );
+    }
+  }
+
+  childDidUpdate = () => {
+    this.setState({
+      updated: true
+    });
+  };
   mapIcons = icons => {
-    if (icons.length) {
+    if (icons) {
       return icons.map((value, index) => {
-        return <IconTile key={"icon" + index} icon={value} />;
+        return (
+          <IconTile
+            key={"icon" + index}
+            icon={value}
+            childDidUpdate={this.childDidUpdate}
+          />
+        );
       });
     }
   };
   render() {
-    if (this.props.loading || this.props.iconQuery.loading) {
-      return <div>Icon</div>;
+    if (!this.state.iconList) {
+      return <div />;
     }
-    const icons = this.props.iconQuery.allIcons;
     return (
       <div>
-        <IconTile icon={{}} />
+        <IconTile childDidUpdate={this.childDidUpdate} />
         <hr style={{ marginBottom: "50px", marginTop: "50px" }} />
-        {this.mapIcons(icons)}
+        {this.mapIcons(this.state.iconList)}
       </div>
     );
   }
 }
 
-export default compose(
-  graphql(iconQuery, {
-    name: "iconQuery"
-  })
-)(withRouter(Icon));
+export default Icon;

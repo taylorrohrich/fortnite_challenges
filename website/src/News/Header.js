@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { Card, Icon } from "antd";
 import "./News.css";
 class Header extends Component {
   state = {};

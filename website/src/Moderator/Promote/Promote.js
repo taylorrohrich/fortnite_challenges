@@ -1,11 +1,12 @@
 import React, { Component } from "react";
 import "./../../App.css";
-import { promotedContentQuery } from "./../../Database";
 import PromoteTile from "./PromoteTile";
-import { graphql, compose } from "react-apollo";
-import { withRouter } from "react-router-dom";
-
+import apiRequest from "./../../Controllers";
 class Promote extends Component {
+  state = {
+    promotedContentList: null,
+    updated: false
+  };
   mapPromotedContent = promotedContent => {
     if (promotedContent.length) {
       return promotedContent.map((value, index) => {
@@ -13,19 +14,37 @@ class Promote extends Component {
           <PromoteTile
             key={"promotedContent" + index}
             promotedContent={value}
+            childDidUpdate={() => this.setState({ updated: true })}
           />
         );
       });
     }
   };
-  render() {
-    if (this.props.loading || this.props.promotedContentQuery.loading) {
-      return <div>Promote</div>;
+  componentDidMount() {
+    apiRequest({ name: "getImageType", parameters: { type: "promote" } }).then(
+      response => {
+        this.setState({ promotedContentList: response.data });
+      }
+    );
+  }
+  componentDidUpdate() {
+    if (this.state.updated) {
+      apiRequest({
+        name: "getImageType",
+        parameters: { type: "promote" }
+      }).then(response => {
+        this.setState({ promotedContentList: response.data, updated: false });
+      });
     }
-    const promotedContent = this.props.promotedContentQuery.allPromotedContents;
+  }
+  render() {
+    if (!this.state.promotedContentList) {
+      return <div>Loading...</div>;
+    }
+    const promotedContent = this.state.promotedContentList;
     return (
       <div>
-        <PromoteTile promotedContent={{}} />
+        <PromoteTile childDidUpdate={() => this.setState({ updated: true })} />
         <hr style={{ marginBottom: "50px", marginTop: "50px" }} />
         {this.mapPromotedContent(promotedContent)}
       </div>
@@ -33,8 +52,4 @@ class Promote extends Component {
   }
 }
 
-export default compose(
-  graphql(promotedContentQuery, {
-    name: "promotedContentQuery"
-  })
-)(withRouter(Promote));
+export default Promote;

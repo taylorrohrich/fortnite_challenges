@@ -9,53 +9,40 @@ const toggleCheckAll = (
   weekNumber,
   seasonNumber,
   seasonLocalStorage,
-  challengeNumber,
-  updateSeason
+  updateSeason,
+  localStorageChallenge
 ) => {
-  const weekLocalStorage = seasonLocalStorage["week" + weekNumber],
-    updatedChallenge = toggleAll(
-      weekLocalStorage["c" + challengeNumber],
-      !weekLocalStorage["c" + challengeNumber].all
-    ),
-    updatedLocalStorage = checkIfUpdatedWeek(
-      {
-        ...seasonLocalStorage,
-        ["week" + weekNumber]: {
-          ...weekLocalStorage,
-          ["c" + challengeNumber]: updatedChallenge
-        }
-      },
-      "week" + weekNumber
-    );
+  toggleAll(localStorageChallenge, !localStorageChallenge.isChecked);
+  checkIfUpdatedWeek(seasonLocalStorage, weekNumber);
   localStorage.setItem(
     "season" + seasonNumber,
-    JSON.stringify(updatedLocalStorage)
+    JSON.stringify(seasonLocalStorage)
   );
-  updateSeason(updatedLocalStorage);
+  updateSeason(seasonLocalStorage);
 };
 
 const mapCoordinates = (
-  coordinates,
+  locations,
   weekNumber,
   seasonNumber,
-  seasonLocalStorage,
+  localStorageChallenge,
   challengeNumber,
-  description,
-  updateSeason
+  updateSeason,
+  seasonLocalStorage
 ) => {
-  return coordinates.map((coordinate, index) => (
+  return locations.map((coordinate, index) => (
     <ChallengeMenuItem
       key={
         "week" + weekNumber + "challenge" + challengeNumber + "coord" + index
       }
       data={{
-        coord: { ...coordinate, number: index },
-        description:
-          coordinate.locationDescription || description + ": " + (index + 1),
-        number: challengeNumber,
-        weekNumber: weekNumber,
-        seasonNumber: seasonNumber,
-        seasonLocalStorage: seasonLocalStorage,
+        locationNumber: index,
+        name: coordinate.LocationDescription,
+        challengeNumber,
+        weekNumber,
+        seasonNumber,
+        localStorageChallenge,
+        seasonLocalStorage,
         updateSeason: updateSeason,
         coordItem: true
       }}
@@ -67,14 +54,19 @@ const MultiCoordChallenge = props => {
   const divProps = Object.assign({}, props),
     data = props.data,
     {
-      number,
-      coord,
-      description,
+      challengeNumber,
+      locations,
+      name,
+      isHard,
       weekNumber,
       seasonNumber,
+      localStorageWeek,
       seasonLocalStorage,
       updateSeason
     } = data;
+  const localStorageChallenge = localStorageWeek.challenges.filter(
+    challenge => challenge.number === challengeNumber
+  )[0];
   delete divProps.data;
   return (
     <SubMenu
@@ -89,11 +81,7 @@ const MultiCoordChallenge = props => {
             }}
           >
             <Switch
-              checked={
-                seasonLocalStorage["week" + weekNumber]["c" + number].all
-                  ? true
-                  : false
-              }
+              checked={localStorageChallenge.isChecked}
               defaultChecked={true}
               style={{ marginRight: "15px" }}
               onChange={() =>
@@ -101,24 +89,24 @@ const MultiCoordChallenge = props => {
                   weekNumber,
                   seasonNumber,
                   seasonLocalStorage,
-                  number,
-                  updateSeason
+                  updateSeason,
+                  localStorageChallenge
                 )
               }
             />
           </span>
-          {description}
+          {name}
         </span>
       }
     >
       {mapCoordinates(
-        coord,
+        locations,
         weekNumber,
         seasonNumber,
-        seasonLocalStorage,
-        number,
-        description,
-        updateSeason
+        localStorageChallenge,
+        challengeNumber,
+        updateSeason,
+        seasonLocalStorage
       )}
     </SubMenu>
   );
