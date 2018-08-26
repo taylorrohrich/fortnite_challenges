@@ -15,30 +15,33 @@ class Sidebar extends Component {
     };
   }
 
-  mapWeeks = (data, season) => {
+  mapWeeks = (season, localStorage) => {
     const weeks = new Array(10).fill(0).reduce((acc, item, index) => {
-      if (!data) {
+      const currentItem = index + 1;
+      if (!season) {
         return acc.concat({
           data: {
             loading: true,
-            weekNumber: index + 1
+            weekNumber: currentItem
           }
         });
       }
-      const currentWeek = data.weeks[index];
+      const currentWeek = season.weeks.filter(
+        week => week.number === currentItem
+      )[0];
       if (currentWeek) {
         return acc.concat({
           data: {
             weekNumber: currentWeek.number,
             challenges: currentWeek.challenges,
-            seasonNumber: data.number
+            seasonNumber: season.number
           }
         });
       } else {
         return acc.concat({
           data: {
             unReleased: true,
-            weekNumber: index + 1
+            weekNumber: currentItem
           }
         });
       }
@@ -48,7 +51,7 @@ class Sidebar extends Component {
         key={"week" + item.data.weekNumber}
         data={{
           ...item.data,
-          seasonLocalStorage: season,
+          seasonLocalStorage: localStorage,
           updateSeason: this.props.updateSeason
         }}
       />
@@ -80,7 +83,8 @@ class Sidebar extends Component {
     if (this.props.loading) {
       return <div />;
     }
-    if (!this.props.data || !this.props.data.weeks) {
+    const season = this.props.season;
+    if (!season || !season.weeks) {
       return (
         <Sider className="Sidebar" width={{}} style={this.handleSiderStyle()}>
           <Menu
@@ -105,7 +109,7 @@ class Sidebar extends Component {
             borderRight: 0
           }}
         >
-          {this.mapWeeks(this.props.data, this.props.localStorage)}
+          {this.mapWeeks(season, this.props.localStorage)}
         </Menu>
       </Sider>
     );

@@ -1,41 +1,53 @@
 import React, { Component } from "react";
 import "./../App.css";
+import apiRequest from "./../Controllers";
 import { Card } from "antd";
-import { graphql } from "react-apollo";
 import { withRouter } from "react-router-dom";
-import { promotedContentQuery } from "./../Database";
 const { Meta } = Card;
 
-const loadingPromotedContent = [
-  {
-    title: "Loading...",
-    media: "Loading...",
-    imageUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png"
-  }
-];
-
 const mapCards = promotedContent => {
+  if (!promotedContent) {
+    return (
+      <Card
+        className="PromoteCard"
+        cover={
+          <span style={{ width: "100%" }}>
+            <img
+              style={{ width: "100%" }}
+              alt="example"
+              src={
+                "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png"
+              }
+            />
+          </span>
+        }
+      >
+        <Meta
+          title={<div style={{ fontSize: ".8em" }}>Loading...</div>}
+          description={<div style={{ fontSize: ".7em" }}>Loading...</div>}
+        />
+      </Card>
+    );
+  }
   return promotedContent.map((item, index) => {
+    const options = item.Options ? JSON.parse(item.Options) : null,
+      { title, media, link } = options,
+      url = item.URL;
     return (
       <span key={item.title + index}>
         <Card
           className="PromoteCard"
           cover={
             <span style={{ width: "100%" }}>
-              <a href={item.link}>
-                <img
-                  style={{ width: "100%" }}
-                  alt="example"
-                  src={item.imageUrl}
-                />
+              <a href={link}>
+                <img style={{ width: "100%" }} alt="example" src={url} />
               </a>
             </span>
           }
         >
           <Meta
-            title={<div style={{ fontSize: ".8em" }}>{item.title}</div>}
-            description={<div style={{ fontSize: ".7em" }}>{item.media}</div>}
+            title={<div style={{ fontSize: ".8em" }}>{title}</div>}
+            description={<div style={{ fontSize: ".7em" }}>{media}</div>}
           />
         </Card>
       </span>
@@ -44,26 +56,32 @@ const mapCards = promotedContent => {
 };
 
 class Promote extends Component {
+  state = {
+    promotedContentList: null
+  };
+  componentDidMount() {
+    apiRequest({ name: "getImageType", parameters: { type: "promote" } }).then(
+      response => {
+        this.setState({ promotedContentList: response.data });
+      }
+    );
+  }
   render() {
-    if (this.props.loading || this.props.promotedContentQuery.loading) {
+    const promotedContentList = this.state.promotedContentList;
+    if (!promotedContentList) {
       return (
         <Card title={"Friends of FortFriend"}>
-          <div className="Promote">{mapCards(loadingPromotedContent)}</div>
+          <div className="Promote">{mapCards()}</div>
         </Card>
       );
     }
 
-    const promotedContent = this.props.promotedContentQuery.allPromotedContents;
     return (
       <Card title={"Friends of FortFriend"}>
-        <div className="Promote">{mapCards(promotedContent)}</div>
+        <div className="Promote">{mapCards(promotedContentList)}</div>
       </Card>
     );
   }
 }
 
-const PromoteWithQuery = graphql(promotedContentQuery, {
-  name: "promotedContentQuery"
-})(withRouter(Promote));
-
-export default PromoteWithQuery;
+export default withRouter(Promote);

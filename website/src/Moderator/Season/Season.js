@@ -1,36 +1,91 @@
 import React, { Component } from "react";
 import "./../../App.css";
-import { allSeasonQuery } from "./../../Database";
 import SeasonTile from "./SeasonTile";
-import { graphql, compose } from "react-apollo";
-import { withRouter } from "react-router-dom";
-import { Row, Col, Card } from "antd";
+import apiRequest from "./../../Controllers";
 
+import { Button } from "antd";
+
+import { Row, Col, Card } from "antd";
 class Season extends Component {
+  state = {
+    seasonList: null,
+    updated: false
+  };
   mapSeasons = seasons => {
     if (seasons.length) {
       return seasons.map(season => {
         return (
           <Col span={8}>
-            <Card title={season.number} />
+            <Card
+              title={
+                <div style={{ color: season.IsActive ? "green" : "red" }}>
+                  {season.number}
+                </div>
+              }
+            >
+              <Button
+                onClick={() => {
+                  apiRequest({
+                    name: "postSeasonDelete",
+                    body: { seasonID: season.ID }
+                  }).then(response => {
+                    this.setState({ updated: true });
+                  });
+                }}
+              >
+                Delete
+              </Button>
+            </Card>
           </Col>
         );
       });
     }
   };
-  render() {
-    if (this.props.loading || this.props.allSeasonQuery.loading) {
-      return <div>Icon</div>;
+  componentDidMount() {
+    apiRequest({ name: "getSeasonList" }).then(response => {
+      this.setState({
+        seasonList: response.data
+      });
+    });
+  }
+  componentDidUpdate() {
+    if (this.state.updated) {
+      apiRequest({ name: "getSeasonList" }).then(response => {
+        this.setState({
+          seasonList: response.data,
+          updated: false
+        });
+      });
     }
-    const seasons = this.props.allSeasonQuery.allSeasons;
+  }
+  render() {
+    const seasons = this.state.seasonList;
+    if (!seasons) {
+      return <div> loading...</div>;
+    }
     return (
       <div>
         <Row gutter={16}>
           <Col span={8}>
-            <SeasonTile type={"create"} />
+            <SeasonTile
+              childDidUpdate={() =>
+                this.setState({
+                  updated: true
+                })
+              }
+              type={"create"}
+            />
           </Col>
           <Col span={8}>
-            <SeasonTile type={"changeActive"} seasons={seasons} />
+            <SeasonTile
+              childDidUpdate={() =>
+                this.setState({
+                  updated: true
+                })
+              }
+              type={"changeActive"}
+              seasons={seasons}
+            />
           </Col>
         </Row>
         <hr style={{ marginBottom: "50px", marginTop: "50px" }} />
@@ -40,8 +95,4 @@ class Season extends Component {
   }
 }
 
-export default compose(
-  graphql(allSeasonQuery, {
-    name: "allSeasonQuery"
-  })
-)(withRouter(Season));
+export default Season;

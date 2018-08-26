@@ -1,6 +1,10 @@
 import React from "react";
 import "./../App.css";
-import { checkIfUpdatedWeek, checkIfUpdatedChallenge } from "../Utils";
+import {
+  checkIfUpdatedChallenge,
+  checkIfUpdatedWeek,
+  toggleAll
+} from "../Utils";
 import { Menu, Switch, Checkbox } from "antd";
 
 const toggleCheck = (
@@ -8,80 +12,66 @@ const toggleCheck = (
   seasonNumber,
   challengeNumber,
   seasonLocalStorage,
-  coordItem,
-  coordinates,
-  updateSeason
+  updateSeason,
+  localStorageItem,
+  coordItem
 ) => {
-  const weekLocalStorage = seasonLocalStorage["week" + weekNumber],
-    updatedWeek = {
-      ...weekLocalStorage,
-      ["c" + challengeNumber]: {
-        ...weekLocalStorage["c" + challengeNumber],
-        [coordItem ? "coord" + coordinates.number : "all"]: !weekLocalStorage[
-          "c" + challengeNumber
-        ][coordItem ? "coord" + coordinates.number : "all"]
-      }
-    },
-    checkIfUpdated = coordItem ? checkIfUpdatedChallenge : checkIfUpdatedWeek,
-    updatedLocalStorage = checkIfUpdated(
-      {
-        ...seasonLocalStorage,
-        ["week" + weekNumber]: updatedWeek
-      },
-      "week" + weekNumber,
-      "c" + challengeNumber
-    );
+  const checkIfUpdated = coordItem
+    ? checkIfUpdatedChallenge
+    : checkIfUpdatedWeek;
+  toggleAll(localStorageItem, !localStorageItem.isChecked);
+  checkIfUpdated(seasonLocalStorage, weekNumber, challengeNumber);
   localStorage.setItem(
     "season" + seasonNumber,
-    JSON.stringify(updatedLocalStorage)
+    JSON.stringify(seasonLocalStorage)
   );
-  updateSeason(updatedLocalStorage);
+  updateSeason(seasonLocalStorage);
 };
 
 const ChallengeMenuItem = props => {
   const divProps = Object.assign({}, props),
     data = props.data,
     {
-      number,
-      coord,
-      description,
+      challengeNumber,
+      locationNumber,
+      name,
       weekNumber,
       seasonNumber,
+      localStorageWeek,
+      localStorageChallenge,
       seasonLocalStorage,
       updateSeason,
       coordItem
     } = data,
     Toggle = coordItem ? Checkbox : Switch;
   delete divProps.data;
+  const localStorageItem = coordItem
+    ? localStorageChallenge.locations[locationNumber]
+    : localStorageWeek.challenges.filter(
+        challenge => challenge.number === challengeNumber
+      )[0];
   return (
     <Menu.Item
       style={{ fontSize: ".8em" }}
       {...divProps}
-      key={"week" + weekNumber + "challenge" + number}
+      key={"week" + weekNumber + "challenge" + challengeNumber}
     >
       <Toggle
-        checked={
-          coordItem
-            ? seasonLocalStorage["week" + weekNumber]["c" + number][
-                "coord" + coord.number
-              ]
-            : seasonLocalStorage["week" + weekNumber]["c" + number].all
-        }
-        defaultChecked={true}
+        checked={localStorageItem.isChecked}
         style={{ marginRight: "15px" }}
         onChange={() =>
           toggleCheck(
             weekNumber,
             seasonNumber,
-            number,
+            challengeNumber,
             seasonLocalStorage,
-            coordItem,
-            coord,
-            updateSeason
+            updateSeason,
+            localStorageItem,
+            coordItem
           )
         }
       />
-      {description}
+      {name}
     </Menu.Item>
   );
 };

@@ -1,7 +1,0 @@
-type CreateActiveSeasonPayload {
-  id: ID!
-}
-
-extend type Mutation {
-  createActiveSeason(seasonId: ID!): CreateActiveSeasonPayload
-}

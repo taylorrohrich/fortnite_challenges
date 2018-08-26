@@ -3,32 +3,29 @@ import { x } from "./../Images";
 import "./Navbar.css";
 import { withRouter } from "react-router-dom";
 import onClickOutside from "react-onclickoutside";
-import { SeasonNumberQuery } from "../Database/Season";
-import { graphql, compose } from "react-apollo";
 
 class HamburgerMenu extends React.Component {
   handleClickOutside = e => {
     this.props.toggleMenu();
   };
-  mapSeasonNumbers = seasonNumberQuery => {
-    if (seasonNumberQuery.loading) {
-      return <div />;
+  mapSeasonNumbers = seasonList => {
+    if (seasonList) {
+      return seasonList.map(season => (
+        <div
+          key={"season" + season.number}
+          onClick={() => {
+            this.props.history.push(`/season/${season.number}`);
+            this.props.toggleMenu();
+          }}
+          className="menuItem"
+        >
+          Season {season.number}
+        </div>
+      ));
     }
-    const seasonNumberArray = seasonNumberQuery.allSeasons;
-    return seasonNumberArray.map(season => (
-      <div
-        key={"season" + season.number}
-        onClick={() => {
-          this.props.history.push(`/season/${season.number}`);
-          this.props.toggleMenu();
-        }}
-        className="menuItem"
-      >
-        Season {season.number}
-      </div>
-    ));
   };
   render() {
+    const seasonList = this.props.seasonList;
     return (
       <div className="hamburgerMenu">
         <div
@@ -63,16 +60,10 @@ class HamburgerMenu extends React.Component {
         <div onClick={() => this.props.toggleModal()} className="menuItem">
           Donate
         </div>
-        {this.mapSeasonNumbers(this.props.seasonNumberQuery)}
+        {this.mapSeasonNumbers(seasonList)}
       </div>
     );
   }
 }
 
-const HamburgerMenuWithQuery = compose(
-  graphql(SeasonNumberQuery, {
-    name: "seasonNumberQuery"
-  })
-)(withRouter(onClickOutside(HamburgerMenu)));
-
-export default HamburgerMenuWithQuery;
+export default withRouter(onClickOutside(HamburgerMenu));

@@ -14,7 +14,7 @@ class PostThumbnail extends Component {
       <div className="postThumbnail">
         <Card
           hoverable
-          cover={<img src={imageUrl || placeholder} alt="image" />}
+          cover={<img src={imageUrl || placeholder} alt="thumbnail" />}
         >
           <Meta title={title} description={description} />
           <div style={{ display: "block" }}>

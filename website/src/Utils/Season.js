@@ -1,48 +1,52 @@
 import { isEqual } from "lodash";
 const updateLocalStorageFromData = (seasonJSON, season) => {
-  const updatedSeasonJSON = season.weeks.reduce((acc, week) => {
-    const updatedWeek = week.challenges.reduce((acc, challenge) => {
-      if (challenge.coord.length > 0) {
-        const updatedChallenge = challenge.coord.reduce((acc, coord, index) => {
-          if (acc["coord" + index] === undefined) {
-            return { ...acc, ["coord" + index]: acc.all };
-          }
-          return acc;
-        }, seasonJSON["week" + week.number]["c" + challenge.number]);
-        return { ...acc, ["c" + challenge.number]: updatedChallenge };
-      }
-      return acc;
-    }, seasonJSON["week" + week.number]);
-    return { ...acc, ["week" + week.number]: updatedWeek };
+  const weeks = season.weeks;
+  if (!weeks) {
+    return seasonJSON;
+  }
+  const updatedSeasonJSON = weeks.reduce((acc, week) => {
+    const localStorageWeek = acc.weeks.filter(
+        lsWeek => lsWeek.number === week.number
+      )[0],
+      challenges = week.challenges,
+      localStorageChallenges = localStorageWeek.challenges;
+    challenges.forEach(challenge => {
+      const localStorageChallenge = localStorageChallenges.filter(
+        lsChallenge => lsChallenge.number === challenge.number
+      )[0];
+      localStorageChallenge.locations = challenge.locations.map(
+        (item, index) => {
+          return {
+            isChecked: localStorageChallenge.locations[index] || false
+          };
+        }
+      );
+    });
+    return acc;
   }, seasonJSON);
   return updatedSeasonJSON;
 };
 
-export const handleLocalStorage = season => {
+export const getLocalStorage = season => {
   if (!localStorage.getItem("season" + season.number)) {
-    const currentWeek = season.weeks.reduce((accum, curVal) => {
-      if (curVal.number > accum) accum = curVal.number;
-      return accum;
-    }, 0);
-    const seasonJSON = Array(10)
-      .fill(0)
-      .reduce((acc, item, index) => {
-        const defaultOpen = index + 1 === currentWeek;
-        return {
-          ...acc,
-          ["week" + (index + 1)]: {
-            all: defaultOpen,
-            c1: { all: defaultOpen },
-            c2: { all: defaultOpen },
-            c3: { all: defaultOpen },
-            c4: { all: defaultOpen },
-            c5: { all: defaultOpen },
-            c6: { all: defaultOpen },
-            c7: { all: defaultOpen },
-            c8: { all: defaultOpen }
-          }
-        };
-      }, {});
+    const currentWeek = season.weeks.reduce((acc, cur) => {
+        if (cur.number > acc) acc = cur.number;
+        return acc;
+      }, 0),
+      seasonJSON = {
+        number: season.number,
+        weeks: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((number, index) => {
+          const itemNumber = index + 1,
+            defaultOpen = itemNumber === currentWeek;
+          return {
+            number,
+            isChecked: defaultOpen,
+            challenges: [1, 2, 3, 4, 5, 6, 7, 8].map(number => {
+              return { number, isChecked: defaultOpen, locations: [] };
+            })
+          };
+        })
+      };
     const updatedSeasonJSON = updateLocalStorageFromData(seasonJSON, season);
     localStorage.setItem(
       "season" + season.number,
@@ -63,52 +67,51 @@ export const handleLocalStorage = season => {
   }
 };
 
-export const processData = (data, seasonStorage) => {
-  if (!data || !data.weeks) {
+export const processData = (season, seasonStorage) => {
+  if (!season || !season.weeks) {
     return;
   }
-  data = data.weeks;
-  const refinedData = seasonStorage
-    ? data.reduce((accum, curVal) => {
-        const challenges = curVal.challenges;
-        const selectedChallenges = challenges.reduce((acc, challenge) => {
-          if (
-            seasonStorage["week" + curVal.number]["c" + challenge.number].all
-          ) {
-            return acc.concat(challenge);
-          }
-          if (challenge.coord.length > 1) {
-            return acc.concat({
-              ...challenge,
-              coord: challenge.coord.filter((coordinate, index) => {
-                return seasonStorage["week" + curVal.number][
-                  "c" + challenge.number
-                ]["coord" + index];
-              })
-            });
-          }
-          return acc;
-        }, []);
-        return accum.concat(selectedChallenges);
+  const weeks = season.weeks;
+  return seasonStorage
+    ? weeks.reduce((acc, week) => {
+        const challenges = week.challenges,
+          localStorageWeek = seasonStorage.weeks.filter(
+            lsWeek => lsWeek.number === week.number
+          )[0],
+          selectedChallenges = challenges.reduce((acc, challenge) => {
+            const locations = challenge.locations,
+              localStorageLocations = localStorageWeek.challenges.filter(
+                lschallenge => lschallenge.number === challenge.number
+              )[0].locations,
+              selectedLocations = localStorageLocations.reduce(
+                (acc, item, index) => {
+                  if (item.isChecked) {
+                    return acc.concat(locations[index]);
+                  }
+                  return acc;
+                },
+                []
+              );
+            return acc.concat(selectedLocations);
+          }, []);
+
+        return acc.concat(selectedChallenges);
       }, [])
     : [];
-  return refinedData;
 };
 
 export const checkIfUpdatedWeek = (localStorage, weekNumber) => {
-  const updatedWeek = localStorage[weekNumber];
-  const allResult = Object.keys(updatedWeek).reduce((acc, key) => {
-    if (key !== "all")
-      if (acc && !updatedWeek[key].all) {
-        return false;
+  const changedWeek = localStorage.weeks.filter(
+      week => week.number === weekNumber
+    )[0],
+    challenges = changedWeek.challenges,
+    isCheckedValue = challenges.reduce((acc, challenge) => {
+      if (!challenge.isChecked) {
+        acc = false;
       }
-    return acc;
-  }, true);
-  const updatedLocalStorage = {
-    ...localStorage,
-    [weekNumber]: { ...updatedWeek, all: allResult }
-  };
-  return updatedLocalStorage;
+      return acc;
+    }, true);
+  changedWeek.isChecked = isCheckedValue;
 };
 
 export const checkIfUpdatedChallenge = (
@@ -116,33 +119,33 @@ export const checkIfUpdatedChallenge = (
   weekNumber,
   challengeNumber
 ) => {
-  const challenge = localStorage[weekNumber][challengeNumber];
-  const allResult = Object.keys(challenge).reduce((acc, key) => {
-    if (key !== "all")
-      if (acc && !challenge[key]) {
-        return false;
+  const changedWeek = localStorage.weeks.filter(
+      week => week.number === weekNumber
+    )[0],
+    changedChallenge = changedWeek.challenges.filter(
+      challenge => challenge.number === challengeNumber
+    )[0],
+    locations = changedChallenge.locations,
+    isCheckedValue = locations.reduce((acc, location) => {
+      if (!location.isChecked) {
+        acc = false;
       }
-    return acc;
-  }, true);
-  return checkIfUpdatedWeek(
-    {
-      ...localStorage,
-      [weekNumber]: {
-        ...localStorage[weekNumber],
-        [challengeNumber]: {
-          ...localStorage[weekNumber][challengeNumber],
-          all: allResult
-        }
-      }
-    },
-    weekNumber
-  );
+      return acc;
+    }, true);
+  if (changedChallenge.isChecked !== isCheckedValue) {
+    changedChallenge.isChecked = isCheckedValue;
+    checkIfUpdatedWeek(localStorage, weekNumber);
+  }
 };
 
 export const toggleAll = (localStorage, value) => {
-  return Object.keys(localStorage).reduce((acc, key) => {
-    if (typeof localStorage[key] === "object")
-      return { ...acc, [key]: toggleAll(localStorage[key], value) };
-    return { ...acc, [key]: value };
-  }, {});
+  if (localStorage.challenges) {
+    const challenges = localStorage.challenges;
+    challenges.forEach(challenge => toggleAll(challenge, value));
+  }
+  if (localStorage.locations) {
+    const locations = localStorage.locations;
+    locations.forEach(location => toggleAll(location, value));
+  }
+  localStorage.isChecked = value;
 };

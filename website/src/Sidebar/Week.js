@@ -10,43 +10,44 @@ const mapChallenges = (
   challenges,
   weekNumber,
   seasonNumber,
-  seasonLocalStorage,
-  updateSeason
+  localStorageWeek,
+  updateSeason,
+  seasonLocalStorage
 ) => {
   return challenges.map(challenge => {
-    const RenderChallenge =
-      challenge.coord.length < 2 ? ChallengeMenuItem : MultiCoordChallenge;
+    const RenderChallenge = challenge.locations.length
+      ? MultiCoordChallenge
+      : ChallengeMenuItem;
     return (
       <RenderChallenge
         key={"week" + weekNumber + "challenge" + challenge.number}
         data={{
-          ...challenge,
-          weekNumber: weekNumber,
-          seasonNumber: seasonNumber,
-          seasonLocalStorage: seasonLocalStorage,
-          updateSeason: updateSeason
+          isHard: challenge.isHard,
+          challengeNumber: challenge.number,
+          name: challenge.name,
+          locations: challenge.locations,
+          weekNumber,
+          seasonNumber,
+          localStorageWeek,
+          updateSeason,
+          seasonLocalStorage
         }}
       />
     );
   });
 };
 const toggleCheckAll = (
-  weekNumber,
   seasonNumber,
-  seasonLocalStorage,
-  updateSeason
+  localStorageWeek,
+  updateSeason,
+  seasonLocalStorage
 ) => {
-  const weekLocalStorage = seasonLocalStorage["week" + weekNumber],
-    updatedWeek = toggleAll(weekLocalStorage, !weekLocalStorage.all),
-    updatedLocalStorage = {
-      ...seasonLocalStorage,
-      ["week" + weekNumber]: updatedWeek
-    };
+  toggleAll(localStorageWeek, !localStorageWeek.isChecked);
   localStorage.setItem(
     "season" + seasonNumber,
-    JSON.stringify(updatedLocalStorage)
+    JSON.stringify(seasonLocalStorage)
   );
-  updateSeason(updatedLocalStorage);
+  updateSeason(seasonLocalStorage);
 };
 
 const Week = props => {
@@ -78,6 +79,9 @@ const Week = props => {
       />
     );
   }
+  const localStorageWeek = seasonLocalStorage.weeks.filter(
+    week => week.number === weekNumber
+  )[0];
   return (
     <SubMenu
       style={{ fontsize: "1em" }}
@@ -91,17 +95,15 @@ const Week = props => {
             }}
           >
             <Switch
-              checked={
-                seasonLocalStorage["week" + data.weekNumber].all ? true : false
-              }
+              checked={localStorageWeek.isChecked}
               defaultChecked={true}
               style={{ marginRight: "15px" }}
               onChange={() =>
                 toggleCheckAll(
-                  weekNumber,
                   seasonNumber,
-                  seasonLocalStorage,
-                  updateSeason
+                  localStorageWeek,
+                  updateSeason,
+                  seasonLocalStorage
                 )
               }
             />
@@ -114,8 +116,9 @@ const Week = props => {
         challenges,
         weekNumber,
         seasonNumber,
-        seasonLocalStorage,
-        updateSeason
+        localStorageWeek,
+        updateSeason,
+        seasonLocalStorage
       )}
     </SubMenu>
   );

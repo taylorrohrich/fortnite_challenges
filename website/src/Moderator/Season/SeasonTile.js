@@ -1,17 +1,14 @@
 import React, { Component } from "react";
 import "./../../App.css";
-import { createActiveSeason, createSeason } from "./../../Database";
-import { mutation } from "./../../Utils";
 import { Input, Button, Col, Row, Card, Select } from "antd";
-import { graphql, compose } from "react-apollo";
-import { withRouter } from "react-router-dom";
+import apiRequest from "../../Controllers";
 const Option = Select.Option;
 class SeasonTile extends Component {
   constructor(props) {
     super(props);
     this.state = {
       number: null,
-      season: null
+      seasonID: null
     };
   }
 
@@ -24,35 +21,14 @@ class SeasonTile extends Component {
   mapSeasons = seasons => {
     return seasons.map((season, index) => {
       return (
-        <Option value={season.id} key={season.number + index}>
+        <Option value={season.ID} key={season.number + index}>
           {season.number}
         </Option>
       );
     });
   };
-  createMutation = () => {
-    let { season } = this.state;
-    if (!season) {
-      alert("not all fields filled out");
-    } else {
-      const variables = {
-        seasonId: season
-      };
-      this.props.createActiveSeason({ variables }).then(response => {
-        console.log(response);
-      });
-    }
-  };
   render() {
-    const { type, seasons } = this.props,
-      variables =
-        type === "create"
-          ? { number: this.state.number }
-          : { seasonId: this.state.season },
-      mutationFunction =
-        type === "create"
-          ? this.props.createSeason
-          : this.props.createActiveSeason;
+    const { type, seasons } = this.props;
     return (
       <Card
         title={type === "create" ? "Create Season" : "Change Active Season"}
@@ -74,10 +50,10 @@ class SeasonTile extends Component {
               seasons && (
                 <Select
                   onChange={e => {
-                    this.changeNormalState("season", e);
+                    this.changeNormalState("seasonID", e);
                   }}
                   style={{ width: "100%" }}
-                  value={this.state.season}
+                  value={this.state.seasonID}
                 >
                   {this.mapSeasons(seasons)}
                 </Select>
@@ -88,7 +64,23 @@ class SeasonTile extends Component {
             <Button
               style={{ width: "100%" }}
               type="primary"
-              onClick={() => mutation(variables, mutationFunction)}
+              onClick={
+                type === "create"
+                  ? () =>
+                      apiRequest({
+                        name: "postSeasonCreate",
+                        body: { seasonNumber: this.state.number }
+                      }).then(response => {
+                        this.props.childDidUpdate();
+                      })
+                  : () =>
+                      apiRequest({
+                        name: "postSeasonUpdate",
+                        body: { seasonID: this.state.seasonID, isActive: true }
+                      }).then(response => {
+                        this.props.childDidUpdate();
+                      })
+              }
             >
               {type === "create" ? "Create" : "Update Active"}
             </Button>
@@ -99,11 +91,4 @@ class SeasonTile extends Component {
   }
 }
 
-export default compose(
-  graphql(createActiveSeason, {
-    name: "createActiveSeason"
-  }),
-  graphql(createSeason, {
-    name: "createSeason"
-  })
-)(withRouter(SeasonTile));
+export default SeasonTile;

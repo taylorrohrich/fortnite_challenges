@@ -1,4 +1,4 @@
-import SeasonRouteHandlerWithQuery from "./SeasonRouteHandler";
+import SeasonRouteHandler from "./SeasonRouteHandler";
 import Routes from "./Routes";
-export { SeasonRouteHandlerWithQuery };
+export { SeasonRouteHandler };
 export default Routes;

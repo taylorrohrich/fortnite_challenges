@@ -1,12 +1,10 @@
 import React, { Component } from "react";
 import "./../App.css";
 import { populateMap, decideMap } from "../Utils";
-import { iconQuery } from "./../Database";
+import { isEqual } from "lodash";
 
 //node modules
 import L from "leaflet";
-import { graphql } from "react-apollo";
-import { withRouter } from "react-router-dom";
 class Map extends Component {
   constructor(props) {
     super(props);
@@ -88,20 +86,12 @@ class Map extends Component {
     if (prevState.map) {
       let markers = prevState.markers;
       let currentImage = prevState.currentImage;
-      if (
-        nextProps.iconQuery.allIcons !== prevState.icons ||
-        !(JSON.stringify(nextProps.data) === JSON.stringify(prevState.data))
-      ) {
+      if (!isEqual(nextProps.data, prevState.data)) {
         let length = nextProps.mapLength;
         let map = prevState.map;
         map.removeLayer(markers);
         markers.clearLayers();
-        populateMap(
-          nextProps.data,
-          length,
-          markers,
-          nextProps.iconQuery.allIcons
-        );
+        populateMap(nextProps.data, length, markers);
         map.addLayer(markers);
       }
       if (
@@ -114,12 +104,7 @@ class Map extends Component {
           let map = prevState.map;
           map.removeLayer(currentImage);
           markers.clearLayers();
-          populateMap(
-            nextProps.data,
-            length,
-            markers,
-            nextProps.iconQuery.allIcons
-          );
+          populateMap(nextProps.data, length, markers);
           let imageBounds = [[0, 0], [length, length]];
           map.fitBounds(imageBounds);
           map.setMaxBounds(imageBounds);
@@ -148,7 +133,6 @@ class Map extends Component {
         data: nextProps.data,
         markers: markers,
         currentImage: currentImage,
-        icons: nextProps.iconQuery.allIcons,
         number: nextProps.number
       };
     }
@@ -168,8 +152,4 @@ class Map extends Component {
   }
 }
 
-const MapWithQuery = graphql(iconQuery, {
-  name: "iconQuery"
-})(withRouter(Map));
-
-export default MapWithQuery;
+export default Map;
