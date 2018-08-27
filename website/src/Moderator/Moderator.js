@@ -167,7 +167,7 @@ class Moderator extends Component {
     }
     return (
       <div className="App">
-        {this.state.authenticated ? (
+        {!this.state.authenticated ? (
           <Modal
             visible={true}
             title="Moderator Login"

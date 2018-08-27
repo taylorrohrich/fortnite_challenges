@@ -27,8 +27,7 @@ class Map extends Component {
       maxBoundsViscosity: 1.0,
       layers: markers,
       dragging: false,
-      scrollWheelZoom: false,
-      attributionControl: false
+      scrollWheelZoom: false
     });
     let imageBounds = [[0, 0], [length, length]];
     let currentImage = L.imageOverlay(
@@ -37,10 +36,6 @@ class Map extends Component {
     ).addTo(map);
     map.fitBounds(imageBounds);
     map.setMaxBounds(imageBounds);
-    L.control.attribution({ position: "topright" }).addTo(map);
-    map.attributionControl.addAttribution(
-      '<a href="https://www.reddit.com/user/thesquatingdog", class="your_class">/u/thesquatingdog</a>'
-    );
     this.setState({ map: map, markers: markers, currentImage: currentImage });
     map.on("click", res => {
       if (window.innerWidth >= 992 && !map.scrollWheelZoom.enabled()) {

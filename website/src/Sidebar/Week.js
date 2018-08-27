@@ -15,9 +15,8 @@ const mapChallenges = (
   seasonLocalStorage
 ) => {
   return challenges.map(challenge => {
-    const RenderChallenge = challenge.locations.length
-      ? MultiCoordChallenge
-      : ChallengeMenuItem;
+    const RenderChallenge =
+      challenge.locations.length > 1 ? MultiCoordChallenge : ChallengeMenuItem;
     return (
       <RenderChallenge
         key={"week" + weekNumber + "challenge" + challenge.number}

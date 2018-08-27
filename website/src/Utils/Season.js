@@ -1,11 +1,12 @@
 import { isEqual } from "lodash";
-const updateLocalStorageFromData = (seasonJSON, season) => {
+const updateLocalStorageFromData = (seasonJSON, season, currentWeek) => {
   const weeks = season.weeks;
   if (!weeks) {
     return seasonJSON;
   }
   const updatedSeasonJSON = weeks.reduce((acc, week) => {
-    const localStorageWeek = acc.weeks.filter(
+    const weekNumber = week.number,
+      localStorageWeek = acc.weeks.filter(
         lsWeek => lsWeek.number === week.number
       )[0],
       challenges = week.challenges,
@@ -17,7 +18,10 @@ const updateLocalStorageFromData = (seasonJSON, season) => {
       localStorageChallenge.locations = challenge.locations.map(
         (item, index) => {
           return {
-            isChecked: localStorageChallenge.locations[index] || false
+            isChecked:
+              (localStorageChallenge.locations[index] &&
+                localStorageChallenge.locations[index].isChecked) ||
+              week.number === currentWeek
           };
         }
       );
@@ -28,26 +32,30 @@ const updateLocalStorageFromData = (seasonJSON, season) => {
 };
 
 export const getLocalStorage = season => {
+  const currentWeek = season.weeks.reduce((acc, cur) => {
+    if (cur.number > acc) acc = cur.number;
+    return acc;
+  }, 0);
   if (!localStorage.getItem("season" + season.number)) {
-    const currentWeek = season.weeks.reduce((acc, cur) => {
-        if (cur.number > acc) acc = cur.number;
-        return acc;
-      }, 0),
-      seasonJSON = {
-        number: season.number,
-        weeks: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((number, index) => {
-          const itemNumber = index + 1,
-            defaultOpen = itemNumber === currentWeek;
-          return {
-            number,
-            isChecked: defaultOpen,
-            challenges: [1, 2, 3, 4, 5, 6, 7, 8].map(number => {
-              return { number, isChecked: defaultOpen, locations: [] };
-            })
-          };
-        })
-      };
-    const updatedSeasonJSON = updateLocalStorageFromData(seasonJSON, season);
+    const seasonJSON = {
+      number: season.number,
+      weeks: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((number, index) => {
+        const itemNumber = index + 1,
+          defaultOpen = itemNumber === currentWeek;
+        return {
+          number,
+          isChecked: defaultOpen,
+          challenges: [1, 2, 3, 4, 5, 6, 7, 8].map(number => {
+            return { number, isChecked: defaultOpen, locations: [] };
+          })
+        };
+      })
+    };
+    const updatedSeasonJSON = updateLocalStorageFromData(
+      seasonJSON,
+      season,
+      currentWeek
+    );
     localStorage.setItem(
       "season" + season.number,
       JSON.stringify(updatedSeasonJSON)
@@ -56,7 +64,11 @@ export const getLocalStorage = season => {
   } else {
     const seasonJSON = localStorage.getItem("season" + season.number),
       parsedSeasonJSON = JSON.parse(seasonJSON),
-      updatedSeasonJSON = updateLocalStorageFromData(parsedSeasonJSON, season);
+      updatedSeasonJSON = updateLocalStorageFromData(
+        parsedSeasonJSON,
+        season,
+        currentWeek
+      );
     if (!isEqual(parsedSeasonJSON, updatedSeasonJSON)) {
       localStorage.setItem(
         "season" + season.number,
