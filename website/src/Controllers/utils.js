@@ -10,7 +10,7 @@ export const apiRequest = async ({ name, body, parameters, formData }) => {
       websiteUrl =
         process.env.NODE_ENV === "development"
           ? "http://localhost:8080"
-          : "https://fort-friend.com/api", //change when domain changes
+          : "/api", //change when domain changes
       url = websiteUrl + routes[name][0],
       data = formData ? formDataBody({ name, formData }) : body,
       config = formData
