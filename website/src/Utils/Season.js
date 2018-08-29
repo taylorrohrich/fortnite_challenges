@@ -19,9 +19,10 @@ const updateLocalStorageFromData = (seasonJSON, season, currentWeek) => {
         (item, index) => {
           return {
             isChecked:
-              (localStorageChallenge.locations[index] &&
-                localStorageChallenge.locations[index].isChecked) ||
-              week.number === currentWeek
+              localStorageChallenge.locations[index] &&
+              localStorageChallenge.locations[index].isChecked != null
+                ? localStorageChallenge.locations[index].isChecked
+                : week.number === currentWeek
           };
         }
       );
