@@ -6,6 +6,8 @@ import Routes from "./Routes";
 import registerServiceWorker from "./registerServiceWorker";
 import { unregister } from "./registerServiceWorker";
 import { BrowserRouter as Router } from "react-router-dom";
+import netlifyIdentity from "netlify-identity-widget";
+netlifyIdentity.init();
 ReactDOM.render(
   <Router>
     <Routes />
