@@ -5,6 +5,7 @@
 }
 
 #mapid {
+  z-index: 0;
   display: block;
 }
 .Sidebar {

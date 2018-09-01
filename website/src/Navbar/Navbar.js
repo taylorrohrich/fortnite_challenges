@@ -2,9 +2,10 @@ import React, { Component } from "react";
 import "./Navbar.css";
 import HamburgerMenu from "./Menu";
 import { hamburger } from "./../Images";
-import { Modal } from "antd";
 import apiRequest from "./../Controllers";
 
+import { Modal } from "antd";
+import netlifyIdentity from "netlify-identity-widget";
 class Navbar extends Component {
   constructor(props) {
     super(props);
@@ -22,10 +23,16 @@ class Navbar extends Component {
       });
     });
   }
+  handleLogIn = () => {
+    netlifyIdentity.open("login");
+  };
   render() {
     return (
       <div className="header">
         <div className="logo">FortFriend</div>
+        <div onClick={this.handleLogIn} className="logo">
+          log in
+        </div>
         <div style={{ width: "75px", height: "75px", float: "right" }}>
           <img
             onClick={() => this.setState({ showMenu: !this.state.showMenu })}
