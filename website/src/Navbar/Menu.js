@@ -3,6 +3,7 @@ import { x } from "./../Images";
 import "./Navbar.css";
 import { withRouter } from "react-router-dom";
 import onClickOutside from "react-onclickoutside";
+import netlifyIdentity from "netlify-identity-widget";
 
 class HamburgerMenu extends React.Component {
   handleClickOutside = e => {
@@ -59,6 +60,18 @@ class HamburgerMenu extends React.Component {
         </div>
         <div onClick={() => this.props.toggleModal()} className="menuItem">
           Donate
+        </div>
+        <div
+          onClick={() =>
+            this.props.history.push(
+              `/authentication/${
+                netlifyIdentity.currentUser() ? "logout" : "login"
+              }`
+            )
+          }
+          className="menuItem"
+        >
+          {netlifyIdentity.currentUser() ? "Logout" : "Login"}
         </div>
         {this.mapSeasonNumbers(seasonList)}
       </div>

@@ -3,8 +3,15 @@
 .header {
   height: 75px;
   background-color: rgb(47, 47, 48);
+  display: "block";
 }
 
+.navItem {
+  display: block;
+  margin: auto;
+  padding-right: 20px;
+  color: white;
+}
 .logo {
   font-family: "Luckiest Guy";
   line-height: 75px;

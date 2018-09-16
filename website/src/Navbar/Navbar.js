@@ -3,9 +3,9 @@ import "./Navbar.css";
 import HamburgerMenu from "./Menu";
 import { hamburger } from "./../Images";
 import apiRequest from "./../Controllers";
-
-import { Modal } from "antd";
+import { withRouter } from "react-router-dom";
 import netlifyIdentity from "netlify-identity-widget";
+import { Modal } from "antd";
 class Navbar extends Component {
   constructor(props) {
     super(props);
@@ -24,29 +24,40 @@ class Navbar extends Component {
     });
   }
   handleLogIn = () => {
-    netlifyIdentity.open("login");
+    const type = netlifyIdentity.currentUser() ? "logout" : "login";
+    this.props.history.push(`/authentication/${type}`);
   };
+
   render() {
     return (
       <div className="header">
         <div className="logo">FortFriend</div>
-        <div onClick={this.handleLogIn} className="logo">
-          log in
-        </div>
-        <div style={{ width: "75px", height: "75px", float: "right" }}>
-          <img
-            onClick={() => this.setState({ showMenu: !this.state.showMenu })}
+        <div style={{ display: "flex", justifyContent: "flex-end" }}>
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <div onClick={this.handleLogIn} className="navItem">
+              {netlifyIdentity.currentUser() ? "Logout" : "Login"}
+            </div>
+            <div className="navItem">Battle Pass</div>
+          </div>
+          <div
             style={{
               width: "75px",
-              height: "75px",
-              padding: "20px",
-              cursor: "pointer"
+              height: "75px"
             }}
-            src={hamburger}
-            alt=""
-          />
+          >
+            <img
+              onClick={() => this.setState({ showMenu: !this.state.showMenu })}
+              style={{
+                width: "75px",
+                height: "75px",
+                padding: "20px",
+                cursor: "pointer"
+              }}
+              src={hamburger}
+              alt=""
+            />
+          </div>
         </div>
-
         {this.state.showMenu && (
           <HamburgerMenu
             toggleModal={() =>
@@ -101,4 +112,4 @@ class Navbar extends Component {
   }
 }
 
-export default Navbar;
+export default withRouter(Navbar);
