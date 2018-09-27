@@ -34,10 +34,23 @@ class Navbar extends Component {
         <div className="logo">FortFriend</div>
         <div style={{ display: "flex", justifyContent: "flex-end" }}>
           <div style={{ display: "flex", justifyContent: "center" }}>
+            <div
+              className="navItem"
+              onClick={() => this.props.history.push(`/`)}
+            >
+              Battle Pass
+            </div>
             <div onClick={this.handleLogIn} className="navItem">
               {netlifyIdentity.currentUser() ? "Logout" : "Login"}
             </div>
-            <div className="navItem">Battle Pass</div>
+            {netlifyIdentity.currentUser() && (
+              <div
+                className="navItem"
+                onClick={() => this.props.history.push(`/profile`)}
+              >
+                Profile
+              </div>
+            )}
           </div>
           <div
             style={{
