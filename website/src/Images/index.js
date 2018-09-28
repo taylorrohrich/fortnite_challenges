@@ -1,6 +1,7 @@
 export { default as challenge } from "./challenge.png";
 export { default as fnmap4 } from "./fnmap4.jpg";
 export { default as fnmap5 } from "./fnmap5.jpg";
+export { default as fnmap6 } from "./fnmap6.jpg";
 export { default as github } from "./github.png";
 export { default as hamburger } from "./hamburger.png";
 export { default as reddit } from "./reddit.png";

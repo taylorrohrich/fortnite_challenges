@@ -1,5 +1,12 @@
 import L from "leaflet";
-import { youtube, challenge, fnmap4, fnmap5, placeholder } from "./../Images";
+import {
+  youtube,
+  challenge,
+  fnmap4,
+  fnmap5,
+  fnmap6,
+  placeholder
+} from "./../Images";
 
 export const decideMap = seasonNumber => {
   let map = null;
@@ -9,6 +16,9 @@ export const decideMap = seasonNumber => {
       break;
     case 5:
       map = fnmap5;
+      break;
+    case 6:
+      map = fnmap6;
       break;
     default:
       map = placeholder;
