@@ -59,19 +59,12 @@ class CoordinateTile extends Component {
       credit,
       file
     } = this.state;
-    if (
-      challengeID &&
-      iconID &&
-      description &&
-      referral &&
-      credit &&
-      coordinates
-    ) {
+    if (challengeID && iconID && description && referral && credit) {
       const formData = {
         challengeID,
         iconID,
         description,
-        coordinates: JSON.stringify(coordinates),
+        coordinates: JSON.stringify(coordinates || { x: null, y: null }),
         referral,
         credit,
         file,
@@ -110,15 +103,14 @@ class CoordinateTile extends Component {
       iconID &&
       description &&
       referral &&
-      credit &&
-      coordinates
+      credit
     ) {
       const formData = {
         locationID,
         challengeID,
         iconID,
         description,
-        coordinates: JSON.stringify(coordinates),
+        coordinates: JSON.stringify(coordinates || { x: null, y: null }),
         referral,
         credit,
         file,
