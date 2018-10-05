@@ -30,27 +30,29 @@ export const populateMap = (locations, length, group) => {
   if (locations && locations.length) {
     locations.forEach(location => {
       const coordinate = location.Coordinates
-          ? JSON.parse(location.Coordinates)
-          : null,
-        locationDescription = location.LocationDescription,
-        challengeName = location.ChallengeName,
-        imageURL = location.ImageURL,
-        iconURL = location.IconURL,
-        options = location.Options ? JSON.parse(location.Options) : null,
-        referral = location.Referral,
-        credit = location.Credit,
-        icon = getIcon(options, iconURL),
-        marker = getMarker(
-          coordinate,
-          length,
-          icon,
-          locationDescription,
-          challengeName,
-          imageURL,
-          referral,
-          credit
-        );
-      group.addLayer(marker);
+        ? JSON.parse(location.Coordinates)
+        : null;
+      if (coordinate && coordinate.x && coordinate.y) {
+        const locationDescription = location.LocationDescription,
+          challengeName = location.ChallengeName,
+          imageURL = location.ImageURL,
+          iconURL = location.IconURL,
+          options = location.Options ? JSON.parse(location.Options) : null,
+          referral = location.Referral,
+          credit = location.Credit,
+          icon = getIcon(options, iconURL),
+          marker = getMarker(
+            coordinate,
+            length,
+            icon,
+            locationDescription,
+            challengeName,
+            imageURL,
+            referral,
+            credit
+          );
+        group.addLayer(marker);
+      }
     });
   }
 };
