@@ -54,7 +54,7 @@ class Moderator extends Component {
       authenticated: false,
       username: "",
       password: "",
-      seasonNumber: 6
+      seasonNumber: 7
     };
   }
 
