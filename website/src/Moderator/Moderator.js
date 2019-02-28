@@ -54,7 +54,7 @@ class Moderator extends Component {
       authenticated: false,
       username: "",
       password: "",
-      seasonNumber: 7
+      seasonNumber: 8
     };
   }
 
@@ -213,31 +213,31 @@ class Moderator extends Component {
             </Form>
           </Modal>
         ) : (
-          <div>
-            <SidebarMapContainer
-              number={this.state.seasonNumber}
-              updateModerator={this.pushCoordinate}
-            />
-            <Select
-              value={this.state.seasonID}
-              onChange={seasonID => {
-                this.setState({ seasonID: seasonID });
-              }}
-            >
-              {this.mapSeasonListOptions()}
-            </Select>
-            <Card
-              style={{ width: "100%" }}
-              title="Moderator Page"
-              tabList={tabList}
-              onTabChange={key => {
-                this.changeNormalState("key", key);
-              }}
-            >
-              {this.contentList(this.state.key)}
-            </Card>
-          </div>
-        )}
+            <div>
+              <SidebarMapContainer
+                number={this.state.seasonNumber}
+                updateModerator={this.pushCoordinate}
+              />
+              <Select
+                value={this.state.seasonID}
+                onChange={seasonID => {
+                  this.setState({ seasonID: seasonID });
+                }}
+              >
+                {this.mapSeasonListOptions()}
+              </Select>
+              <Card
+                style={{ width: "100%" }}
+                title="Moderator Page"
+                tabList={tabList}
+                onTabChange={key => {
+                  this.changeNormalState("key", key);
+                }}
+              >
+                {this.contentList(this.state.key)}
+              </Card>
+            </div>
+          )}
       </div>
     );
   }
