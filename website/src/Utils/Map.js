@@ -6,6 +6,7 @@ import {
   fnmap5,
   fnmap6,
   fnmap7,
+  fnmap8,
   placeholder
 } from "./../Images";
 
@@ -23,6 +24,9 @@ export const decideMap = seasonNumber => {
       break;
     case 7:
       map = fnmap7;
+      break;
+    case 8:
+      map = fnmap8;
       break;
     default:
       map = placeholder;
@@ -75,31 +79,31 @@ const getMarker = (
   const popup = L.popup({ keepInView: true, maxWidth: popupWidth }).setContent(
     imageURL
       ? "<div style='width:100%;text-align:center'>" +
-          "<img" +
-          " style='width:" +
-          popupWidth +
-          "px;height:auto'" +
-          " src=" +
-          imageURL +
+      "<img" +
+      " style='width:" +
+      popupWidth +
+      "px;height:auto'" +
+      " src=" +
+      imageURL +
+      " />" +
+      "<b>" +
+      challengeName +
+      "</b>" +
+      "<br/>" +
+      (locationDescription ? "<i>" + locationDescription + "</i>" : "") +
+      (credit
+        ? referral
+          ? "<a href=" +
+          referral +
+          " target='_blank' ><img src=" +
+          youtube +
+          " style='height:auto;width:15px;margin-left:5px;margin-right:5px'" +
           " />" +
-          "<b>" +
-          challengeName +
-          "</b>" +
-          "<br/>" +
-          (locationDescription ? "<i>" + locationDescription + "</i>" : "") +
-          (credit
-            ? referral
-              ? "<a href=" +
-                referral +
-                " target='_blank' ><img src=" +
-                youtube +
-                " style='height:auto;width:15px;margin-left:5px;margin-right:5px'" +
-                " />" +
-                credit +
-                "</a>"
-              : credit
-            : "") +
-          "</div>"
+          credit +
+          "</a>"
+          : credit
+        : "") +
+      "</div>"
       : challengeName
   );
   return L.marker([coordinate.x * length, coordinate.y * length], {
